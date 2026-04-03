@@ -4,2399 +4,1801 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Polski — Numbers, Dates & Time</title>
-<meta name="theme-color" content="#1a0a00">
+<meta name="theme-color" content="#0f0f14">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Polski">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════════════════════════
-   DESIGN SYSTEM — Polish market / receipt aesthetic
-   Warm ivory, deep crimson, ink black, aged gold
-═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════════════ */
 :root {
-  --cream:    #faf6ef;
-  --parchment:#f0e8d8;
-  --ink:      #1a0a00;
+  --ink:      #0f0f14;
+  --ink2:     #1e1e28;
+  --cream:    #f7f4ee;
+  --parch:    #ede8dc;
+  --card:     #ffffff;
   --crimson:  #c8102e;
-  --gold:     #b8860b;
-  --muted:    #7a6a5a;
-  --border:   #d4c4a8;
-  --card:     #fffdf8;
-  --correct:  #2d6a2d;
+  --gold:     #c49a1a;
+  --sage:     #2d6a4f;
+  --blue:     #1a4fa0;
+  --muted:    #7a7068;
+  --border:   #ddd8cc;
+  --correct:  #2d6a4f;
   --wrong:    #c8102e;
-  --phonetic: #8b6914;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --phonetic: #8b6000;
+  --holiday:  #c8102e;
+  --tradition:#c49a1a;
+  --nameday:  #1a4fa0;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
-    --cream:    #1c1410;
-    --parchment:#241c14;
-    --ink:      #f0e8d8;
-    --crimson:  #e8384f;
-    --gold:     #d4a017;
-    --muted:    #a09080;
-    --border:   #3a2e22;
-    --card:     #211810;
-    --correct:  #4a9a4a;
-    --wrong:    #e8384f;
-    --phonetic: #c4942a;
+    --ink:     #f7f4ee; --ink2:    #e8e2d4;
+    --cream:   #0f0f14; --parch:   #1a1820;
+    --card:    #1e1e28; --crimson: #e8384f;
+    --gold:    #d4a820; --sage:    #4a9a6f;
+    --blue:    #4a7fd4; --muted:   #9a9090;
+    --border:  #2e2c38; --correct: #4a9a6f;
+    --wrong:   #e8384f; --phonetic:#c4940a;
+    --holiday: #e8384f; --tradition:#d4a820; --nameday:#4a7fd4;
   }
 }
+body.dark  { --ink:#f7f4ee;--ink2:#e8e2d4;--cream:#0f0f14;--parch:#1a1820;--card:#1e1e28;--crimson:#e8384f;--gold:#d4a820;--sage:#4a9a6f;--blue:#4a7fd4;--muted:#9a9090;--border:#2e2c38;--correct:#4a9a6f;--wrong:#e8384f;--phonetic:#c4940a;--holiday:#e8384f;--tradition:#d4a820;--nameday:#4a7fd4; }
+body.light { --ink:#0f0f14;--ink2:#1e1e28;--cream:#f7f4ee;--parch:#ede8dc;--card:#ffffff;--crimson:#c8102e;--gold:#c49a1a;--sage:#2d6a4f;--blue:#1a4fa0;--muted:#7a7068;--border:#ddd8cc;--correct:#2d6a4f;--wrong:#c8102e;--phonetic:#8b6000;--holiday:#c8102e;--tradition:#c49a1a;--nameday:#1a4fa0; }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-html, body {
-  height: 100%; height: 100dvh;
-  font-family: 'Source Serif 4', Georgia, serif;
-  background: var(--cream);
-  color: var(--ink);
-  overflow: hidden;
-  display: flex; flex-direction: column;
+/* ── RESET & BASE ────────────────────────────────────── */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html { height:100%; height:100dvh; }
+body {
+  font-family:'DM Sans',system-ui,sans-serif;
+  background:var(--cream); color:var(--ink);
+  height:100%; height:100dvh;
+  display:flex; flex-direction:column;
+  overflow:hidden;
 }
 
-/* ── TYPOGRAPHY ──────────────────────────────────────────────── */
-.display-num {
-  font-family: 'Playfair Display', serif;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
+/* ── APP SHELL ────────────────────────────────────────── */
+#app { display:flex; flex-direction:column; height:100dvh; overflow:hidden; }
 
-/* ── APP SHELL ───────────────────────────────────────────────── */
-#app { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
-
-/* ── TOP HEADER ──────────────────────────────────────────────── */
+/* ── TOP BAR ──────────────────────────────────────────── */
 .top-bar {
-  background: var(--ink);
-  color: var(--cream);
-  display: flex;
-  align-items: center;
-  gap: 0;
-  height: 52px;
-  flex-shrink: 0;
-  padding-top: env(safe-area-inset-top, 0px);
+  background:var(--ink2); color:var(--cream);
+  display:flex; align-items:center; gap:0;
+  height:calc(48px + var(--safe-t));
+  padding-top:var(--safe-t);
+  flex-shrink:0; position:relative; z-index:100;
 }
-
-.app-wordmark {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  padding: 0 16px;
-  flex-shrink: 0;
-  color: var(--gold);
+.wordmark {
+  font-family:'DM Serif Display',serif;
+  font-size:1.2rem; color:var(--gold);
+  padding:0 14px; flex-shrink:0; letter-spacing:0.02em;
 }
-
-.top-bar-xp {
-  margin-left: auto;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--gold);
-  padding: 0 12px;
-  flex-shrink: 0;
+.top-bar-right { margin-left:auto; display:flex; align-items:center; gap:0; }
+.top-icon-btn { background:none; border:none; color:var(--cream); opacity:0.7;
+  font-size:1rem; padding:0 10px; height:100%; cursor:pointer; }
+.top-icon-btn:hover { opacity:1; }
+.xp-badge {
+  font-size:0.7rem; font-weight:700; color:var(--gold);
+  padding:0 10px; letter-spacing:0.04em;
 }
+.streak-badge { font-size:0.75rem; color:#ff9d4d; padding:0 4px; }
 
-.top-bar-streak {
-  font-size: 0.75rem;
-  color: #ff9d4d;
-  padding: 0 8px;
-  flex-shrink: 0;
-}
-
-/* ── BOTTOM NAV ──────────────────────────────────────────────── */
+/* ── BOTTOM NAV ───────────────────────────────────────── */
 .bottom-nav {
-  background: var(--ink);
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  flex-shrink: 0;
-  padding-bottom: var(--safe-bottom);
+  background:var(--ink2);
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  flex-shrink:0;
+  padding-bottom:var(--safe-b);
+  border-top:1px solid rgba(255,255,255,0.06);
 }
-
 .nav-tab {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 10px 4px;
-  border: none; background: none; color: #6a5a4a;
-  font-family: 'Source Serif 4', serif;
-  font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase;
-  cursor: pointer; transition: color 0.2s;
-  gap: 3px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; padding:8px 4px;
+  border:none; background:none; color:#5a5070;
+  font-family:'DM Sans',sans-serif; font-size:0.58rem;
+  font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+  cursor:pointer; transition:color 0.15s;
 }
-.nav-tab .nav-icon { font-size: 1.4rem; line-height: 1; }
-.nav-tab.active { color: var(--gold); }
-.nav-tab.active .nav-icon { filter: drop-shadow(0 0 4px rgba(184,134,11,0.6)); }
+.nav-icon { font-size:1.25rem; line-height:1; }
+.nav-tab.active { color:var(--gold); }
 
-/* ── SCREEN CONTAINER ────────────────────────────────────────── */
-.screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }
-.screen.active { display: flex; }
+/* ── SCREENS ──────────────────────────────────────────── */
+.screen {
+  display:none; flex-direction:column;
+  flex:1; overflow:hidden; min-height:0;
+}
+.screen.active { display:flex; }
 
-/* ══════════════════════════════════════════════════════════════
-   SCREEN 1: NUMBERS / SHOPPING
-══════════════════════════════════════════════════════════════ */
-.numbers-screen { background: var(--cream); }
+/* ═══════════════════════════════════════════════════════
+   SCREEN 1: NUMBERS
+═══════════════════════════════════════════════════════ */
+.mode-tabs {
+  display:flex; overflow-x:auto; flex-shrink:0;
+  background:var(--parch); border-bottom:1px solid var(--border);
+  scrollbar-width:none;
+}
+.mode-tabs::-webkit-scrollbar { display:none; }
+.mode-tab {
+  flex-shrink:0; padding:10px 14px;
+  font-size:0.72rem; font-weight:600; letter-spacing:0.05em; text-transform:uppercase;
+  color:var(--muted); background:none; border:none;
+  border-bottom:2px solid transparent; margin-bottom:-1px;
+  cursor:pointer; transition:all 0.15s; white-space:nowrap;
+}
+.mode-tab.active { color:var(--crimson); border-bottom-color:var(--crimson); }
 
-/* Score ribbon */
-.score-ribbon {
-  background: var(--parchment);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 12px;
-  padding: 6px 14px;
-  font-size: 0.78rem; color: var(--muted);
-  flex-shrink: 0;
+.settings-strip {
+  background:var(--parch); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  padding:6px 12px; flex-shrink:0;
 }
-.score-ribbon .pill {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 2px 10px;
-  font-weight: 600;
-  color: var(--ink);
+.settings-strip label {
+  display:flex; align-items:center; gap:4px;
+  font-size:0.7rem; color:var(--muted); cursor:pointer;
 }
-.daily-bar {
-  flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden;
+.settings-strip select {
+  font-size:0.7rem; padding:3px 6px; border-radius:6px;
+  background:var(--card); color:var(--ink); border:1px solid var(--border);
+  font-family:inherit; cursor:pointer;
 }
-.daily-bar-fill { height: 100%; background: var(--crimson); border-radius: 3px; transition: width 0.5s; }
+.tog { accent-color:var(--crimson); cursor:pointer; }
 
 /* Display card */
 .display-card {
-  margin: 12px 14px 8px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px 14px 12px;
-  position: relative;
-  box-shadow: 0 2px 8px rgba(26,10,0,0.06);
-  flex-shrink: 0;
+  margin:10px 12px 6px; flex-shrink:0;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:14px 14px 10px;
+  box-shadow:0 1px 6px rgba(0,0,0,0.06);
+  position:relative;
 }
-
 .mode-chip {
-  display: inline-block;
-  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--muted);
-  font-family: 'Source Serif 4', serif;
-  margin-bottom: 6px;
+  font-size:0.6rem; font-weight:700; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:6px; display:block;
 }
-
 .grammar-chip {
-  position: absolute; top: 12px; right: 12px;
-  background: var(--crimson); color: white;
-  font-size: 0.58rem; font-weight: 600; letter-spacing: 0.06em;
-  padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
-  display: none;
+  display:none; position:absolute; top:12px; right:12px;
+  background:var(--crimson); color:#fff;
+  font-size:0.58rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+  padding:3px 8px; border-radius:4px;
 }
-.grammar-chip.show { display: block; }
+.grammar-chip.show { display:block; }
+.scenario-tag {
+  display:none; margin-bottom:6px;
+  background:rgba(196,154,26,0.12); border:1px solid var(--gold);
+  color:var(--gold); font-size:0.7rem; font-weight:600;
+  padding:3px 10px; border-radius:6px; width:fit-content;
+}
+.voice-fb { font-size:0.78rem; min-height:1rem; margin-bottom:4px; font-weight:600; }
 
-.pl-display {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.4rem, 7vw, 2.2rem);
-  font-weight: 700;
-  color: var(--crimson);
-  line-height: 1.15;
-  margin-bottom: 4px;
-  min-height: 2.5rem;
-  visibility: hidden;
+.pl-text {
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(1.3rem,6vw,2rem); color:var(--crimson);
+  line-height:1.2; margin-bottom:4px; min-height:2rem; visibility:hidden;
 }
-.pl-display.reveal { visibility: visible; animation: fadeUp 0.25s ease; }
-
-.phonetic-display {
-  font-style: italic;
-  font-size: 0.82rem;
-  color: var(--phonetic);
-  min-height: 1.1rem;
-  margin-bottom: 4px;
-  visibility: hidden;
-}
-.phonetic-display.reveal { visibility: visible; }
-
-.en-display {
-  font-size: 0.9rem;
-  color: var(--muted);
-  min-height: 1.2rem;
-  visibility: hidden;
-}
-.en-display.reveal { visibility: visible; }
-
-.voice-feedback {
-  font-size: 0.8rem; color: var(--correct); font-weight: 600;
-  min-height: 1rem; text-align: center; margin-top: 4px;
-}
-
-/* Mode sub-tabs (Numbers / Shopping / Context) */
-.mode-tabs {
-  display: flex; gap: 0;
-  border-bottom: 2px solid var(--border);
-  flex-shrink: 0;
-  padding: 0 14px;
-  overflow-x: auto;
-}
-.mode-tab {
-  padding: 6px 12px;
-  font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--muted);
-  background: none; border: none; border-bottom: 2px solid transparent;
-  margin-bottom: -2px; cursor: pointer;
-  white-space: nowrap;
-  font-family: 'Source Serif 4', serif;
-  font-weight: 600;
-  transition: color 0.2s;
-}
-.mode-tab.active { color: var(--crimson); border-bottom-color: var(--crimson); }
+.pl-text.show { visibility:visible; animation:fadeUp 0.2s ease; }
+.ph-text { font-style:italic; font-size:0.8rem; color:var(--phonetic); min-height:1rem; visibility:hidden; }
+.ph-text.show { visibility:visible; }
+.en-text { font-size:0.85rem; color:var(--muted); visibility:hidden; }
+.en-text.show { visibility:visible; }
 
 /* Answer grid */
-.answer-scroll { flex: 1; overflow-y: auto; padding: 8px 14px 8px; }
-
-.answer-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
-}
-.answer-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-
+.answer-scroll { flex:1; overflow-y:auto; padding:8px 12px 4px; min-height:0; }
+.answer-grid { display:grid; gap:8px; }
+.grid-2 { grid-template-columns:1fr 1fr; }
+.grid-3 { grid-template-columns:1fr 1fr 1fr; }
 .ans-btn {
-  background: var(--card);
-  border: 1.5px solid var(--border);
-  border-bottom: 3px solid var(--border);
-  border-radius: 12px;
-  min-height: 60px;
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(0.9rem, 3.5vw, 1.15rem);
-  font-weight: 700;
-  color: var(--ink);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  padding: 8px 6px;
-  text-align: center;
-  word-break: break-word;
-  position: relative;
-  transition: transform 0.08s, border-bottom-width 0.08s;
+  position:relative;
+  background:var(--card); border:1.5px solid var(--border);
+  border-bottom:3px solid var(--border);
+  border-radius:11px; min-height:58px;
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(0.85rem,3.5vw,1.1rem); font-weight:400;
+  color:var(--ink); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  padding:8px 6px; text-align:center; word-break:break-word;
+  transition:transform 0.08s, border-color 0.15s;
 }
-.ans-btn:active { transform: translateY(2px); border-bottom-width: 1px; }
-.ans-btn .key-hint { position: absolute; top: 4px; left: 6px; font-size: 0.58rem; color: var(--border); font-family: 'Source Serif 4', serif; font-weight: 400; }
-.ans-btn.correct { background: #e8f5e8; border-color: var(--correct); color: var(--correct); }
-.ans-btn.wrong   { background: #fcecea; border-color: var(--wrong);   color: var(--wrong);   opacity: 0.6; }
+.ans-btn:active { transform:translateY(2px); border-bottom-width:1px; }
+.key-hint { position:absolute; top:4px; left:6px; font-size:0.56rem; color:var(--border); font-family:'DM Sans',sans-serif; }
+.ans-btn.correct { background:#edf7f0; border-color:var(--correct); color:var(--correct); }
+.ans-btn.wrong   { background:#fcecea; border-color:var(--wrong);   color:var(--wrong); opacity:0.6; }
 
-/* Type input area */
-.type-area {
-  display: none;
-  padding: 8px 14px;
-  flex-direction: column;
-  gap: 8px;
-}
+.type-area { display:none; flex-direction:column; gap:8px; padding:0 12px 8px; }
 .type-input {
-  width: 100%; padding: 12px 14px;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem; font-weight: 700; text-align: center;
-  background: var(--card); color: var(--ink);
-  border: 2px solid var(--border); border-radius: 12px;
-  outline: none;
+  width:100%; padding:12px 14px; text-align:center;
+  font-family:'DM Serif Display',serif; font-size:1.3rem;
+  background:var(--card); color:var(--ink);
+  border:2px solid var(--border); border-radius:11px; outline:none;
 }
-.type-input:focus { border-color: var(--crimson); }
+.type-input:focus { border-color:var(--crimson); }
+.check-btn {
+  width:100%; background:var(--crimson); color:#fff;
+  border:none; border-radius:11px; padding:13px;
+  font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.95rem;
+  cursor:pointer;
+}
 
-/* Action footer for numbers screen */
-.numbers-footer {
-  background: var(--parchment);
-  border-top: 1px solid var(--border);
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 8px;
-  padding: 10px 14px;
-  padding-bottom: max(10px, var(--safe-bottom));
-  flex-shrink: 0;
+/* Numbers footer */
+.num-footer {
+  background:var(--parch); border-top:1px solid var(--border);
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:7px; padding:8px 12px;
+  padding-bottom:max(8px,var(--safe-b)); flex-shrink:0;
 }
 .act-btn {
-  border: none; border-radius: 10px;
-  font-weight: 700; font-size: 0.75rem; color: white;
-  cursor: pointer; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 2px;
-  padding: 8px 4px;
-  font-family: 'Source Serif 4', serif;
+  border:none; border-radius:10px; font-weight:700;
+  font-size:0.72rem; color:#fff; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:1px; padding:7px 4px;
+  font-family:'DM Sans',sans-serif;
 }
-.act-btn .act-icon { font-size: 1.2rem; line-height: 1; }
-.btn-listen { background: var(--correct); }
-.btn-mic    { background: var(--wrong); }
-.btn-hf     { background: #5a3a8a; }
-.btn-skip   { background: var(--muted); font-size: 0.68rem; }
-.btn-check  {
-  width: 100%; background: var(--crimson); color: white;
-  border: none; border-radius: 10px; padding: 12px;
-  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1rem;
-  cursor: pointer;
-}
+.act-icon { font-size:1.15rem; line-height:1; }
+.btn-listen { background:var(--sage); }
+.btn-mic    { background:var(--crimson); }
+.btn-hf     { background:#5a3a8a; }
+.btn-skip   { background:var(--muted); font-size:0.65rem; }
 
-/* Settings drawer */
-.settings-row {
-  background: var(--parchment);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; flex-wrap: wrap;
-  gap: 8px; padding: 8px 14px;
-  flex-shrink: 0;
+/* Score pop */
+.score-pop {
+  position:absolute; left:50%; pointer-events:none; z-index:50;
+  font-family:'DM Serif Display',serif; font-size:2rem; font-style:italic;
+  color:var(--sage); white-space:nowrap;
+  animation:scoreFloat 0.9s ease forwards;
 }
-.settings-row label { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 4px; cursor: pointer; }
-.settings-row select {
-  font-size: 0.72rem; padding: 3px 6px; border-radius: 6px;
-  background: var(--card); color: var(--ink); border: 1px solid var(--border);
-  font-family: inherit;
+@keyframes scoreFloat {
+  0%   { opacity:0; transform:translate(-50%,0) scale(0.7); }
+  25%  { opacity:1; transform:translate(-50%,-20px) scale(1.1); }
+  80%  { opacity:1; transform:translate(-50%,-28px) scale(1); }
+  100% { opacity:0; transform:translate(-50%,-50px) scale(0.9); }
 }
-.tog { cursor: pointer; accent-color: var(--crimson); }
-.tog-label { font-size: 0.7rem; color: var(--muted); }
+@keyframes fadeUp { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+@keyframes confettiFall { to{transform:translateY(110vh) rotate(720deg);opacity:0} }
 
-/* ══════════════════════════════════════════════════════════════
-   SCREEN 2: CALENDAR / DIARY
-══════════════════════════════════════════════════════════════ */
-.calendar-screen { background: var(--cream); overflow-y: auto; }
-
+/* ═══════════════════════════════════════════════════════
+   SCREEN 2: CALENDAR
+═══════════════════════════════════════════════════════ */
 .cal-header {
-  background: var(--ink);
-  color: var(--cream);
-  padding: 14px 16px 12px;
-  flex-shrink: 0;
+  background:var(--ink2); color:var(--cream);
+  padding:12px 14px 8px; flex-shrink:0;
 }
-.cal-month-row {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 8px;
+.cal-nav-row {
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;
 }
-.cal-month-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.4rem; font-weight: 700; color: var(--gold);
-}
+.cal-month-name { font-family:'DM Serif Display',serif; font-size:1.3rem; color:var(--gold); }
 .cal-nav-btn {
-  background: rgba(255,255,255,0.1); border: none; color: var(--cream);
-  width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  background:rgba(255,255,255,0.1); border:none; color:var(--cream);
+  width:34px; height:34px; border-radius:50%; font-size:1.2rem;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
 }
-.cal-selected-phrase {
-  font-size: 0.82rem; color: rgba(240,232,216,0.7);
-  font-style: italic; min-height: 1.1rem;
-}
-.cal-weekdays {
-  display: grid; grid-template-columns: repeat(7, 1fr);
-  text-align: center; font-size: 0.65rem; letter-spacing: 0.06em;
-  color: rgba(240,232,216,0.5); text-transform: uppercase;
-  padding: 0 2px;
+.cal-phrase { font-size:0.78rem; color:rgba(247,244,238,0.6); font-style:italic; min-height:1rem; }
+.cal-wd-row {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  text-align:center; font-size:0.6rem; font-weight:700;
+  letter-spacing:0.06em; text-transform:uppercase;
+  color:rgba(247,244,238,0.4); padding:0 2px; margin-bottom:4px;
 }
 
-.cal-body { padding: 8px 10px 12px; flex: 1; }
-
-.cal-grid {
-  display: grid; grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+/* Name search bar */
+.name-search-row {
+  display:flex; gap:6px; padding:8px 12px 0; flex-shrink:0;
 }
+.name-search-input {
+  flex:1; padding:8px 12px; border-radius:8px;
+  border:1.5px solid var(--border); background:var(--card); color:var(--ink);
+  font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none;
+}
+.name-search-input:focus { border-color:var(--blue); }
+.name-search-btn {
+  background:var(--blue); color:#fff; border:none;
+  border-radius:8px; padding:0 14px; font-weight:700;
+  font-size:0.78rem; cursor:pointer; font-family:'DM Sans',sans-serif;
+  white-space:nowrap;
+}
+.name-result {
+  margin:4px 12px 0; padding:8px 12px; border-radius:8px;
+  background:var(--card); border:1px solid var(--border);
+  font-size:0.82rem; color:var(--ink); display:none;
+}
+.name-result.show { display:block; }
+
+.cal-body { flex:1; overflow-y:auto; padding:6px 10px 80px; min-height:0; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:10px; }
 
 .cal-day {
-  aspect-ratio: 1;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  border-radius: 8px;
-  font-size: 0.85rem; font-weight: 600;
-  cursor: pointer; position: relative;
-  transition: background 0.15s;
-  border: 1.5px solid transparent;
+  aspect-ratio:1; border-radius:7px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-size:0.82rem; font-weight:600; cursor:pointer; position:relative;
+  border:1.5px solid transparent; transition:background 0.12s;
+  gap:1px;
 }
-.cal-day:hover { background: var(--parchment); }
-.cal-day.today { background: var(--gold); color: var(--ink) !important; font-weight: 900; }
-.cal-day.selected { background: var(--crimson) !important; color: white !important; border-color: transparent !important; }
-.cal-day.holiday { border-color: var(--crimson); color: var(--crimson); }
-.cal-day.tradition { border-color: var(--gold); }
-.cal-day.spacer { background: none; cursor: default; }
-.cal-day .diary-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--correct);
-  position: absolute; bottom: 2px;
-}
-.cal-day.holiday .holiday-dot { display: block; }
-.cal-day .event-label {
-  font-size: 0.45rem; text-align: center; line-height: 1.1;
-  color: var(--crimson); max-width: 100%; overflow: hidden;
-  white-space: nowrap; text-overflow: ellipsis;
-}
+.cal-day:hover:not(.spacer) { background:var(--parch); }
+.cal-day.spacer { cursor:default; }
+.cal-day.today { background:var(--gold); color:var(--ink) !important; font-weight:800; border-color:transparent; }
+.cal-day.selected { background:var(--crimson) !important; color:#fff !important; border-color:transparent !important; }
+
+/* Holiday/tradition markers — coloured top border */
+.cal-day.is-holiday   { border-top-color:var(--holiday);    border-top-width:3px; }
+.cal-day.is-tradition { border-top-color:var(--tradition);  border-top-width:3px; }
+.cal-day.is-nameday   { border-bottom-color:var(--nameday); border-bottom-width:2px; }
+
+/* Small dots below the number */
+.cal-day .day-dots { display:flex; gap:2px; justify-content:center; }
+.cal-day .dot { width:4px; height:4px; border-radius:50%; flex-shrink:0; }
+.dot-diary    { background:var(--sage); }
+.dot-holiday  { background:var(--holiday); }
+.dot-tradition{ background:var(--tradition); }
+.dot-nameday  { background:var(--nameday); }
 
 /* Calendar info panel */
 .cal-info-panel {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  margin: 0 10px 12px;
-  padding: 14px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:12px 14px; margin-bottom:8px; display:none;
 }
-
-.cal-date-pl {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem; font-weight: 700; color: var(--crimson);
-  margin-bottom: 2px;
-}
-.cal-date-phonetic { font-style: italic; font-size: 0.78rem; color: var(--phonetic); margin-bottom: 4px; }
-.cal-date-en { font-size: 0.82rem; color: var(--muted); margin-bottom: 10px; }
-
-.cal-panel-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.cal-pill {
-  font-size: 0.72rem; font-weight: 600; padding: 6px 14px;
-  border-radius: 20px; border: 1.5px solid var(--border);
-  background: var(--card); color: var(--ink);
-  cursor: pointer; font-family: 'Source Serif 4', serif;
-  transition: background 0.15s;
-}
-.cal-pill:hover { background: var(--parchment); }
-.cal-pill.primary { background: var(--crimson); color: white; border-color: var(--crimson); }
-.cal-pill.gold    { background: var(--gold);    color: white; border-color: var(--gold); }
-
-.case-toggle-row {
-  display: flex; gap: 8px; margin-bottom: 10px;
-}
+.case-row { display:flex; gap:6px; margin-bottom:10px; }
 .case-pill {
-  flex: 1; text-align: center;
-  padding: 6px 8px; border-radius: 8px; font-size: 0.72rem; font-weight: 600;
-  border: 1.5px solid var(--border); cursor: pointer;
-  font-family: 'Source Serif 4', serif; color: var(--muted);
-  transition: all 0.15s;
+  flex:1; text-align:center; padding:6px;
+  border-radius:7px; font-size:0.68rem; font-weight:700;
+  letter-spacing:0.04em; border:1.5px solid var(--border);
+  cursor:pointer; color:var(--muted); transition:all 0.15s;
+  font-family:'DM Sans',sans-serif;
 }
-.case-pill.active { background: var(--crimson); color: white; border-color: var(--crimson); }
+.case-pill.active { background:var(--crimson); color:#fff; border-color:var(--crimson); }
 
-/* Diary entries */
-.diary-section { margin: 0 10px 12px; }
-.diary-section h3 { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
-.diary-entry {
-  display: flex; gap: 10px; align-items: flex-start;
-  padding: 10px 12px; margin-bottom: 6px;
-  background: var(--card); border-radius: 10px;
-  border-left: 3px solid var(--crimson);
+.date-pl   { font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--crimson); margin-bottom:2px; }
+.date-ph   { font-style:italic; font-size:0.76rem; color:var(--phonetic); margin-bottom:3px; }
+.date-en   { font-size:0.8rem; color:var(--muted); margin-bottom:10px; }
+.nameday-row { font-size:0.78rem; color:var(--blue); margin-bottom:10px; font-weight:600; }
+
+.cal-btn-row { display:flex; gap:6px; flex-wrap:wrap; }
+.cal-pill {
+  font-size:0.7rem; font-weight:700; padding:6px 12px;
+  border-radius:20px; border:1.5px solid var(--border);
+  background:var(--card); color:var(--ink); cursor:pointer;
+  font-family:'DM Sans',sans-serif; transition:background 0.12s;
 }
-.diary-entry-text { flex: 1; font-size: 0.88rem; line-height: 1.4; }
-.diary-entry-date { font-size: 0.7rem; color: var(--muted); margin-bottom: 2px; }
-.diary-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; flex-shrink: 0; }
-.diary-input-row { display: flex; gap: 8px; }
+.cal-pill:hover { background:var(--parch); }
+.cal-pill.primary { background:var(--crimson); color:#fff; border-color:var(--crimson); }
+.cal-pill.blue    { background:var(--blue);    color:#fff; border-color:var(--blue); }
+.cal-pill.gold    { background:var(--gold);    color:#fff; border-color:var(--gold); }
+
+/* Holiday card */
+.holiday-info-card {
+  border-radius:10px; padding:10px 12px; margin-bottom:8px;
+  font-size:0.82rem; display:none;
+}
+.holiday-info-card.show { display:block; }
+.holiday-info-card.type-holiday   { background:rgba(200,16,46,0.06);  border-left:3px solid var(--holiday); }
+.holiday-info-card.type-tradition { background:rgba(196,154,26,0.08); border-left:3px solid var(--tradition); }
+.holiday-info-card h4 { font-size:0.82rem; font-weight:700; margin-bottom:3px; color:var(--ink); }
+.holiday-info-card p  { color:var(--muted); line-height:1.45; font-size:0.78rem; }
+
+/* Legend */
+.cal-legend { display:flex; gap:10px; flex-wrap:wrap; padding:0 0 8px; font-size:0.62rem; font-weight:600; color:var(--muted); }
+.legend-item { display:flex; align-items:center; gap:4px; }
+.legend-dot  { width:8px; height:8px; border-radius:50%; }
+
+/* Diary */
+.diary-section { margin-bottom:10px; }
+.diary-section h3 { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+.diary-input-row { display:flex; gap:6px; margin-bottom:6px; }
 .diary-textarea {
-  flex: 1; padding: 10px 12px;
-  font-family: 'Source Serif 4', serif; font-size: 0.9rem;
-  background: var(--card); color: var(--ink);
-  border: 1.5px solid var(--border); border-radius: 10px;
-  resize: none; min-height: 44px; max-height: 88px;
-  outline: none;
+  flex:1; padding:9px 11px; border-radius:9px;
+  border:1.5px solid var(--border); background:var(--card); color:var(--ink);
+  font-family:'DM Sans',sans-serif; font-size:0.87rem;
+  resize:none; min-height:40px; outline:none;
 }
-.diary-textarea:focus { border-color: var(--crimson); }
+.diary-textarea:focus { border-color:var(--crimson); }
 .diary-save {
-  background: var(--crimson); color: white; border: none;
-  border-radius: 10px; padding: 0 16px;
-  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.85rem;
-  cursor: pointer; flex-shrink: 0;
+  background:var(--crimson); color:#fff; border:none;
+  border-radius:9px; padding:0 14px; font-weight:700;
+  font-size:0.78rem; cursor:pointer; flex-shrink:0;
+  font-family:'DM Sans',sans-serif;
 }
-
-/* Holiday info card */
-.holiday-card {
-  padding: 10px 12px; margin-bottom: 8px;
-  background: rgba(200,16,46,0.05);
-  border-left: 3px solid var(--crimson); border-radius: 0 8px 8px 0;
+.diary-entry {
+  display:flex; gap:8px; align-items:flex-start;
+  padding:9px 11px; margin-bottom:5px;
+  background:var(--card); border-radius:9px;
+  border-left:3px solid var(--crimson);
 }
-.holiday-card h4 { font-size: 0.88rem; color: var(--crimson); margin-bottom: 2px; }
-.holiday-card p  { font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+.diary-entry-text { flex:1; font-size:0.85rem; line-height:1.4; }
+.diary-entry-meta { font-size:0.68rem; color:var(--muted); margin-bottom:2px; }
+.diary-del { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.95rem; flex-shrink:0; padding:0 2px; }
 
-/* ══════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    SCREEN 3: CLOCK
-══════════════════════════════════════════════════════════════ */
-.clock-screen {
-  background: var(--cream);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-}
-
-.clock-top {
-  display: flex; gap: 8px; padding: 10px 14px 6px;
-  flex-shrink: 0; flex-wrap: wrap;
+═══════════════════════════════════════════════════════ */
+.clock-pills {
+  display:flex; gap:6px; padding:10px 12px 6px;
+  flex-shrink:0; flex-wrap:wrap; background:var(--parch);
+  border-bottom:1px solid var(--border);
 }
 .clock-pill {
-  font-size: 0.7rem; font-weight: 600; padding: 5px 12px;
-  border-radius: 20px; border: 1.5px solid var(--border);
-  background: var(--card); color: var(--muted); cursor: pointer;
-  font-family: 'Source Serif 4', serif; transition: all 0.15s;
+  font-size:0.68rem; font-weight:700; padding:5px 11px;
+  border-radius:20px; border:1.5px solid var(--border);
+  background:var(--card); color:var(--muted); cursor:pointer;
+  font-family:'DM Sans',sans-serif; letter-spacing:0.04em;
+  transition:all 0.14s;
 }
-.clock-pill.active { background: var(--crimson); color: white; border-color: var(--crimson); }
+.clock-pill.active { background:var(--crimson); color:#fff; border-color:var(--crimson); }
 
-/* Analogue clock */
-.clock-wrap {
-  display: flex; justify-content: center; align-items: center;
-  padding: 8px 14px; flex-shrink: 0;
-}
-.clock-face {
-  width: min(200px, 44vw); height: min(200px, 44vw);
-  border-radius: 50%;
-  background: var(--card);
-  border: 3px solid var(--ink);
-  position: relative;
-  box-shadow: 0 4px 20px rgba(26,10,0,0.12), inset 0 1px 3px rgba(255,255,255,0.5);
-  cursor: grab;
-}
-.clock-face:active { cursor: grabbing; }
-.clock-center {
-  position: absolute; top: 50%; left: 50%;
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--ink); transform: translate(-50%, -50%); z-index: 10;
-}
-.clock-hand {
-  position: absolute; bottom: 50%; left: 50%;
-  transform-origin: bottom center;
-  border-radius: 3px 3px 0 0;
-}
-.hand-hour {
-  width: 4px; height: 28%; background: var(--ink);
-  margin-left: -2px; border-radius: 3px;
-}
-.hand-min {
-  width: 3px; height: 40%; background: var(--ink);
-  margin-left: -1.5px; border-radius: 3px;
-}
-.hand-sec {
-  width: 1.5px; height: 44%; background: var(--crimson);
-  margin-left: -0.75px; border-radius: 2px; display: none;
-}
-.clock-mark {
-  position: absolute; top: 50%; left: 50%;
-  width: 2px; height: 8%;
-  background: var(--border);
-  transform-origin: bottom center;
-  margin-left: -1px;
-}
-.clock-mark.major {
-  width: 3px; height: 10%;
-  background: var(--ink);
-  margin-left: -1.5px;
+/* Clock face area */
+.clock-area {
+  display:flex; align-items:center; justify-content:center;
+  padding:10px 14px 4px; flex-shrink:0; gap:20px; flex-wrap:wrap;
 }
 
-/* Digital display */
-.clock-digital {
-  text-align: center; padding: 0 14px 6px;
-  flex-shrink: 0;
-}
+/* SVG clock — clean, reliable geometry */
+.clock-svg-wrap { flex-shrink:0; }
+svg.clock-face { cursor:grab; touch-action:none; }
+svg.clock-face:active { cursor:grabbing; }
+
+.clock-digital { text-align:center; padding:2px 14px 6px; flex-shrink:0; }
 .time-input {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.2rem; font-weight: 900;
-  background: none; border: none; color: var(--ink);
-  text-align: center; width: 100%; letter-spacing: 0.05em;
-  outline: none; cursor: pointer;
+  font-family:'DM Serif Display',serif; font-size:2rem;
+  background:none; border:none; color:var(--ink);
+  text-align:center; width:140px; outline:none; cursor:pointer;
+  border-bottom:2px solid var(--border); letter-spacing:0.05em;
 }
-.time-input:focus { color: var(--crimson); }
+.time-input:focus { border-bottom-color:var(--crimson); color:var(--crimson); }
 
-/* Polish time display */
-.clock-polish-area {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  margin: 0 14px 8px;
-  padding: 14px;
-  text-align: center;
-  flex-shrink: 0;
+.clock-polish {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; margin:0 12px 6px; padding:12px 14px;
+  text-align:center; flex-shrink:0;
 }
-
-.time-pl-main {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.1rem, 5vw, 1.6rem);
-  font-weight: 700; color: var(--crimson);
-  margin-bottom: 4px; line-height: 1.2;
+.time-pl {
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(1.1rem,5vw,1.55rem);
+  color:var(--crimson); margin-bottom:4px; line-height:1.25;
 }
-.time-pl-main .nom { color: var(--correct); }
-.time-pl-main .gen { color: var(--gold); }
-.time-pl-main .card { color: var(--crimson); }
-
-.time-phonetic {
-  font-style: italic; font-size: 0.8rem; color: var(--phonetic);
-  margin-bottom: 4px; min-height: 1.1rem;
-}
-.time-en { font-size: 0.85rem; color: var(--muted); }
-
+.time-pl .nom  { color:var(--sage); }
+.time-pl .gen  { color:var(--gold); }
+.time-pl .card { color:var(--crimson); }
+.time-ph { font-style:italic; font-size:0.78rem; color:var(--phonetic); margin-bottom:3px; min-height:1rem; }
+.time-en { font-size:0.82rem; color:var(--muted); margin-bottom:6px; }
 .grammar-note {
-  display: inline-block; margin-top: 8px;
-  font-size: 0.68rem; padding: 3px 10px; border-radius: 4px;
-  font-weight: 600; letter-spacing: 0.06em;
+  display:inline-block; font-size:0.65rem; font-weight:700;
+  padding:3px 10px; border-radius:4px; letter-spacing:0.05em;
 }
-.note-nom  { background: rgba(45,106,45,0.1); color: var(--correct); }
-.note-gen  { background: rgba(184,134,11,0.1); color: var(--gold); }
-.note-card { background: rgba(200,16,46,0.1);  color: var(--crimson); }
+.note-nom  { background:rgba(45,106,79,0.1);  color:var(--sage); }
+.note-gen  { background:rgba(196,154,26,0.1); color:var(--gold); }
+.note-card { background:rgba(200,16,46,0.08); color:var(--crimson); }
+.note-formal { background:rgba(26,79,160,0.08); color:var(--blue); }
 
-/* Clock quiz grid */
 .clock-quiz-grid {
-  display: none; grid-template-columns: 1fr 1fr;
-  gap: 8px; padding: 0 14px 8px; flex-shrink: 0;
+  display:none; grid-template-columns:1fr 1fr;
+  gap:7px; padding:0 12px 6px; flex-shrink:0;
 }
-.clock-quiz-grid.show { display: grid; }
-
+.clock-quiz-grid.show { display:grid; }
 .quiz-opt {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 10px; padding: 10px 8px;
-  font-family: 'Playfair Display', serif; font-size: 0.82rem; font-weight: 700;
-  color: var(--ink); cursor: pointer; text-align: center; line-height: 1.3;
-  transition: all 0.15s;
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:9px; padding:9px 6px;
+  font-family:'DM Serif Display',serif; font-size:0.82rem;
+  color:var(--ink); cursor:pointer; text-align:center; line-height:1.3;
+  transition:all 0.14s;
 }
-.quiz-opt.correct { background: #e8f5e8; border-color: var(--correct); color: var(--correct); }
-.quiz-opt.wrong   { background: #fcecea; border-color: var(--wrong);   color: var(--wrong);   opacity: 0.6; }
+.quiz-opt.correct { background:#edf7f0; border-color:var(--correct); color:var(--correct); }
+.quiz-opt.wrong   { background:#fcecea; border-color:var(--wrong);   color:var(--wrong); opacity:0.6; }
 
-/* Clock action row */
 .clock-actions {
-  display: flex; gap: 8px; padding: 6px 14px;
-  flex-shrink: 0; flex-wrap: wrap;
+  display:flex; gap:6px; padding:4px 12px 6px;
+  flex-shrink:0; flex-wrap:wrap;
 }
-.clock-action-btn {
-  flex: 1; min-width: 80px;
-  padding: 10px 8px; border-radius: 10px; border: none;
-  font-family: 'Source Serif 4', serif; font-weight: 700; font-size: 0.75rem;
-  cursor: pointer; color: white;
-  display: flex; align-items: center; justify-content: center; gap: 4px;
+.clk-act {
+  flex:1; min-width:70px; padding:9px 6px;
+  border-radius:9px; border:none; color:#fff;
+  font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.7rem;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:4px;
 }
-.btn-actual  { background: var(--ink); }
-.btn-random  { background: var(--muted); }
-.btn-speak   { background: var(--correct); }
-.btn-slow    { background: var(--gold); }
-.btn-quiz-t  { background: var(--crimson); }
+.btn-now    { background:var(--ink2); }
+.btn-rnd    { background:var(--muted); }
+.btn-speak  { background:var(--sage); }
+.btn-slow   { background:var(--gold); }
 
-/* ══════════════════════════════════════════════════════════════
-   HANDSFREE OVERLAY
-══════════════════════════════════════════════════════════════ */
-#hf-overlay {
-  display: none; position: fixed; inset: 0; z-index: 9000;
-  background: var(--ink); color: var(--cream);
-  flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 30px;
-}
-#hf-overlay.show { display: flex; }
-.hf-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 30px; }
-.hf-pl { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 8vw, 2.8rem); font-weight: 900; color: var(--gold); margin-bottom: 16px; line-height: 1.2; }
-.hf-en { font-size: 1rem; color: rgba(240,232,216,0.6); margin-bottom: 40px; }
-.hf-stop { background: var(--crimson); color: white; border: none; padding: 16px 40px; border-radius: 30px; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1rem; cursor: pointer; }
-
-/* ══════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    MODALS
-══════════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 .modal-bg {
-  display: none; position: fixed; inset: 0; z-index: 8000;
-  background: rgba(26,10,0,0.7); backdrop-filter: blur(4px);
-  align-items: center; justify-content: center;
+  display:none; position:fixed; inset:0; z-index:1000;
+  background:rgba(15,15,20,0.75); backdrop-filter:blur(4px);
+  align-items:center; justify-content:center;
 }
-.modal-bg.show { display: flex; }
+.modal-bg.show { display:flex; }
 .modal-box {
-  background: var(--card); border-radius: 20px;
-  width: 94%; max-width: 420px; max-height: 88dvh;
-  overflow-y: auto; padding: 24px;
-  box-shadow: 0 10px 40px rgba(26,10,0,0.3);
-  position: relative;
+  background:var(--card); border-radius:18px;
+  width:94%; max-width:400px; max-height:90dvh;
+  overflow-y:auto; padding:22px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.3); position:relative;
 }
 .modal-close {
-  position: absolute; top: 16px; right: 16px;
-  background: var(--parchment); border: 1px solid var(--border);
-  width: 30px; height: 30px; border-radius: 50%;
-  font-size: 1.1rem; cursor: pointer; color: var(--ink);
-  display: flex; align-items: center; justify-content: center;
+  position:absolute; top:14px; right:14px;
+  background:var(--parch); border:1px solid var(--border);
+  width:28px; height:28px; border-radius:50%; font-size:1rem;
+  cursor:pointer; color:var(--ink);
+  display:flex; align-items:center; justify-content:center;
 }
-.modal-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem; font-weight: 700; color: var(--crimson);
-  margin-bottom: 16px;
-}
-.modal-section { margin-bottom: 16px; }
-.modal-section h3 { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-.modal-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.88rem; }
-.modal-row select { font-size: 0.82rem; padding: 4px 8px; border-radius: 6px; background: var(--parchment); color: var(--ink); border: 1px solid var(--border); }
-.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.modal-mode-btn {
-  padding: 8px 6px; border-radius: 8px; border: 1.5px solid var(--border);
-  background: var(--card); color: var(--muted); font-size: 0.72rem; font-weight: 600;
-  cursor: pointer; text-align: center; font-family: 'Source Serif 4', serif;
-  transition: all 0.15s;
-}
-.modal-mode-btn.active { background: rgba(200,16,46,0.08); border-color: var(--crimson); color: var(--crimson); }
-.range-row { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; margin-bottom: 6px; }
-.range-row input[type=range] { flex: 1; accent-color: var(--crimson); }
-.range-val { font-family: 'Playfair Display', serif; font-weight: 700; min-width: 60px; text-align: right; font-size: 0.85rem; }
+.modal-title { font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--crimson); margin-bottom:14px; }
+.modal-sec { margin-bottom:14px; }
+.modal-sec h3 { font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+.modal-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; font-size:0.85rem; }
+.modal-row select { font-size:0.78rem; padding:4px 8px; border-radius:7px; background:var(--parch); color:var(--ink); border:1px solid var(--border); font-family:inherit; }
+.range-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:0.82rem; }
+.range-row input[type=range] { flex:1; accent-color:var(--crimson); }
+.range-val { font-family:'DM Serif Display',serif; font-weight:400; min-width:55px; text-align:right; }
 
-/* ══════════════════════════════════════════════════════════════
-   STATS & PROGRESS
-══════════════════════════════════════════════════════════════ */
-.stat-card {
-  background: var(--parchment); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
-}
-.stat-card-title { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.stat-card-value { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--crimson); }
-.progress-bar { background: var(--border); height: 6px; border-radius: 3px; overflow: hidden; margin-top: 6px; }
-.progress-fill { height: 100%; background: var(--crimson); border-radius: 3px; transition: width 0.5s; }
+.stat-card { background:var(--parch); border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin-bottom:7px; }
+.stat-label { font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+.stat-value { font-family:'DM Serif Display',serif; font-size:1.4rem; color:var(--crimson); }
+.prog-bar { background:var(--border); height:5px; border-radius:3px; overflow:hidden; margin-top:5px; }
+.prog-fill { height:100%; background:var(--crimson); border-radius:3px; transition:width 0.5s; }
 
-/* ══════════════════════════════════════════════════════════════
-   SHOPPING SCENARIO CARDS
-══════════════════════════════════════════════════════════════ */
-.scenario-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(184,134,11,0.12); border: 1px solid var(--gold);
-  border-radius: 8px; padding: 3px 10px; margin-bottom: 8px;
-  font-size: 0.72rem; font-weight: 600; color: var(--gold);
+/* handsfree overlay */
+#hf-overlay {
+  display:none; position:fixed; inset:0; z-index:2000;
+  background:var(--ink2); flex-direction:column;
+  align-items:center; justify-content:center; text-align:center; padding:30px;
 }
+#hf-overlay.show { display:flex; }
+.hf-label { font-size:0.65rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:24px; }
+.hf-pl { font-family:'DM Serif Display',serif; font-size:clamp(1.8rem,8vw,2.8rem); color:var(--gold); margin-bottom:14px; line-height:1.2; }
+.hf-en { font-size:1rem; color:rgba(247,244,238,0.55); margin-bottom:40px; }
+.hf-stop { background:var(--crimson); color:#fff; border:none; padding:14px 36px; border-radius:26px; font-family:'DM Serif Display',serif; font-size:1rem; cursor:pointer; }
 
-/* ══════════════════════════════════════════════════════════════
-   ANIMATIONS
-══════════════════════════════════════════════════════════════ */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes scoreFloat {
-  0%   { opacity: 0; transform: translate(-50%, 0) scale(0.7); }
-  20%  { opacity: 1; transform: translate(-50%, -20px) scale(1.1); }
-  80%  { opacity: 1; transform: translate(-50%, -30px) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -50px) scale(0.9); }
-}
-@keyframes confettiFall {
-  to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-}
-@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
-
-.score-pop {
-  position: absolute; left: 50%; top: 50%; pointer-events: none;
-  font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900;
-  color: var(--correct); animation: scoreFloat 0.9s ease forwards;
-  white-space: nowrap; z-index: 100;
-}
-
-@media (max-height: 640px) {
-  .ans-btn { min-height: 48px; font-size: 0.85rem; }
-  .display-card { margin: 6px 10px 4px; padding: 10px; }
-  .pl-display { font-size: 1.2rem; }
-  .clock-face { width: min(160px, 40vw); height: min(160px, 40vw); }
+@media (max-height:640px) {
+  .ans-btn { min-height:46px; font-size:0.82rem; }
+  .display-card { margin:6px 10px 4px; padding:10px; }
+  .clock-area { padding:6px 10px 2px; }
 }
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- ═══════════════ TOP BAR ═══════════════ -->
+<!-- TOP BAR -->
 <div class="top-bar">
-  <span class="app-wordmark">Polski</span>
-  <span class="top-bar-streak" id="streak-display">🔥 0</span>
-  <span class="top-bar-xp" id="xp-display">⭐ 0 XP</span>
-  <button onclick="showModal('settings-modal')" style="background:none;border:none;color:var(--gold);font-size:1.1rem;padding:0 8px;cursor:pointer;">⚙️</button>
-  <button onclick="showModal('stats-modal')" style="background:none;border:none;color:var(--gold);font-size:1.1rem;padding:0 8px;cursor:pointer;">📊</button>
+  <span class="wordmark">Polski</span>
+  <div class="top-bar-right">
+    <span class="streak-badge" id="streak-badge">🔥 0</span>
+    <span class="xp-badge" id="xp-badge">0 XP</span>
+    <button class="top-icon-btn" onclick="showModal('stats-modal')">📊</button>
+    <button class="top-icon-btn" onclick="showModal('settings-modal')">⚙️</button>
+  </div>
 </div>
 
-<!-- ═══════════════ SCREENS ═══════════════ -->
+<!-- ═══ NUMBERS SCREEN ═══════════════════════════════════ -->
+<div class="screen active" id="screen-numbers">
 
-<!-- ── SCREEN 1: NUMBERS ────────────────── -->
-<div class="screen numbers-screen active" id="screen-numbers">
-
-  <!-- Mode sub-tabs -->
   <div class="mode-tabs">
-    <button class="mode-tab active" onclick="setSubMode('numbers')"    id="tab-numbers">Numbers</button>
-    <button class="mode-tab"        onclick="setSubMode('shopping')"   id="tab-shopping">🛒 Shopping</button>
-    <button class="mode-tab"        onclick="setSubMode('prices')"     id="tab-prices">Prices</button>
-    <button class="mode-tab"        onclick="setSubMode('context')"    id="tab-context">Sentences</button>
-    <button class="mode-tab"        onclick="setSubMode('ordinal')"    id="tab-ordinal">Ordinals</button>
+    <button class="mode-tab active" onclick="setSubMode('numbers')"  id="tab-numbers">Numbers</button>
+    <button class="mode-tab"        onclick="setSubMode('shopping')" id="tab-shopping">🛒 Shopping</button>
+    <button class="mode-tab"        onclick="setSubMode('prices')"   id="tab-prices">Prices</button>
+    <button class="mode-tab"        onclick="setSubMode('context')"  id="tab-context">Sentences</button>
+    <button class="mode-tab"        onclick="setSubMode('ordinal')"  id="tab-ordinal">Ordinals</button>
   </div>
 
-  <!-- Settings row -->
-  <div class="settings-row" id="num-settings">
-    <label><span class="tog-label">Buttons:</span>
-      <select id="grid-size" onchange="generateNumbers()">
+  <div class="settings-strip">
+    <label>Buttons:
+      <select id="grid-size" onchange="genNumbers()">
         <option value="4">4</option>
         <option value="8" selected>8</option>
         <option value="12">12</option>
         <option value="type">Type</option>
       </select>
     </label>
-    <label><span class="tog-label">Show:</span>
-      <select id="btn-style" onchange="generateNumbers()">
+    <label>Show:
+      <select id="btn-style" onchange="genNumbers()">
         <option value="digits">Digits</option>
         <option value="words">Polish</option>
       </select>
     </label>
-    <label><input type="checkbox" class="tog" id="chk-negatives"> Neg</label>
-    <label><input type="checkbox" class="tog" id="chk-decimals"> Dec</label>
-    <label><input type="checkbox" class="tog" id="chk-fractions"> Frac</label>
+    <label><input type="checkbox" class="tog" id="chk-neg"> Neg</label>
+    <label><input type="checkbox" class="tog" id="chk-dec"> Dec</label>
+    <label><input type="checkbox" class="tog" id="chk-frac"> Frac</label>
   </div>
 
-  <!-- Display card -->
-  <div class="display-card" id="num-display-card">
-    <div class="mode-chip" id="num-mode-chip">Numbers</div>
-    <div class="grammar-chip" id="grammar-chip"></div>
-    <div class="scenario-badge" id="scenario-badge" style="display:none;"></div>
-    <div id="voice-feedback" class="voice-feedback"></div>
-    <div class="pl-display" id="pl-text">—</div>
-    <div class="phonetic-display" id="phonetic-text"></div>
-    <div class="en-display" id="en-text">—</div>
+  <div class="display-card" id="display-card">
+    <span class="mode-chip" id="mode-chip">Numbers</span>
+    <span class="grammar-chip" id="grammar-chip"></span>
+    <div class="scenario-tag" id="scenario-tag"></div>
+    <div class="voice-fb" id="voice-fb"></div>
+    <div class="pl-text" id="pl-text">—</div>
+    <div class="ph-text" id="ph-text"></div>
+    <div class="en-text" id="en-text">—</div>
   </div>
 
-  <!-- Answer area -->
   <div class="answer-scroll" id="answer-scroll">
-    <div class="answer-grid cols-2" id="answer-grid"></div>
+    <div class="answer-grid grid-2" id="answer-grid"></div>
     <div class="type-area" id="type-area">
-      <input type="text" class="type-input" id="type-input" placeholder="Type the answer…" autocomplete="off">
-      <button class="btn-check" id="type-check-btn" onclick="checkTyped()">CHECK</button>
+      <input type="text" class="type-input" id="type-input" placeholder="Type answer…" autocomplete="off">
+      <button class="check-btn" onclick="checkTyped()">CHECK</button>
     </div>
   </div>
 
-  <!-- Footer controls -->
-  <div class="numbers-footer">
-    <button class="act-btn btn-listen" onclick="handleSpeakerTap()" id="spk-btn">
+  <div class="num-footer">
+    <button class="act-btn btn-listen" onclick="handleSpkTap()" id="spk-btn">
       <span class="act-icon">🔊</span><span>Tap×2 Slow</span>
     </button>
     <button class="act-btn btn-mic" id="mic-btn" onclick="toggleMic()">
       <span class="act-icon">🎙️</span>
     </button>
-    <button class="act-btn btn-hf" id="hf-btn" onclick="toggleHandsfree()">
+    <button class="act-btn btn-hf" id="hf-btn" onclick="toggleHF()">
       <span class="act-icon">🚗</span>
     </button>
-    <button class="act-btn btn-skip" onclick="generateNumbers()" id="skip-btn">
-      SKIP ➡
-    </button>
+    <button class="act-btn btn-skip" id="skip-btn" onclick="genNumbers()">SKIP ➡</button>
   </div>
 </div>
 
-<!-- ── SCREEN 2: CALENDAR ───────────────── -->
-<div class="screen calendar-screen" id="screen-calendar">
+<!-- ═══ CALENDAR SCREEN ══════════════════════════════════ -->
+<div class="screen" id="screen-calendar">
 
   <div class="cal-header">
-    <div class="cal-month-row">
+    <div class="cal-nav-row">
       <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
       <div>
-        <div class="cal-month-name" id="cal-month-name">April 2026</div>
-        <div class="cal-selected-phrase" id="cal-quick-phrase">Select a date</div>
+        <div class="cal-month-name" id="cal-month-name">—</div>
+        <div class="cal-phrase" id="cal-phrase">Select a date</div>
       </div>
       <button class="cal-nav-btn" onclick="calNav(1)">›</button>
     </div>
-    <div class="cal-weekdays">
+    <div class="cal-wd-row" id="cal-wd-row">
       <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
     </div>
   </div>
 
-  <div class="cal-body">
+  <!-- Name day search -->
+  <div class="name-search-row">
+    <input type="text" class="name-search-input" id="name-search" placeholder="Search a name (e.g. Anna)…">
+    <button class="name-search-btn" onclick="searchName()">Find Day</button>
+  </div>
+  <div class="name-result" id="name-result"></div>
+
+  <div class="cal-body" id="cal-body">
+    <!-- Legend -->
+    <div class="cal-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div>National Holiday</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--tradition)"></div>Tradition</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--nameday)"></div>Name Days</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div>Your Notes</div>
+    </div>
+
     <div class="cal-grid" id="cal-grid"></div>
 
     <!-- Selected date info -->
-    <div class="cal-info-panel" id="cal-info-panel" style="display:none;">
-      <div class="case-toggle-row">
+    <div class="cal-info-panel" id="cal-info-panel">
+      <div class="case-row">
         <button class="case-pill active" id="case-nom" onclick="setCase('nom')">📅 Today is… (Nominative)</button>
         <button class="case-pill"        id="case-gen" onclick="setCase('gen')">🎉 On the… (Genitive)</button>
       </div>
-      <div class="cal-date-pl"       id="cal-date-pl">—</div>
-      <div class="cal-date-phonetic" id="cal-date-phonetic">—</div>
-      <div class="cal-date-en"       id="cal-date-en">—</div>
-      <div class="cal-panel-btns">
+      <div class="date-pl"       id="date-pl">—</div>
+      <div class="date-ph"       id="date-ph">—</div>
+      <div class="date-en"       id="date-en">—</div>
+      <div class="nameday-row"   id="nameday-row" style="display:none;"></div>
+      <div class="cal-btn-row">
         <button class="cal-pill primary" onclick="speakDate()">🔊 Listen</button>
-        <button class="cal-pill" onclick="toggleYear()">Year: <span id="year-toggle-label">ON</span></button>
-        <button class="cal-pill gold" onclick="openDiary()">📓 Add Note</button>
+        <button class="cal-pill" onclick="toggleCalYear()">Year: <span id="yr-lbl">ON</span></button>
+        <button class="cal-pill gold" onclick="openDiary()">📓 <span id="diary-btn-lbl">Add Note</span></button>
       </div>
     </div>
 
-    <!-- Holiday info -->
-    <div id="holiday-card-area"></div>
+    <div class="holiday-info-card" id="holiday-card"></div>
 
-    <!-- Diary -->
-    <div class="diary-section" id="diary-section" style="display:none;">
-      <h3>📓 Notes for this date</h3>
-      <div class="diary-input-row" style="margin-bottom:8px;">
-        <textarea class="diary-textarea" id="diary-input" placeholder="Add appointment or note…" rows="2"></textarea>
+    <div class="diary-section" id="diary-write" style="display:none;">
+      <h3>📓 Note for this date</h3>
+      <div class="diary-input-row">
+        <textarea class="diary-textarea" id="diary-input" rows="2" placeholder="Add appointment or note…"></textarea>
         <button class="diary-save" onclick="saveDiaryEntry()">Save</button>
       </div>
       <div id="diary-entries"></div>
     </div>
 
-    <!-- All upcoming diary entries -->
-    <div class="diary-section" id="upcoming-section">
-      <h3>📌 Upcoming Appointments</h3>
+    <div class="diary-section" id="upcoming-wrap" style="margin-top:8px;">
+      <h3>📌 Upcoming</h3>
       <div id="upcoming-entries"></div>
     </div>
   </div>
 </div>
 
-<!-- ── SCREEN 3: CLOCK ──────────────────── -->
-<div class="screen clock-screen" id="screen-clock">
+<!-- ═══ CLOCK SCREEN ═════════════════════════════════════ -->
+<div class="screen" id="screen-clock">
 
-  <div class="clock-top">
-    <button class="clock-pill active" id="pill-casual" onclick="setClockMode('casual')">Casual</button>
-    <button class="clock-pill"        id="pill-formal" onclick="setClockMode('formal')">Formal (24h)</button>
+  <div class="clock-pills">
+    <button class="clock-pill active" id="pill-casual" onclick="setClockStyle('casual')">Casual</button>
+    <button class="clock-pill"        id="pill-formal" onclick="setClockStyle('formal')">Formal (24h)</button>
     <button class="clock-pill"        id="pill-sec"    onclick="toggleSec()">Sec: OFF</button>
-    <button class="clock-pill"        id="pill-ph"     onclick="togglePhonetics()">Phonetic: ON</button>
-    <button class="clock-pill"        id="pill-quiz"   onclick="toggleClockQuiz()">Quiz: OFF</button>
+    <button class="clock-pill"        id="pill-ph"     onclick="togglePh()">Phonetic: ON</button>
+    <button class="clock-pill"        id="pill-quiz"   onclick="toggleQuiz()">Quiz: OFF</button>
   </div>
 
-  <div class="clock-wrap">
-    <div class="clock-face" id="clock-face"
-         onmousedown="startDrag(event)" ontouchstart="startDrag(event)">
-      <div class="clock-center"></div>
-      <div class="clock-hand hand-hour" id="hand-hour"></div>
-      <div class="clock-hand hand-min"  id="hand-min"></div>
-      <div class="clock-hand hand-sec"  id="hand-sec"></div>
+  <div class="clock-area">
+    <!-- SVG analogue clock — geometry is exact and cannot misalign -->
+    <div class="clock-svg-wrap">
+      <svg class="clock-face" id="clock-svg" width="190" height="190"
+           viewBox="-95 -95 190 190"
+           onmousedown="startDrag(event)" ontouchstart="startDrag(event)">
+        <!-- Face -->
+        <circle cx="0" cy="0" r="90" fill="var(--card)" stroke="var(--ink)" stroke-width="4"/>
+        <!-- 60 tick marks drawn in SVG coordinate space — no transform-origin issues -->
+        <g id="clock-ticks"></g>
+        <!-- Hands — all pivot around 0,0 which is the exact center -->
+        <line id="hand-hour" x1="0" y1="8"  x2="0" y2="-52" stroke="var(--ink)"    stroke-width="5" stroke-linecap="round"/>
+        <line id="hand-min"  x1="0" y1="10" x2="0" y2="-72" stroke="var(--ink)"    stroke-width="3.5" stroke-linecap="round"/>
+        <line id="hand-sec"  x1="0" y1="14" x2="0" y2="-78" stroke="var(--crimson)" stroke-width="1.5" stroke-linecap="round" style="display:none"/>
+        <!-- Centre dot -->
+        <circle cx="0" cy="0" r="5" fill="var(--ink)"/>
+        <circle cx="0" cy="0" r="2.5" fill="var(--card)"/>
+      </svg>
+    </div>
+
+    <div class="clock-digital">
+      <input type="text" class="time-input" id="time-input"
+             placeholder="00:00" oninput="manualTime(this.value)">
     </div>
   </div>
 
-  <div class="clock-digital">
-    <input type="text" class="time-input" id="time-input"
-           placeholder="00:00" oninput="manualTime(this.value)">
+  <div class="clock-polish">
+    <div class="time-pl" id="time-pl">—</div>
+    <div class="time-ph" id="time-ph"></div>
+    <div class="time-en" id="time-en"></div>
+    <div id="grammar-note"></div>
   </div>
 
-  <div class="clock-polish-area">
-    <div class="time-pl-main" id="time-pl-main">—</div>
-    <div class="time-phonetic" id="time-phonetic"></div>
-    <div class="time-en"       id="time-en"></div>
-    <div id="grammar-note-area"></div>
-  </div>
-
-  <div class="clock-quiz-grid" id="clock-quiz-grid"></div>
+  <div class="clock-quiz-grid" id="quiz-grid"></div>
 
   <div class="clock-actions">
-    <button class="clock-action-btn btn-actual" onclick="setRealTime()">⏱ Now</button>
-    <button class="clock-action-btn btn-random" onclick="rollTime()">🎲 Random</button>
-    <button class="clock-action-btn btn-speak"  onclick="clockSpeak(1)">🔊 Listen</button>
-    <button class="clock-action-btn btn-slow"   onclick="clockSpeak(0.5)">🐢 Slow</button>
+    <button class="clk-act btn-now"   onclick="setRealTime()">⏱ Now</button>
+    <button class="clk-act btn-rnd"   onclick="rollTime()">🎲 Random</button>
+    <button class="clk-act btn-speak" onclick="clockSpeak(1)">🔊 Listen</button>
+    <button class="clk-act btn-slow"  onclick="clockSpeak(0.5)">🐢 Slow</button>
   </div>
 </div>
 
-<!-- ═══════════════ BOTTOM NAV ═══════════ -->
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
-  <button class="nav-tab active" onclick="switchScreen('numbers')" id="nav-numbers">
+  <button class="nav-tab active" id="nav-numbers"  onclick="switchScreen('numbers')">
     <span class="nav-icon">🔢</span>Numbers
   </button>
-  <button class="nav-tab" onclick="switchScreen('calendar')" id="nav-calendar">
+  <button class="nav-tab" id="nav-calendar" onclick="switchScreen('calendar')">
     <span class="nav-icon">📅</span>Calendar
   </button>
-  <button class="nav-tab" onclick="switchScreen('clock')" id="nav-clock">
+  <button class="nav-tab" id="nav-clock"    onclick="switchScreen('clock')">
     <span class="nav-icon">🕒</span>Clock
   </button>
 </div>
 
-<!-- ═══════════════ HANDSFREE OVERLAY ════ -->
+<!-- HANDSFREE -->
 <div id="hf-overlay">
   <div class="hf-label">🚗 Handsfree Mode</div>
   <div class="hf-pl" id="hf-pl">—</div>
   <div class="hf-en" id="hf-en">—</div>
-  <button class="hf-stop" onclick="toggleHandsfree()">⏹ Stop</button>
+  <button class="hf-stop" onclick="toggleHF()">⏹ Stop</button>
 </div>
 
-<!-- ═══════════════ SETTINGS MODAL ═══════ -->
+<!-- SETTINGS MODAL -->
 <div class="modal-bg" id="settings-modal">
   <div class="modal-box">
     <button class="modal-close" onclick="hideModal('settings-modal')">×</button>
     <div class="modal-title">Settings</div>
-
-    <div class="modal-section">
+    <div class="modal-sec">
       <h3>Campaign Level</h3>
       <div class="modal-row">
-        <span id="camp-level-desc">Level 1 — Novice (1–20)</span>
-        <div style="display:flex;gap:6px;">
-          <button onclick="adjustCampLevel(-1)" style="padding:4px 10px;border-radius:6px;background:var(--parchment);border:1px solid var(--border);cursor:pointer;">−</button>
-          <button onclick="adjustCampLevel(1)"  style="padding:4px 10px;border-radius:6px;background:var(--parchment);border:1px solid var(--border);cursor:pointer;">+</button>
+        <span id="camp-desc" style="font-size:0.82rem;">Level 1 — Novice</span>
+        <div style="display:flex;gap:5px;">
+          <button onclick="adjLevel(-1)" style="padding:4px 10px;border-radius:6px;background:var(--parch);border:1px solid var(--border);cursor:pointer;font-family:inherit;">−</button>
+          <button onclick="adjLevel(1)"  style="padding:4px 10px;border-radius:6px;background:var(--parch);border:1px solid var(--border);cursor:pointer;font-family:inherit;">+</button>
         </div>
       </div>
       <div class="modal-row">
-        <label style="font-size:0.82rem;">Auto-campaign (managed difficulty)</label>
-        <input type="checkbox" class="tog" id="auto-campaign" checked>
+        <label style="font-size:0.82rem;">Auto-manage difficulty</label>
+        <input type="checkbox" class="tog" id="auto-camp" checked onchange="toggleAutoCamp()">
       </div>
     </div>
-
-    <div class="modal-section" id="manual-range-section" style="display:none;">
+    <div class="modal-sec" id="manual-range" style="display:none;">
       <h3>Manual Range</h3>
-      <div class="range-row">
-        <span>Min</span>
-        <input type="range" id="range-min" min="0" max="6" value="0" oninput="updateRange()">
-        <span class="range-val" id="range-min-val">1</span>
-      </div>
-      <div class="range-row">
-        <span>Max</span>
-        <input type="range" id="range-max" min="1" max="8" value="2" oninput="updateRange()">
-        <span class="range-val" id="range-max-val">100</span>
-      </div>
+      <div class="range-row"><span>Min</span><input type="range" id="r-min" min="0" max="6" value="0" oninput="updRange()"><span class="range-val" id="r-min-lbl">1</span></div>
+      <div class="range-row"><span>Max</span><input type="range" id="r-max" min="1" max="8" value="2" oninput="updRange()"><span class="range-val" id="r-max-lbl">100</span></div>
     </div>
-
-    <div class="modal-section">
+    <div class="modal-sec">
       <h3>Display</h3>
-      <div class="modal-row">
-        <label>Theme</label>
+      <div class="modal-row"><label>Theme</label>
         <select id="theme-sel" onchange="applyTheme()">
-          <option value="auto">Auto</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
+          <option value="auto">Auto</option><option value="light">Light</option><option value="dark">Dark</option>
         </select>
       </div>
-      <div class="modal-row">
-        <label>Polish voice</label>
-        <button onclick="testVoice()" style="padding:4px 12px;border-radius:6px;background:var(--crimson);color:white;border:none;cursor:pointer;font-size:0.78rem;">Test 🔊</button>
-      </div>
-    </div>
-
-    <div class="modal-section">
-      <h3>Daily Goal</h3>
-      <div class="modal-row">
-        <label>Target XP / day</label>
-        <select id="daily-goal-sel">
-          <option value="100">100 XP (Easy)</option>
-          <option value="300" selected>300 XP (Normal)</option>
-          <option value="500">500 XP (Hard)</option>
+      <div class="modal-row"><label>Daily XP goal</label>
+        <select id="goal-sel">
+          <option value="100">100 (Easy)</option>
+          <option value="300" selected>300 (Normal)</option>
+          <option value="500">500 (Hard)</option>
         </select>
       </div>
     </div>
-
-    <button onclick="hideModal('settings-modal');generateNumbers();" class="btn-check" style="margin-top:8px;">Save & Play</button>
+    <div class="modal-sec">
+      <h3>Polish Voice</h3>
+      <div class="modal-row"><span style="font-size:0.82rem;">Test audio output</span>
+        <button onclick="speakPL('Dzień dobry! Ile to kosztuje?')" style="padding:5px 12px;border-radius:7px;background:var(--crimson);color:#fff;border:none;cursor:pointer;font-size:0.78rem;font-family:inherit;">Test 🔊</button>
+      </div>
+    </div>
+    <button onclick="hideModal('settings-modal');genNumbers();" class="check-btn" style="margin-top:6px;">Save & Play</button>
   </div>
 </div>
 
-<!-- ═══════════════ STATS MODAL ══════════ -->
+<!-- STATS MODAL -->
 <div class="modal-bg" id="stats-modal">
   <div class="modal-box">
     <button class="modal-close" onclick="hideModal('stats-modal')">×</button>
     <div class="modal-title">My Progress</div>
-    <div id="stats-content"></div>
-    <button onclick="startReview()" class="btn-check" style="margin-top:12px; background:var(--gold);">⚠️ Review Mistakes</button>
-    <button onclick="if(confirm('Reset all progress?'))localStorage.clear(),location.reload()" style="margin-top:8px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-family:inherit;">Reset Progress</button>
+    <div id="stats-body"></div>
+    <button onclick="startReview()" class="check-btn" style="margin-top:10px;background:var(--gold);">⚠️ Review Mistakes</button>
+    <button onclick="if(confirm('Reset all progress?'))localStorage.clear(),location.reload()" style="width:100%;margin-top:7px;padding:10px;border-radius:9px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-family:inherit;">Reset Progress</button>
   </div>
 </div>
 
-<!-- ═══════════════ GOAL MET MODAL ═══════ -->
+<!-- GOAL MET -->
 <div class="modal-bg" id="goal-modal">
   <div class="modal-box" style="text-align:center;">
-    <div style="font-size:2.5rem;margin-bottom:12px;">🎯</div>
+    <div style="font-size:2.5rem;margin-bottom:10px;">🎯</div>
     <div class="modal-title" style="text-align:center;">Goal Achieved!</div>
-    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:16px;">Świetna robota! You hit your daily XP target.</p>
-    <button onclick="hideModal('goal-modal')" class="btn-check">Keep Going!</button>
+    <p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Świetna robota! Daily target hit.</p>
+    <button onclick="hideModal('goal-modal')" class="check-btn">Keep Going!</button>
   </div>
 </div>
 
-</div><!-- #app -->
-
-</html>
 <script>
-'use strict';
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 1 — LANGUAGE DATA
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+/* ═══════════════════════════════════════════════════════
+   LANGUAGE DATA
+═══════════════════════════════════════════════════════ */
 const UNITS   = ["","jeden","dwa","trzy","cztery","pięć","sześć","siedem","osiem","dziewięć"];
 const TEENS   = ["dziesięć","jedenaście","dwanaście","trzynaście","czternaście","piętnaście","szesnaście","siedemnaście","osiemnaście","dziewiętnaście"];
 const TENS    = ["","","dwadzieścia","trzydzieści","czterdzieści","pięćdziesiąt","sześćdziesiąt","siedemdziesiąt","osiemdziesiąt","dziewięćdziesiąt"];
-const HUNDREDS= ["","sto","dwieście","trzysta","czterysta","pięćset","sześćset","siedemset","osiemset","dziewięćset"];
+const HUNDS   = ["","sto","dwieście","trzysta","czterysta","pięćset","sześćset","siedemset","osiemset","dziewięćset"];
 
-const MONTHS_GEN = ["stycznia","lutego","marca","kwietnia","maja","czerwca","lipca","sierpnia","września","października","listopada","grudnia"];
-const MONTHS_NOM = ["styczeń","luty","marzec","kwiecień","maj","czerwiec","lipiec","sierpień","wrzesień","październik","listopad","grudzień"];
-const MONTHS_EN  = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const DAYS_PL    = ["Niedziela","Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota"];
-const DAYS_EN    = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-const DAYS_SHORT = ["Nie","Pon","Wt","Śr","Czw","Pią","Sob"];
+const MONTHS_GEN=["stycznia","lutego","marca","kwietnia","maja","czerwca","lipca","sierpnia","września","października","listopada","grudnia"];
+const MONTHS_EN =["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DAYS_EN   =["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const MONTHS_PH =["stich-nyah","loo-teh-go","mahr-tsah","kyev-tnyah","mah-yah","cherv-tsah","leep-tsah","syerp-nyah","vzhyeh-shnyah","paz-jyeh-nee-kah","lees-toh-pah-dah","grood-nyah"];
 
-// Ordinals — Nominative (Masculine): "Dzisiaj jest piąty"
-const ORD_NOM = ["","pierwszy","drugi","trzeci","czwarty","piąty","szósty","siódmy","ósmy","dziewiąty","dziesiąty",
-  "jedenasty","dwunasty","trzynasty","czternasty","piętnasty","szesnasty","siedemnasty","osiemnasty","dziewiętnasty",
-  "dwudziesty","dwudziesty pierwszy","dwudziesty drugi","dwudziesty trzeci","dwudziesty czwarty","dwudziesty piąty",
-  "dwudziesty szósty","dwudziesty siódmy","dwudziesty ósmy","dwudziesty dziewiąty","trzydziesty","trzydziesty pierwszy"];
+const ORD_NOM=["","pierwszy","drugi","trzeci","czwarty","piąty","szósty","siódmy","ósmy","dziewiąty","dziesiąty","jedenasty","dwunasty","trzynasty","czternasty","piętnasty","szesnasty","siedemnasty","osiemnasty","dziewiętnasty","dwudziesty","dwudziesty pierwszy","dwudziesty drugi","dwudziesty trzeci","dwudziesty czwarty","dwudziesty piąty","dwudziesty szósty","dwudziesty siódmy","dwudziesty ósmy","dwudziesty dziewiąty","trzydziesty","trzydziesty pierwszy"];
+const ORD_GEN=["","pierwszego","drugiego","trzeciego","czwartego","piątego","szóstego","siódmego","ósmego","dziewiątego","dziesiątego","jedenastego","dwunastego","trzynastego","czternastego","piętnastego","szesnastego","siedemnastego","osiemnastego","dziewiętnastego","dwudziestego","dwudziestego pierwszego","dwudziestego drugiego","dwudziestego trzeciego","dwudziestego czwartego","dwudziestego piątego","dwudziestego szóstego","dwudziestego siódmego","dwudziestego ósmego","dwudziestego dziewiątego","trzydziestego","trzydziestego pierwszego"];
+const ORD_PH_NOM=["","pyer-v-shy","droo-gy","t-sheh-chee","chvar-ty","pyon-ty","shoos-ty","shood-my","oos-my","jyev-yon-ty","jyeh-shon-ty","yeh-den-as-ty","dvoo-nas-ty","t-she-nas-ty","chter-nas-ty","pyent-nas-ty","shes-nas-ty","shyeh-dem-nas-ty","oh-syem-nas-ty","jyev-yet-nas-ty","dvoo-jyes-ty","dvoo-jyes-ty pyer-v-shy","dvoo-jyes-ty droo-gy","dvoo-jyes-ty t-sheh-chee","dvoo-jyes-ty chvar-ty","dvoo-jyes-ty pyon-ty","dvoo-jyes-ty shoos-ty","dvoo-jyes-ty shood-my","dvoo-jyes-ty oos-my","dvoo-jyes-ty jyev-yon-ty","t-shy-jyes-ty","t-shy-jyes-ty pyer-v-shy"];
+const ORD_PH_GEN=["","pyer-v-sheh-go","droo-gyeh-go","t-sheh-chyeh-go","chvar-teh-go","pyon-teh-go","shoos-teh-go","shood-meh-go","oos-meh-go","jyev-yon-teh-go","jyeh-shon-teh-go","yeh-den-as-teh-go","dvoo-nas-teh-go","t-she-nas-teh-go","chter-nas-teh-go","pyent-nas-teh-go","shes-nas-teh-go","shyeh-dem-nas-teh-go","oh-syem-nas-teh-go","jyev-yet-nas-teh-go","dvoo-jyes-teh-go","dvoo-jyes-teh-go pyer-v-sheh-go","dvoo-jyes-teh-go droo-gyeh-go","dvoo-jyes-teh-go t-sheh-chyeh-go","dvoo-jyes-teh-go chvar-teh-go","dvoo-jyes-teh-go pyon-teh-go","dvoo-jyes-teh-go shoos-teh-go","dvoo-jyes-teh-go shood-meh-go","dvoo-jyes-teh-go oos-meh-go","dvoo-jyes-teh-go jyev-yon-teh-go","t-shy-jyes-teh-go","t-shy-jyes-teh-go pyer-v-sheh-go"];
 
-// Ordinals — Genitive (Masculine): "Piątego maja" (appointment/event)
-const ORD_GEN = ["","pierwszego","drugiego","trzeciego","czwartego","piątego","szóstego","siódmego","ósmego","dziewiątego","dziesiątego",
-  "jedenastego","dwunastego","trzynastego","czternastego","piętnastego","szesnastego","siedemnastego","osiemnastego","dziewiętnastego",
-  "dwudziestego","dwudziestego pierwszego","dwudziestego drugiego","dwudziestego trzeciego","dwudziestego czwartego","dwudziestego piątego",
-  "dwudziestego szóstego","dwudziestego siódmego","dwudziestego ósmego","dwudziestego dziewiątego","trzydziestego","trzydziestego pierwszego"];
+const H_NOM=["północ","pierwsza","druga","trzecia","czwarta","piąta","szósta","siódma","ósma","dziewiąta","dziesiąta","jedenasta","południe","trzynasta","czternasta","piętnasta","szesnasta","siedemnasta","osiemnasta","dziewiętnasta","dwudziesta","dwudziesta pierwsza","dwudziesta druga","dwudziesta trzecia"];
+const H_GEN=["północy","pierwszej","drugiej","trzeciej","czwartej","piątej","szóstej","siódmej","ósmej","dziewiątej","dziesiątej","jedenastej","południa","trzynastej","czternastej","piętnastej","szesnastej","siedemnastej","osiemnastej","dziewiętnastej","dwudziestej","dwudziestej pierwszej","dwudziestej drugiej","dwudziestej trzeciej"];
+const H_NOM_PH=["poow-nots","pyerv-shah","droo-gah","tshe-tsyah","chvar-tah","pyon-tah","shoos-tah","shood-mah","oos-mah","je-vyon-tah","je-shon-tah","ye-de-nas-tah","po-wood-nye","tshi-nas-tah","chter-nas-tah","pyent-nas-tah","shes-nas-tah","she-dem-nas-tah","o-shem-nas-tah","je-vyet-nas-tah","dvoo-jest-ah","dvoo-jest-ah pyerv-shah","dvoo-jest-ah droo-gah","dvoo-jest-ah tshe-tsyah"];
+const H_GEN_PH=["poow-no-tsi","pyerv-shey","droo-gyey","tshe-tsiey","chvar-tey","pyon-tey","shoos-tey","shood-mey","oos-mey","je-vyon-tey","je-shon-tey","ye-de-nas-tey","po-wood-nyah","tshi-nas-tey","chter-nas-tey","pyent-nas-tey","shes-nas-tey","she-dem-nas-tey","o-shem-nas-tey","je-vyet-nas-tey","dvoo-jes-tey","dvoo-jes-tey pyerv-shey","dvoo-jes-tey droo-gyey","dvoo-jes-tey tshe-tsiey"];
+const M_ALL=["zero","jedna","dwie","trzy","cztery","pięć","sześć","siedem","osiem","dziewięć","dziesięć","jedenaście","dwanaście","trzynaście","czternaście","piętnaście","szesnaście","siedemnaście","osiemnaście","dziewiętnaście","dwadzieścia","dwadzieścia jeden","dwadzieścia dwie","dwadzieścia trzy","dwadzieścia cztery","dwadzieścia pięć","dwadzieścia sześć","dwadzieścia siedem","dwadzieścia osiem","dwadzieścia dziewięć","trzydzieści","trzydzieści jeden","trzydzieści dwie","trzydzieści trzy","trzydzieści cztery","trzydzieści pięć","trzydzieści sześć","trzydzieści siedem","trzydzieści osiem","trzydzieści dziewięć","czterdzieści","czterdzieści jeden","czterdzieści dwie","czterdzieści trzy","czterdzieści cztery","czterdzieści pięć","czterdzieści sześć","czterdzieści siedem","czterdzieści osiem","czterdzieści dziewięć","pięćdziesiąt","pięćdziesiąt jeden","pięćdziesiąt dwie","pięćdziesiąt trzy","pięćdziesiąt cztery","pięćdziesiąt pięć","pięćdziesiąt sześć","pięćdziesiąt siedem","pięćdziesiąt osiem","pięćdziesiąt dziewięć"];
+const M_PH=["ze-ro","yed-nah","dvye","tshi","chter-ih","pyench","shesh-ch","she-dem","o-shem","je-vyench","je-shench","ye-de-nas-che","dva-nash-che","tshi-nash-che","chter-nash-che","pyent-nash-che","shes-nas-che","she-dem-nash-che","o-shem-nash-che","je-vyet-nas-che","dva-jes-tsyah","dva-jes-tsyah yed-nah","dva-jes-tsyah dvye","dva-jes-tsyah tshi","dva-jes-tsyah chter-ih","dva-jes-tsyah pyench","dva-jes-tsyah shesh-ch","dva-jes-tsyah she-dem","dva-jes-tsyah o-shem","dva-jes-tsyah je-vyench","tshi-jes-tsyi","tshi-jes-tsyi yed-nah","tshi-jes-tsyi dvye","tshi-jes-tsyi tshi","tshi-jes-tsyi chter-ih","tshi-jes-tsyi pyench","tshi-jes-tsyi shesh-ch","tshi-jes-tsyi she-dem","tshi-jes-tsyi o-shem","tshi-jes-tsyi je-vyench","chter-jes-tsyi","chter-jes-tsyi yed-nah","chter-jes-tsyi dvye","chter-jes-tsyi tshi","chter-jes-tsyi chter-ih","chter-jes-tsyi pyench","chter-jes-tsyi shesh-ch","chter-jes-tsyi she-dem","chter-jes-tsyi o-shem","chter-jes-tsyi je-vyench","pyench-je-shont","pyench-je-shont yed-nah","pyench-je-shont dvye","pyench-je-shont tshi","pyench-je-shont chter-ih","pyench-je-shont pyench","pyench-je-shont shesh-ch","pyench-je-shont she-dem","pyench-je-shont o-shem","pyench-je-shont je-vyench"];
 
-// Ordinal phonetics (nominative)
-const ORD_PH_NOM = ["","pyer-v-shy","droo-gy","t-sheh-chee","chvar-ty","pyon-ty","shoos-ty","shood-my","oos-my","jyev-yon-ty","jyeh-shon-ty",
-  "yeh-den-as-ty","dvoo-nas-ty","t-she-nas-ty","chter-nas-ty","pyent-nas-ty","shes-nas-ty","shyeh-dem-nas-ty","oh-syem-nas-ty","jyev-yet-nas-ty","dvoo-jyes-ty",
-  "dvoo-jyes-ty pyer-v-shy","dvoo-jyes-ty droo-gy","dvoo-jyes-ty t-sheh-chee","dvoo-jyes-ty chvar-ty","dvoo-jyes-ty pyon-ty",
-  "dvoo-jyes-ty shoos-ty","dvoo-jyes-ty shood-my","dvoo-jyes-ty oos-my","dvoo-jyes-ty jyev-yon-ty","t-shy-jyes-ty","t-shy-jyes-ty pyer-v-shy"];
+const FRACS={2:["druga","drugie","drugich"],3:["trzecia","trzecie","trzecich"],4:["czwarta","czwarte","czwartych"],5:["piąta","piąte","piątych"],6:["szósta","szóste","szóstych"],8:["ósma","ósme","ósmych"],10:["dziesiąta","dziesiąte","dziesiątych"],100:["setna","setne","setnych"]};
 
-const ORD_PH_GEN = ["","pyer-v-sheh-go","droo-gyeh-go","t-sheh-chyeh-go","chvar-teh-go","pyon-teh-go","shoos-teh-go","shood-meh-go","oos-meh-go","jyev-yon-teh-go","jyeh-shon-teh-go",
-  "yeh-den-as-teh-go","dvoo-nas-teh-go","t-she-nas-teh-go","chter-nas-teh-go","pyent-nas-teh-go","shes-nas-teh-go","shyeh-dem-nas-teh-go","oh-syem-nas-teh-go","jyev-yet-nas-teh-go","dvoo-jyes-teh-go",
-  "dvoo-jyes-teh-go pyer-v-sheh-go","dvoo-jyes-teh-go droo-gyeh-go","dvoo-jyes-teh-go t-sheh-chyeh-go","dvoo-jyes-teh-go chvar-teh-go","dvoo-jyes-teh-go pyon-teh-go",
-  "dvoo-jyes-teh-go shoos-teh-go","dvoo-jyes-teh-go shood-meh-go","dvoo-jyes-teh-go oos-meh-go","dvoo-jyes-teh-go jyev-yon-teh-go","t-shy-jyes-teh-go","t-shy-jyes-teh-go pyer-v-sheh-go"];
-
-const MONTHS_PH = ["stich-nyah","loo-teh-go","mahr-tsah","kyev-tnyah","mah-yah","cherv-tsah","leep-tsah","syerp-nyah","vzhyeh-shnyah","paz-jyeh-nee-kah","lees-toh-pah-dah","grood-nyah"];
-
-// Clock data
-const H_NOM = ["północ","pierwsza","druga","trzecia","czwarta","piąta","szósta","siódma","ósma","dziewiąta","dziesiąta","jedenasta","południe",
-  "trzynasta","czternasta","piętnasta","szesnasta","siedemnasta","osiemnasta","dziewiętnasta","dwudziesta","dwudziesta pierwsza","dwudziesta druga","dwudziesta trzecia"];
-const H_GEN = ["północy","pierwszej","drugiej","trzeciej","czwartej","piątej","szóstej","siódmej","ósmej","dziewiątej","dziesiątej","jedenastej","południa",
-  "trzynastej","czternastej","piętnastej","szesnastej","siedemnastej","osiemnastej","dziewiętnastej","dwudziestej","dwudziestej pierwszej","dwudziestej drugiej","dwudziestej trzeciej"];
-const H_NOM_PH = ["poow-nots","pyerv-shah","droo-gah","tshe-tsyah","chvar-tah","pyon-tah","shoos-tah","shood-mah","oos-mah","je-vyon-tah","je-shon-tah","ye-de-nas-tah","po-wood-nye",
-  "tshi-nas-tah","chter-nas-tah","pyent-nas-tah","shes-nas-tah","she-dem-nas-tah","o-shem-nas-tah","je-vyet-nas-tah","dvoo-jest-ah","dvoo-jest-ah pyerv-shah","dvoo-jest-ah droo-gah","dvoo-jest-ah tshe-tsyah"];
-const H_GEN_PH = ["poow-no-tsi","pyerv-shey","droo-gyey","tshe-tsiey","chvar-tey","pyon-tey","shoos-tey","shood-mey","oos-mey","je-vyon-tey","je-shon-tey","ye-de-nas-tey","po-wood-nyah",
-  "tshi-nas-tey","chter-nas-tey","pyent-nas-tey","shes-nas-tey","she-dem-nas-tey","o-shem-nas-tey","je-vyet-nas-tey","dvoo-jes-tey","dvoo-jes-tey pyerv-shey","dvoo-jes-tey droo-gyey","dvoo-jes-tey tshe-tsiey"];
-const M_ALL = ["zero","jedna","dwie","trzy","cztery","pięć","sześć","siedem","osiem","dziewięć","dziesięć","jedenaście","dwanaście","trzynaście","czternaście","piętnaście","szesnaście","siedemnaście","osiemnaście","dziewiętnaście","dwadzieścia","dwadzieścia jeden","dwadzieścia dwie","dwadzieścia trzy","dwadzieścia cztery","dwadzieścia pięć","dwadzieścia sześć","dwadzieścia siedem","dwadzieścia osiem","dwadzieścia dziewięć","trzydzieści","trzydzieści jeden","trzydzieści dwie","trzydzieści trzy","trzydzieści cztery","trzydzieści pięć","trzydzieści sześć","trzydzieści siedem","trzydzieści osiem","trzydzieści dziewięć","czterdzieści","czterdzieści jeden","czterdzieści dwie","czterdzieści trzy","czterdzieści cztery","czterdzieści pięć","czterdzieści sześć","czterdzieści siedem","czterdzieści osiem","czterdzieści dziewięć","pięćdziesiąt","pięćdziesiąt jeden","pięćdziesiąt dwie","pięćdziesiąt trzy","pięćdziesiąt cztery","pięćdziesiąt pięć","pięćdziesiąt sześć","pięćdziesiąt siedem","pięćdziesiąt osiem","pięćdziesiąt dziewięć"];
-const M_ALL_PH = ["ze-ro","yed-nah","dvye","tshi","chter-ih","pyench","shesh-ch","she-dem","o-shem","je-vyench","je-shench","ye-de-nas-che","dva-nash-che","tshi-nash-che","chter-nash-che","pyent-nash-che","shes-nas-che","she-dem-nash-che","o-shem-nash-che","je-vyet-nas-che","dva-jes-tsyah","dva-jes-tsyah yed-nah","dva-jes-tsyah dvye","dva-jes-tsyah tshi","dva-jes-tsyah chter-ih","dva-jes-tsyah pyench","dva-jes-tsyah shesh-ch","dva-jes-tsyah she-dem","dva-jes-tsyah o-shem","dva-jes-tsyah je-vyench","tshi-jes-tsyi","tshi-jes-tsyi yed-nah","tshi-jes-tsyi dvye","tshi-jes-tsyi tshi","tshi-jes-tsyi chter-ih","tshi-jes-tsyi pyench","tshi-jes-tsyi shesh-ch","tshi-jes-tsyi she-dem","tshi-jes-tsyi o-shem","tshi-jes-tsyi je-vyench","chter-jes-tsyi","chter-jes-tsyi yed-nah","chter-jes-tsyi dvye","chter-jes-tsyi tshi","chter-jes-tsyi chter-ih","chter-jes-tsyi pyench","chter-jes-tsyi shesh-ch","chter-jes-tsyi she-dem","chter-jes-tsyi o-shem","chter-jes-tsyi je-vyench","pyench-je-shont","pyench-je-shont yed-nah","pyench-je-shont dvye","pyench-je-shont tshi","pyench-je-shont chter-ih","pyench-je-shont pyench","pyench-je-shont shesh-ch","pyench-je-shont she-dem","pyench-je-shont o-shem","pyench-je-shont je-vyench"];
-
-// Fractions
-const FRACS = {
-  2:["druga","drugie","drugich"], 3:["trzecia","trzecie","trzecich"],
-  4:["czwarta","czwarte","czwartych"], 5:["piąta","piąte","piątych"],
-  6:["szósta","szóste","szóstych"], 8:["ósma","ósme","ósmych"],
-  10:["dziesiąta","dziesiąte","dziesiątych"], 100:["setna","setne","setnych"]
+const GRAMMAR_CTX={
+  years:{s:"rok",p:"lata",g:"lat",phrase:"[N] [W] temu",en:"[N] years ago",max:100},
+  cost:{s:"złoty",p:"złote",g:"złotych",phrase:"To kosztuje [N] [W]",en:"It costs [N] PLN"},
+  hours:{s:"godzina",p:"godziny",g:"godzin",phrase:"Czekam [N] [W]",en:"I wait [N] hours",max:24},
+  people:{s:"osoba",p:"osoby",g:"osób",phrase:"Jest tu [N] [W]",en:"There are [N] people",max:50},
+  age:{s:"rok",p:"lata",g:"lat",phrase:"Mam [N] [W]",en:"I am [N] years old",max:100},
+  distance:{s:"kilometr",p:"kilometry",g:"kilometrów",phrase:"Biegłem [N] [W]",en:"I ran [N] km",max:42}
 };
 
-// Context grammar (sentences about counts)
-const GRAMMAR_CTX = {
-  years:    {s:"rok",     p:"lata",     g:"lat",       phrase:"[N] [W] temu",         en:"[N] years ago",       max:100},
-  cost:     {s:"złoty",   p:"złote",    g:"złotych",   phrase:"To kosztuje [N] [W]",  en:"It costs [N] PLN"},
-  hours:    {s:"godzina", p:"godziny",  g:"godzin",    phrase:"Czekam [N] [W]",       en:"I wait [N] hours",    max:24},
-  people:   {s:"osoba",   p:"osoby",    g:"osób",      phrase:"Jest tu [N] [W]",      en:"There are [N] people",max:50},
-  age:      {s:"rok",     p:"lata",     g:"lat",       phrase:"Mam [N] [W]",          en:"I am [N] years old",  max:100},
-  distance: {s:"kilometr",p:"kilometry",g:"kilometrów",phrase:"Biegłem [N] [W]",      en:"I ran [N] km",        max:42}
-};
-
-// Shopping scenarios — the main practical use case
-const SHOPPING = [
-  {scene:"🛒 Sklep spożywczy", items:[
-    {pl:"jabłka", en:"apples", unit:"kilogram", unitPl:"kilogram", unitPl2:"kilogramy", unitPlG:"kilogramów"},
-    {pl:"chleb",  en:"bread",  unit:"loaf",     unitPl:"bochenek", unitPl2:"bochenki",  unitPlG:"bochenków"},
-    {pl:"mleko",  en:"milk",   unit:"litre",    unitPl:"litr",     unitPl2:"litry",     unitPlG:"litrów"},
-    {pl:"jajka",  en:"eggs",   unit:"eggs",     unitPl:"jajko",    unitPl2:"jajka",     unitPlG:"jajek"},
+const SHOPPING=[
+  {scene:"🛒 Supermarket",items:[
+    {pl:"jabłka",en:"apples",s:"kilogram",p:"kilogramy",g:"kilogramów"},
+    {pl:"chleb",en:"loaves of bread",s:"bochenek",p:"bochenki",g:"bochenków"},
+    {pl:"mleko",en:"litres of milk",s:"litr",p:"litry",g:"litrów"},
+    {pl:"jajka",en:"eggs",s:"jajko",p:"jajka",g:"jajek"},
+    {pl:"ser",en:"cheeses",s:"ser",p:"sery",g:"serów"},
+    {pl:"jogurt",en:"yoghurts",s:"jogurt",p:"jogurty",g:"jogurtów"},
   ]},
-  {scene:"☕ Kawiarnia", items:[
-    {pl:"kawa",     en:"coffee",  unit:"cup",  unitPl:"kawa",    unitPl2:"kawy",    unitPlG:"kaw"},
-    {pl:"herbata",  en:"tea",     unit:"cup",  unitPl:"herbata", unitPl2:"herbaty", unitPlG:"herbat"},
-    {pl:"croissant",en:"croissant",unit:"piece",unitPl:"croissant",unitPl2:"croissanty",unitPlG:"croissantów"},
+  {scene:"☕ Kawiarnia",items:[
+    {pl:"kawa",en:"coffees",s:"kawa",p:"kawy",g:"kaw"},
+    {pl:"herbata",en:"teas",s:"herbata",p:"herbaty",g:"herbat"},
+    {pl:"croissant",en:"croissants",s:"croissant",p:"croissanty",g:"croissantów"},
+    {pl:"sok",en:"juices",s:"sok",p:"soki",g:"soków"},
   ]},
-  {scene:"🚌 Transport", items:[
-    {pl:"bilet",    en:"ticket",  unit:"ticket",unitPl:"bilet",   unitPl2:"bilety",  unitPlG:"biletów"},
-    {pl:"przejazd", en:"journey", unit:"journey",unitPl:"przejazd",unitPl2:"przejazdy",unitPlG:"przejazdów"},
+  {scene:"🚌 Transport",items:[
+    {pl:"bilet",en:"tickets",s:"bilet",p:"bilety",g:"biletów"},
   ]},
-  {scene:"💊 Apteka", items:[
-    {pl:"tabletka", en:"tablet",  unit:"tablet",unitPl:"tabletka",unitPl2:"tabletki",unitPlG:"tabletek"},
+  {scene:"💊 Apteka",items:[
+    {pl:"tabletka",en:"tablets",s:"tabletka",p:"tabletki",g:"tabletek"},
+    {pl:"opakowanie",en:"packets",s:"opakowanie",p:"opakowania",g:"opakowań"},
+  ]},
+  {scene:"👗 Sklep odzieżowy",items:[
+    {pl:"koszula",en:"shirts",s:"koszula",p:"koszule",g:"koszul"},
+    {pl:"para skarpetek",en:"pairs of socks",s:"para",p:"pary",g:"par"},
   ]}
 ];
 
-// Polish holidays (fixed dates — month 0-indexed)
-const HOLIDAYS = {
-  "0-1":"Nowy Rok 🎆","0-6":"Trzech Króli 🌟","0-21":"Dzień Babci 👵","0-22":"Dzień Dziadka 👴",
-  "2-8":"Dzień Kobiet 🌷","3-1":"Prima Aprilis 🤡","4-1":"Święto Pracy","4-3":"Święto Konstytucji 3 Maja",
-  "4-26":"Dzień Matki 💐","5-1":"Dzień Dziecka 🧸","5-23":"Dzień Ojca 👔",
-  "7-15":"Wniebowzięcie NMP","10-1":"Wszystkich Świętych 🕯️","10-11":"Święto Niepodległości",
-  "10-29":"Andrzejki 🕯️","11-6":"Mikołajki 🎅","11-24":"Wigilia 🎄","11-25":"Boże Narodzenie","11-26":"Drugi Dzień Świąt"
-};
-const HOLIDAY_INFO = {
-  "Nowy Rok 🎆":"New Year's Day. Fireworks light up Polish skies at midnight.",
-  "Trzech Króli 🌟":"Epiphany. Poles write 'K+M+B' in chalk on their doors to bless the home.",
-  "Dzień Babci 👵":"Grandmothers' Day — children recite poems and bring flowers for Babcia.",
-  "Dzień Dziadka 👴":"Grandfathers' Day — the day after Babcia's day, so Dziadek isn't forgotten.",
-  "Dzień Kobiet 🌷":"Women's Day. Men buy tulips for every woman in the office and family.",
-  "Prima Aprilis 🤡":"April Fools' Day. Even newspapers run fake headlines.",
-  "Święto Pracy":"Labor Day. Kicks off 'Majówka' — the great Polish BBQ long weekend.",
-  "Święto Konstytucji 3 Maja":"Constitution Day — the world's second modern constitution, 1791.",
-  "Dzień Matki 💐":"Mother's Day. Heart-shaped 'laurki' cards made by children.",
-  "Dzień Dziecka 🧸":"Children's Day. Festivals, ice cream, and no homework.",
-  "Dzień Ojca 👔":"Father's Day — ties and DIY tools are traditional gifts.",
-  "Wniebowzięcie NMP":"Assumption Day & Polish Army Day. Military parades in Warsaw.",
-  "Wszystkich Świętych 🕯️":"All Saints' Day. Millions of candles turn cemeteries into seas of light.",
-  "Święto Niepodległości":"Independence Day. Commemorating the rebirth of Poland in 1918.",
-  "Andrzejki 🕯️":"St Andrew's Eve. Fortune-telling night — pour hot wax to see your future.",
-  "Mikołajki 🎅":"St Nicholas Day. Children find gifts in their clean boots.",
-  "Wigilia 🎄":"Christmas Eve. The 12-dish meatless supper and sharing the Opłatek wafer.",
-  "Boże Narodzenie":"Christmas Day. Family, carols, and gingerbread.",
-  "Drugi Dzień Świąt":"St Stephen's Day. Visiting friends and relatives."
+// Holidays: key = "month(0-indexed)-day"
+const HOLIDAYS={
+  "0-1":{name:"Nowy Rok 🎆",type:"holiday",info:"New Year's Day. Fireworks light up Polish skies and families celebrate with champagne at midnight."},
+  "0-6":{name:"Trzech Króli 🌟",type:"holiday",info:"Epiphany. Poles write 'K+M+B' in blessed chalk on their doors. The largest religious procession of the year."},
+  "0-21":{name:"Dzień Babci 👵",type:"tradition",info:"Grandmothers' Day. Children recite poems and bring flowers for their Babcia."},
+  "0-22":{name:"Dzień Dziadka 👴",type:"tradition",info:"Grandfathers' Day — the day after Babcia's day, ensuring Dziadek gets equal celebration."},
+  "2-8":{name:"Dzień Kobiet 🌷",type:"tradition",info:"Women's Day. Men buy tulips for every woman in the family and office. A remnant of communist times that stuck."},
+  "3-1":{name:"Prima Aprilis 🤡",type:"tradition",info:"April Fools' Day. Even national newspapers run fake front-page headlines."},
+  "4-1":{name:"Święto Pracy",type:"holiday",info:"Labour Day. Kicks off 'Majówka' — the legendary Polish long weekend of grilling, gardens and outdoor trips."},
+  "4-3":{name:"Święto Konstytucji 3 Maja",type:"holiday",info:"Constitution Day, commemorating the world's second modern constitution in 1791."},
+  "4-26":{name:"Dzień Matki 💐",type:"tradition",info:"Mother's Day. Heart-shaped 'laurki' cards made by children are the most prized gift."},
+  "5-1":{name:"Dzień Dziecka 🧸",type:"tradition",info:"Children's Day. No homework — towns host festivals, ice cream and games for the kids."},
+  "5-23":{name:"Dzień Ojca 👔",type:"tradition",info:"Father's Day. Ties, DIY tools and sweets are traditional gifts."},
+  "7-15":{name:"Wniebowzięcie NMP",type:"holiday",info:"Assumption Day & Polish Army Day. Military parades in Warsaw and herb bouquets blessed in churches."},
+  "10-1":{name:"Wszystkich Świętych 🕯️",type:"holiday",info:"All Saints' Day. Millions of candles (znicze) are lit, turning cemeteries into stunning seas of light."},
+  "10-11":{name:"Święto Niepodległości",type:"holiday",info:"Independence Day, commemorating the rebirth of Poland in 1918 after 123 years of partition."},
+  "10-29":{name:"Andrzejki 🕯️",type:"tradition",info:"St Andrew's Eve. The last big party before Advent — people pour hot wax into water to see their future."},
+  "11-6":{name:"Mikołajki 🎅",type:"tradition",info:"St Nicholas Day. Children find chocolates and small gifts tucked into their clean boots overnight."},
+  "11-24":{name:"Wigilia 🎄",type:"tradition",info:"Christmas Eve — the centrepiece of the Polish year. A 12-dish meatless supper, sharing the Opłatek wafer, then Midnight Mass."},
+  "11-25":{name:"Boże Narodzenie",type:"holiday",info:"Christmas Day. A quiet family day of carols, gingerbread and visiting the nativity scene at church."},
+  "11-26":{name:"Drugi Dzień Świąt",type:"holiday",info:"St Stephen's Day. Traditionally for visiting friends and relatives, away from immediate family."}
 };
 
-const RANKS = [
-  {limit:0,name:"Nowicjusz"},{limit:200,name:"Uczeń"},{limit:1000,name:"Czeladnik"},
-  {limit:5000,name:"Ekspert"},{limit:15000,name:"Mistrz"},{limit:50000,name:"Guru"}
-];
+const RANKS=[{l:0,n:"Nowicjusz"},{l:200,n:"Uczeń"},{l:1000,n:"Czeladnik"},{l:5000,n:"Ekspert"},{l:15000,n:"Mistrz"},{l:50000,n:"Guru"}];
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 2 — LANGUAGE FUNCTIONS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ── NAMEDAYS — loaded inline ─────────────────────────── */
+</script>
 
-function numToPl(n) {
-  if (isNaN(n)) return "…";
-  if (n === 0) return "zero";
-  if (n < 0) return "minus " + numToPl(-n);
-  let s = "";
-  if (n >= 1000000) { let m=Math.floor(n/1000000); s+=(m===1?"":numToPl(m)+" ")+plural(m,"milion","miliony","milionów")+" "; n%=1000000; }
-  if (n >= 1000)    { let t=Math.floor(n/1000);    s+=(t===1?"tysiąc":numToPl(t)+" "+plural(t,"tysiąc","tysiące","tysięcy"))+" "; n%=1000; }
-  if (n >= 100)     { s+=HUNDREDS[Math.floor(n/100)]+" "; n%=100; }
-  if (n >= 20)      { s+=TENS[Math.floor(n/10)]+" "; n%=10; }
-  if (n >= 10)      { s+=TEENS[n-10]+" "; n=0; }
-  if (n > 0)        s+=UNITS[n];
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   LANGUAGE FUNCTIONS
+═══════════════════════════════════════════════════════ */
+function numToPl(n){
+  if(isNaN(n))return"…";if(n===0)return"zero";if(n<0)return"minus "+numToPl(-n);
+  let s="";
+  if(n>=1000000){let m=Math.floor(n/1000000);s+=(m===1?"":numToPl(m)+" ")+plur(m,"milion","miliony","milionów")+" ";n%=1000000;}
+  if(n>=1000){let t=Math.floor(n/1000);s+=(t===1?"tysiąc":numToPl(t)+" "+plur(t,"tysiąc","tysiące","tysięcy"))+" ";n%=1000;}
+  if(n>=100){s+=HUNDS[Math.floor(n/100)]+" ";n%=100;}
+  if(n>=20){s+=TENS[Math.floor(n/10)]+" ";n%=10;}
+  if(n>=10){s+=TEENS[n-10]+" ";n=0;}
+  if(n>0)s+=UNITS[n];
   return s.trim();
 }
+function plur(n,s,pa,pb){n=Math.abs(n);if(n===1)return s;const r10=n%10,r100=n%100;if(r10>=2&&r10<=4&&(r100<10||r100>20))return pa;return pb;}
 
-function plural(n, s, pa, pb) {
-  n = Math.abs(n);
-  if (n === 1) return s;
-  const r10=n%10, r100=n%100;
-  if (r10>=2 && r10<=4 && (r100<10||r100>20)) return pa;
-  return pb;
-}
-
-function timeToPl(h, m, formal) {
-  if (formal) {
-    const hStr = H_NOM[h] || numToPl(h);
-    const mStr = m===0 ? "" : (m<10 ? "zero "+M_ALL[m] : M_ALL[m]);
-    return ("Godzina "+hStr+" "+mStr).trim();
+function timeToPl(h,m,formal){
+  if(formal){
+    const hStr=H_NOM[h]||numToPl(h);
+    const mStr=m===0?"":(m<10?"zero "+M_ALL[m]:M_ALL[m]);
+    return("Godzina "+hStr+" "+mStr).trim();
   }
-  const h12 = h%12, next12 = (h+1)%12;
-  const hFem = H_NOM[h12===0?12:h12];
-  const hGen = H_GEN[h12===0?12:h12];
-  const hNextFem = H_NOM[next12===0?12:next12];
-  const hNextGen = H_GEN[next12===0?12:next12];
-  if (m===0)  return hFem;
-  if (m===30) return `wpół do ${hNextGen}`;
-  if (m<30)   return `${M_ALL[m]} po ${hGen}`;
-  return `za ${M_ALL[60-m]} ${hNextFem}`;
+  const h12=h%12,n12=(h+1)%12;
+  const hF=H_NOM[h12||12],hG=H_GEN[h12||12],hNF=H_NOM[n12||12],hNG=H_GEN[n12||12];
+  if(m===0)return hF;if(m===30)return"wpół do "+hNG;
+  if(m<30)return M_ALL[m]+" po "+hG;
+  return"za "+M_ALL[60-m]+" "+hNF;
 }
-
-function timeToPhonetic(h, m, formal) {
-  if (formal) {
-    const hPh = H_NOM_PH[h]||"";
-    const mPh = m===0 ? "" : (M_ALL_PH[m]||"");
-    return ("go-jee-nah "+hPh+" "+mPh).trim();
+function timePh(h,m,formal){
+  if(formal){return("go-jee-nah "+(H_NOM_PH[h]||"")+" "+(m?M_PH[m]:"")).trim();}
+  const h12=h%12,n12=(h+1)%12;
+  const hNP=H_NOM_PH[h12||12],hGP=H_GEN_PH[h12||12],hNFP=H_NOM_PH[n12||12],hNGP=H_GEN_PH[n12||12];
+  if(m===0)return hNP;if(m===30)return"v-poow do "+hNGP;
+  if(m<30)return(M_PH[m]||"")+" po "+hGP;
+  return"za "+(M_PH[60-m]||"")+" "+hNFP;
+}
+function timeHTML(h,m,formal){
+  if(formal){
+    const hS=H_NOM[h]||numToPl(h);
+    const mS=m===0?"":`<span class="card"> ${m<10?"zero ":""}${M_ALL[m]}</span>`;
+    return`<span class="nom">Godzina ${hS}</span>${mS}`;
   }
-  const h12=h%12, next12=(h+1)%12;
-  const hNP=H_NOM_PH[h12===0?12:h12], hGP=H_GEN_PH[h12===0?12:h12];
-  const hNextNP=H_NOM_PH[next12===0?12:next12], hNextGP=H_GEN_PH[next12===0?12:next12];
-  if (m===0)  return hNP;
-  if (m===30) return `v-poow do ${hNextGP}`;
-  if (m<30)   return `${M_ALL_PH[m]} po ${hGP}`;
-  return `za ${M_ALL_PH[60-m]} ${hNextNP}`;
+  const h12=h%12,n12=(h+1)%12;
+  const hF=H_NOM[h12||12],hG=H_GEN[h12||12],hNF=H_NOM[n12||12],hNG=H_GEN[n12||12];
+  if(m===0)return`<span class="nom">${hF}</span>`;
+  if(m===30)return`wpół do <span class="gen">${hNG}</span>`;
+  if(m<30)return`<span class="card">${M_ALL[m]}</span> po <span class="gen">${hG}</span>`;
+  return`za <span class="card">${M_ALL[60-m]}</span> <span class="nom">${hNF}</span>`;
 }
-
-function timeToEn(h, m) {
-  const pad=n=>n.toString().padStart(2,'0');
-  return `${pad(h)}:${pad(m)}`;
-}
-
-function dateToPl(day, monthIdx, year, isGenitive, includeYear) {
-  const dayWord  = isGenitive ? ORD_GEN[day] : ORD_NOM[day];
-  const monthWord = MONTHS_GEN[monthIdx];
-  let s = `${dayWord} ${monthWord}`;
-  if (includeYear) s += ` ${numToPl(year)} roku`;
+function dateFormatPl(d,mon,yr,gen,inclYr){
+  const day=gen?ORD_GEN[d]:ORD_NOM[d];
+  let s=`${day} ${MONTHS_GEN[mon]}`;
+  if(inclYr)s+=` ${numToPl(yr)} roku`;
   return s;
 }
-
-function dateToPhonetic(day, monthIdx, isGenitive) {
-  const dayPh   = isGenitive ? ORD_PH_GEN[day] : ORD_PH_NOM[day];
-  const monthPh = MONTHS_PH[monthIdx];
-  return `${dayPh} ${monthPh}`;
+function datePh(d,mon,gen){
+  return`${gen?ORD_PH_GEN[d]:ORD_PH_NOM[d]} ${MONTHS_PH[mon]}`;
 }
-
-function dateToEn(day, monthIdx, year, includeYear, dow) {
-  const suffix = (d)=>{const j=d%10,k=d%100;if(j===1&&k!==11)return"st";if(j===2&&k!==12)return"nd";if(j===3&&k!==13)return"rd";return"th";};
-  let s = `${DAYS_EN[dow]}, ${MONTHS_EN[monthIdx]} ${day}${suffix(day)}`;
-  if (includeYear) s += ` ${year}`;
+function dateEn(d,mon,yr,inclYr,dow){
+  const sf=i=>{const j=i%10,k=i%100;if(j==1&&k!=11)return"st";if(j==2&&k!=12)return"nd";if(j==3&&k!=13)return"rd";return"th";};
+  let s=`${DAYS_EN[dow]}, ${MONTHS_EN[mon]} ${d}${sf(d)}`;
+  if(inclYr)s+=` ${yr}`;
   return s;
 }
+function grammarRule(n){
+  n=Math.abs(Math.round(n));if(n===1)return"Rule: 1 — Singular";
+  const r=n%10,r2=n%100;if(r>=2&&r<=4&&(r2<10||r2>20))return"Rule: 2–4 — Nom. Plural";
+  return"Rule: 5+ — Gen. Plural";
+}
+function getNDs(mon,day){
+  if(typeof NAMEDAYS==='undefined')return[];
+  return NAMEDAYS[`${mon}-${day}`]||[];
+}
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 3 — GLOBAL STATE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-const S = {
-  // Numbers
-  subMode: 'numbers',   // numbers | shopping | prices | context | ordinal
-  currentPL: '', currentEN: '', speechText: '',
-  rawData: null, solved: false, startTime: 0,
-  history: [], isReview: false, wrongGuesses: 0,
-  // XP & progress
-  xp: 0, streak: 0, dailyXP: 0, dailyGoal: 300, goalMet: false,
-  mistakes: [],
-  catStats: {numbers:0, shopping:0, prices:0, context:0, ordinal:0},
-  campLevel: 1,
-  // Calendar
-  calViewDate: new Date(), calSelectedDate: new Date(),
-  calCase: 'nom', calYear: true,
-  // Clock
-  clkH: 12, clkM: 0, clkS: 0, clkLive: true,
-  clkFormal: false, clkSec: false, clkPh: true, clkQuiz: false,
-  // Audio
-  userInteracted: false,
-  speakerTaps: 0, speakerTimer: null,
-  handsfree: false, hfTimer: null,
-  audioCtx: null,
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+const S={
+  subMode:'numbers',plText:'',enText:'',speechText:'',rawData:null,
+  solved:false,startTime:0,hist:[],isReview:false,
+  xp:0,streak:0,dailyXP:0,dailyGoal:300,goalMet:false,
+  mistakes:[],cats:{numbers:0,shopping:0,prices:0,context:0,ordinal:0},
+  campLevel:1,
+  calView:new Date(),calSel:null,calCase:'nom',calYear:true,
+  clkH:12,clkM:0,clkS:0,clkLive:true,clkFormal:false,
+  clkSec:false,clkPh:true,clkQuiz:false,clkQRev:true,
+  audioCtx:null,interacted:false,spkTaps:0,spkTimer:null,
+  hf:false,hfTimer:null
 };
+let recog,micOn=false;
 
-let recognition;
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+function init(){
+  // Load state
+  try{
+    S.xp=+localStorage.getItem('pl_xp')||0;
+    S.streak=+localStorage.getItem('pl_streak')||0;
+    S.campLevel=+localStorage.getItem('pl_level')||1;
+    S.mistakes=JSON.parse(localStorage.getItem('pl_mis')||'[]');
+    S.cats=JSON.parse(localStorage.getItem('pl_cats')||JSON.stringify(S.cats));
+    const today=new Date().toDateString();
+    if(localStorage.getItem('pl_date')!==today){S.dailyXP=0;S.goalMet=false;localStorage.setItem('pl_date',today);}
+    else{S.dailyXP=+localStorage.getItem('pl_daily')||0;if(S.dailyXP>=S.dailyGoal)S.goalMet=true;}
+  }catch(e){}
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 4 — INIT
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function init() {
-  loadState();
-  buildClockFace();
-  setupSpeech();
+  buildSVGTicks();
+  setupRecog();
   setupAudioUnlock();
-
-  document.addEventListener('keydown', handleKey);
-  document.getElementById('auto-campaign').addEventListener('change', toggleAutoCampaign);
-
+  document.addEventListener('keydown',handleKey);
   setRealTime();
-  setInterval(clockTick, 1000);
-  renderCalendar();
-  generateNumbers();
-  updateTopBar();
-
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+  setInterval(clockTick,1000);
+  calRender();
+  genNumbers();
+  updTopBar();
+  updCampDesc();
 }
 
-function loadState() {
-  try {
-    S.xp       = parseInt(localStorage.getItem('pl_xp')      || 0);
-    S.streak   = parseInt(localStorage.getItem('pl_streak')  || 0);
-    S.campLevel= parseInt(localStorage.getItem('pl_level')   || 1);
-    S.mistakes = JSON.parse(localStorage.getItem('pl_mistakes') || '[]');
-    S.catStats = JSON.parse(localStorage.getItem('pl_cats') || JSON.stringify(S.catStats));
-
-    const today = new Date().toDateString();
-    if (localStorage.getItem('pl_date') !== today) {
-      S.dailyXP = 0; S.goalMet = false;
-      localStorage.setItem('pl_date', today);
-    } else {
-      S.dailyXP = parseInt(localStorage.getItem('pl_daily') || 0);
-      if (S.dailyXP >= S.dailyGoal) S.goalMet = true;
-    }
-  } catch(e) {}
-}
-
-function saveState() {
-  localStorage.setItem('pl_xp', S.xp);
-  localStorage.setItem('pl_streak', S.streak);
-  localStorage.setItem('pl_level', S.campLevel);
-  localStorage.setItem('pl_daily', S.dailyXP);
-  localStorage.setItem('pl_mistakes', JSON.stringify(S.mistakes.slice(-50)));
-  localStorage.setItem('pl_cats', JSON.stringify(S.catStats));
-}
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 5 — SCREEN NAVIGATION
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function switchScreen(name) {
+/* ═══════════════════════════════════════════════════════
+   SCREEN NAVIGATION
+═══════════════════════════════════════════════════════ */
+function switchScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
-  if (name === 'calendar') renderCalendar();
-  if (name === 'clock') updateClockDisplay();
+  if(name==='calendar')calRender();
+  if(name==='clock')updClock();
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 6 — NUMBERS ENGINE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ═══════════════════════════════════════════════════════
+   NUMBERS ENGINE
+═══════════════════════════════════════════════════════ */
+const SUBMODE_LABEL={numbers:'Numbers',shopping:'🛒 Shopping',prices:'Prices',context:'Sentences',ordinal:'Ordinals'};
 
-function setSubMode(mode) {
-  S.subMode = mode;
+function setSubMode(m){
+  S.subMode=m;
   document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-'+mode).classList.add('active');
-  document.getElementById('num-mode-chip').innerText =
-    {numbers:'Numbers',shopping:'🛒 Shopping',prices:'Prices',context:'Sentences',ordinal:'Ordinals'}[mode];
-  generateNumbers();
+  document.getElementById('tab-'+m).classList.add('active');
+  document.getElementById('mode-chip').innerText=SUBMODE_LABEL[m]||m;
+  genNumbers();
 }
 
-function getRange() {
-  if (document.getElementById('auto-campaign').checked) {
-    return [[1,20],[1,100],[1,1000],[1,10000],[1,100000],[1,10000000]][Math.min(S.campLevel-1,5)];
+function getRange(){
+  if(document.getElementById('auto-camp').checked){
+    return[[1,20],[1,100],[1,1000],[1,10000],[1,100000],[1,10000000]][Math.min(S.campLevel-1,5)];
   }
-  const mn = Math.pow(10, parseInt(document.getElementById('range-min').value));
-  const mx = Math.pow(10, parseInt(document.getElementById('range-max').value));
-  return [mn, mx];
+  return[Math.pow(10,+document.getElementById('r-min').value),Math.pow(10,+document.getElementById('r-max').value)];
 }
 
-function generateRaw() {
-  const [min, max] = getRange();
-  const m = S.subMode;
-
-  if (m === 'ordinal') return { type:'ordinal', n: Math.floor(Math.random()*20)+1 };
-
-  if (m === 'context') {
-    const keys = Object.keys(GRAMMAR_CTX);
-    const k = keys[Math.floor(Math.random()*keys.length)];
-    const g = GRAMMAR_CTX[k];
-    const localMax = Math.min(g.max||max, max);
-    const localMin = Math.min(min, localMax);
-    return { type:'context', key:k, n: Math.floor(Math.random()*(localMax-localMin+1))+localMin };
+function makeRaw(){
+  const[min,max]=getRange(),m=S.subMode;
+  if(m==='ordinal')return{type:'ordinal',n:Math.floor(Math.random()*20)+1};
+  if(m==='context'){
+    const keys=Object.keys(GRAMMAR_CTX),k=keys[Math.floor(Math.random()*keys.length)],g=GRAMMAR_CTX[k];
+    const lmax=Math.min(g.max||max,max),lmin=Math.min(min,lmax);
+    return{type:'context',key:k,n:Math.floor(Math.random()*(lmax-lmin+1))+lmin};
   }
-
-  if (m === 'shopping') {
-    const scene = SHOPPING[Math.floor(Math.random()*SHOPPING.length)];
-    const item  = scene.items[Math.floor(Math.random()*scene.items.length)];
-    const n = Math.floor(Math.random()*20)+1;
-    return { type:'shopping', scene: scene.scene, item, n };
+  if(m==='shopping'){
+    const scene=SHOPPING[Math.floor(Math.random()*SHOPPING.length)];
+    const item=scene.items[Math.floor(Math.random()*scene.items.length)];
+    return{type:'shopping',scene:scene.scene,item,n:Math.floor(Math.random()*20)+1};
   }
-
-  if (m === 'prices') {
-    const n  = Math.floor(Math.random()*(max-1))+1;
-    const gr = Math.random() < 0.6 ? Math.floor(Math.random()*99)+1 : 0;
-    return { type:'prices', n, gr };
+  if(m==='prices'){
+    return{type:'prices',n:Math.floor(Math.random()*(max-1))+1,gr:Math.random()<0.65?Math.floor(Math.random()*99)+1:0};
   }
-
-  // Numbers
-  const allowedTypes = ['integer'];
-  if (document.getElementById('chk-negatives').checked)  allowedTypes.push('negative');
-  if (document.getElementById('chk-decimals').checked)   allowedTypes.push('decimal');
-  if (document.getElementById('chk-fractions').checked)  allowedTypes.push('fraction');
-  const type = allowedTypes[Math.floor(Math.random()*allowedTypes.length)];
-
-  if (type === 'fraction') {
-    const denoms = [2,3,4,5,6,8,10,100];
-    const d = denoms[Math.floor(Math.random()*denoms.length)];
-    return { type:'fraction', n: Math.floor(Math.random()*(d-1))+1, d };
-  }
-  if (type === 'decimal') {
-    return { type:'decimal', v: parseFloat((Math.random()*(max-min)+min).toFixed(1)) };
-  }
-  if (type === 'negative') {
-    return { type:'integer', v: -(Math.floor(Math.random()*max)+1) };
-  }
-  return { type:'integer', v: Math.floor(Math.random()*(max-min+1))+min };
+  const types=['integer'];
+  if(document.getElementById('chk-neg').checked)types.push('negative');
+  if(document.getElementById('chk-dec').checked)types.push('decimal');
+  if(document.getElementById('chk-frac').checked)types.push('fraction');
+  const t=types[Math.floor(Math.random()*types.length)];
+  if(t==='fraction'){const ds=[2,3,4,5,6,8,10,100],d=ds[Math.floor(Math.random()*ds.length)];return{type:'fraction',n:Math.floor(Math.random()*(d-1))+1,d};}
+  if(t==='decimal')return{type:'decimal',v:parseFloat((Math.random()*(max-min)+min).toFixed(1))};
+  if(t==='negative')return{type:'integer',v:-(Math.floor(Math.random()*max)+1)};
+  return{type:'integer',v:Math.floor(Math.random()*(max-min+1))+min};
 }
 
-function processRaw(raw) {
-  S.rawData = raw;
-  const t = raw.type;
+function processRaw(raw){
+  S.rawData=raw;const t=raw.type;
+  // reset tags
+  const gc=document.getElementById('grammar-chip');gc.className='grammar-chip';
+  document.getElementById('scenario-tag').style.display='none';
 
-  if (t === 'ordinal') {
-    S.currentPL  = ORD_NOM[raw.n] || raw.n+'.';
-    S.currentEN  = raw.n + '.';
-    S.speechText = S.currentPL;
-    showGrammarChip('Ordinal (Nominative)');
-    return;
+  if(t==='ordinal'){
+    S.plText=ORD_NOM[raw.n]||raw.n+'.';S.enText=raw.n+'.';S.speechText=S.plText;
+    chip('Ordinal (Nominative)');return;
   }
-
-  if (t === 'context') {
-    const g    = GRAMMAR_CTX[raw.key];
-    const word = plural(raw.n, g.s, g.p, g.g);
-    const full = g.phrase.replace('[N]', numToPl(raw.n)).replace('[W]', word);
-    S.currentPL  = g.phrase.replace('[N]', `<b>${raw.n}</b>`).replace('[W]', word);
-    S.currentEN  = g.en.replace('[N]', raw.n);
-    S.speechText = full;
-    showGrammarChip(getGrammarRule(raw.n));
-    return;
+  if(t==='context'){
+    const g=GRAMMAR_CTX[raw.key],word=plur(raw.n,g.s,g.p,g.g),full=g.phrase.replace('[N]',numToPl(raw.n)).replace('[W]',word);
+    S.plText=g.phrase.replace('[N]',`<b>${raw.n}</b>`).replace('[W]',word);
+    S.enText=g.en.replace('[N]',raw.n);S.speechText=full;chip(grammarRule(raw.n));return;
   }
-
-  if (t === 'shopping') {
-    const {item, n} = raw;
-    const word = plural(n, item.unitPl, item.unitPl2, item.unitPl2+'ów').replace('ów','ów');
-    // Proper declension
-    const nounForm = n===1 ? item.unitPl : (n>=2&&n<=4 ? item.unitPl2 : item.unitPl2.replace(/y$/,'')+'ów');
-    const numWord  = numToPl(n);
-    S.currentPL  = `${numWord} ${nounForm}`;
-    S.currentEN  = `${n} ${item.en}`;
-    S.speechText = S.currentPL;
-    document.getElementById('scenario-badge').style.display = 'inline-flex';
-    document.getElementById('scenario-badge').innerHTML = `${raw.scene}`;
-    showGrammarChip(getGrammarRule(n));
-    return;
+  if(t==='shopping'){
+    const{item,n}=raw;
+    const noun=n===1?item.s:(n>=2&&n<=4?item.p:item.g);
+    S.plText=`${numToPl(n)} ${noun}`;S.enText=`${n} ${item.en}`;S.speechText=S.plText;
+    document.getElementById('scenario-tag').style.display='block';
+    document.getElementById('scenario-tag').innerText=raw.scene;
+    chip(grammarRule(n));return;
   }
-
-  document.getElementById('scenario-badge').style.display = 'none';
-
-  if (t === 'prices') {
-    const {n, gr} = raw;
-    S.currentEN = `${n},${gr.toString().padStart(2,'0')} zł`;
-    if (n===0)       S.currentPL = `${numToPl(gr)} ${plural(gr,'grosz','grosze','groszy')}`;
-    else if (gr===0) S.currentPL = `${numToPl(n)} ${plural(n,'złoty','złote','złotych')}`;
-    else { const gt = gr<10 ? "zero "+numToPl(gr) : numToPl(gr); S.currentPL = `${numToPl(n)} ${gt}`; }
-    S.speechText = S.currentPL;
-    showGrammarChip('Price (informal)');
-    return;
+  if(t==='prices'){
+    const{n,gr}=raw;
+    S.enText=`${n},${String(gr).padStart(2,'0')} zł`;
+    if(n===0)S.plText=`${numToPl(gr)} ${plur(gr,'grosz','grosze','groszy')}`;
+    else if(gr===0)S.plText=`${numToPl(n)} ${plur(n,'złoty','złote','złotych')}`;
+    else S.plText=`${numToPl(n)} ${gr<10?"zero "+numToPl(gr):numToPl(gr)}`;
+    S.speechText=S.plText;chip('Price (spoken)');return;
   }
-
-  if (t === 'fraction') {
-    const {n, d} = raw;
-    const numW = n===1?"jedna":n===2?"dwie":numToPl(n);
-    const da = FRACS[d]; if(!da){S.currentPL=`${n}/${d}`;S.currentEN=`${n}/${d}`;S.speechText=S.currentPL;return;}
-    const denW = plural(n, da[0], da[1], da[2]);
-    S.currentPL = `${numW} ${denW}`;
-    S.currentEN = `${n}/${d}`;
-    S.speechText = S.currentPL;
-    showGrammarChip('Fraction (Feminine)');
-    return;
+  if(t==='fraction'){
+    const{n,d}=raw;const da=FRACS[d];
+    const numW=n===1?"jedna":n===2?"dwie":numToPl(n);
+    if(!da){S.plText=`${numW}/${d}`;S.enText=`${n}/${d}`;S.speechText=S.plText;return;}
+    S.plText=`${numW} ${plur(n,da[0],da[1],da[2])}`;S.enText=`${n}/${d}`;S.speechText=S.plText;chip('Fraction (Feminine)');return;
   }
-
-  if (t === 'decimal') {
-    const s = raw.v.toString(); const parts = s.split('.');
-    S.currentEN  = s.replace('.', ',');
-    S.currentPL  = `${numToPl(parseInt(parts[0]))} przecinek ${parts[1].split('').map(d=>numToPl(parseInt(d))).join(' ')}`;
-    S.speechText = S.currentPL;
-    showGrammarChip('Decimal');
-    return;
+  if(t==='decimal'){
+    const s=raw.v.toString(),parts=s.split('.');
+    S.enText=s.replace('.',',');
+    S.plText=`${numToPl(parseInt(parts[0]))} przecinek ${parts[1].split('').map(x=>numToPl(+x)).join(' ')}`;
+    S.speechText=S.plText;chip('Decimal');return;
   }
-
-  // Integer
-  S.currentEN  = raw.v.toLocaleString();
-  S.currentPL  = numToPl(raw.v);
-  S.speechText = S.currentPL;
-  if (typeof raw.v === 'number' && !isNaN(raw.v)) showGrammarChip(getGrammarRule(Math.abs(raw.v)));
+  // integer
+  S.enText=raw.v.toLocaleString();S.plText=numToPl(raw.v);S.speechText=S.plText;
+  if(!isNaN(raw.v))chip(grammarRule(Math.abs(raw.v)));
 }
 
-function getGrammarRule(n) {
-  n = Math.abs(Math.round(n));
-  if (n===1) return 'Rule: 1 — Singular';
-  const r10=n%10, r100=n%100;
-  if (r10>=2&&r10<=4&&(r100<10||r100>20)) return 'Rule: 2–4 — Nom. Plural';
-  return 'Rule: 5+ — Gen. Plural';
+function chip(txt){const c=document.getElementById('grammar-chip');c.innerText=txt;c.classList.add('show');}
+
+function genNumbers(){
+  if(S.hfTimer)clearTimeout(S.hfTimer);
+  S.solved=false;S.wrongGuesses=0;
+
+  // reset display
+  const ids=['pl-text','ph-text','en-text'];
+  ids.forEach(id=>{const el=document.getElementById(id);el.className=el.className.replace(/\bshow\b/,'').trim();el.innerHTML=id==='pl-text'?'—':'';});
+  document.getElementById('voice-fb').innerText='';
+  document.getElementById('voice-fb').style.color='';
+  document.getElementById('skip-btn').innerText='SKIP ➡';
+  if(document.getElementById('type-input'))document.getElementById('type-input').style.borderColor='';
+
+  let raw,safety=0;
+  do{raw=makeRaw();safety++;}while(histRepeated(raw)&&safety<10);
+  histAdd(raw);processRaw(raw);
+  buildGrid();
+  S.startTime=Date.now();
+  if(S.hf){doHF();return;}
+  setTimeout(()=>speak(1),200);
 }
 
-function showGrammarChip(text) {
-  const c = document.getElementById('grammar-chip');
-  c.innerText = text; c.classList.add('show');
-}
+function histRepeated(r){return S.hist.some(h=>JSON.stringify(h)===JSON.stringify(r));}
+function histAdd(r){S.hist.push(r);if(S.hist.length>5)S.hist.shift();}
 
-function generateNumbers() {
-  if (S.hfTimer) clearTimeout(S.hfTimer);
-  S.solved = false; S.wrongGuesses = 0;
+function buildGrid(){
+  const sel=document.getElementById('grid-size').value;
+  const grid=document.getElementById('answer-grid');
+  const typeA=document.getElementById('type-area');
+  const forcType=sel==='type'||S.subMode==='context';
 
-  // Reset display
-  ['pl-text','phonetic-text','en-text'].forEach(id=>{
-    const el=document.getElementById(id);
-    el.classList.remove('reveal');
-    el.innerHTML = id==='pl-text'?'—':'';
-  });
-  document.getElementById('grammar-chip').classList.remove('show');
-  document.getElementById('scenario-badge').style.display='none';
-  document.getElementById('voice-feedback').innerText='';
-
-  // Generate unique value
-  let raw, safety=0;
-  do { raw=generateRaw(); safety++; }
-  while (isRepeated(raw) && safety<10);
-  addHistory(raw);
-  processRaw(raw);
-
-  renderAnswerArea();
-  S.startTime = Date.now();
-
-  if (S.handsfree) { doHandsfree(); return; }
-  setTimeout(()=>speak(1.0), 200);
-}
-
-function isRepeated(raw) { return S.history.some(h=>JSON.stringify(h)===JSON.stringify(raw)); }
-function addHistory(raw) { S.history.push(raw); if(S.history.length>5) S.history.shift(); }
-
-function renderAnswerArea() {
-  const gridSel = document.getElementById('grid-size').value;
-  const grid    = document.getElementById('answer-grid');
-  const typeArea= document.getElementById('type-area');
-  const scroll  = document.getElementById('answer-scroll');
-
-  if (gridSel === 'type' || S.subMode === 'context') {
-    grid.style.display = 'none'; typeArea.style.display='flex';
-    document.getElementById('type-input').value='';
-    document.getElementById('type-input').style.borderColor='';
-    scroll.scrollTop=0;
-    return;
+  if(forcType){
+    grid.style.display='none';typeA.style.display='flex';
+    document.getElementById('type-input').value='';return;
   }
-
-  typeArea.style.display='none'; grid.style.display='grid';
-  const count = parseInt(gridSel)||8;
-  grid.className = 'answer-grid ' + (count===12?'cols-3':'cols-2');
-  grid.innerHTML = '';
-
-  const showDigits = document.getElementById('btn-style').value==='digits' && !['context','shopping'].includes(S.subMode);
-  const correctText = showDigits ? S.currentEN : S.currentPL;
-
-  let answers = [{ text: correctText, correct: true }];
-  let safety  = 0;
-
-  while (answers.length < count && safety < 300) {
-    safety++;
-    const decoy = generateDecoyText(S.rawData, showDigits);
-    if (decoy && decoy !== '—' && decoy !== correctText && !answers.find(a=>a.text===decoy)) {
-      answers.push({ text: decoy, correct: false });
-    }
-  }
-
-  answers.sort(()=>Math.random()-0.5);
-  answers.forEach((a, i)=>{
-    const btn = document.createElement('button');
-    btn.className = 'ans-btn';
-    btn.innerHTML = `<span class="key-hint">${i+1}</span>${a.text}`;
-    btn.onclick = () => { if(S.solved) return; a.correct ? win(btn) : lose(btn); };
-    grid.appendChild(btn);
-  });
-
-  scroll.scrollTop = 0;
-}
-
-function generateDecoyText(raw, showDigits) {
-  try {
-    const t = raw.type;
-
-    if (t === 'ordinal') {
-      let d = Math.floor(Math.random()*20)+1;
-      return showDigits ? d+'.' : (ORD_NOM[d]||d+'.');
-    }
-    if (t === 'context') {
-      const g = GRAMMAR_CTX[raw.key];
-      const n = Math.max(1, raw.n + Math.floor(Math.random()*6)-3);
-      if (n===raw.n) return null;
-      return g.phrase.replace('[N]', numToPl(n)).replace('[W]', plural(n,g.s,g.p,g.g));
-    }
-    if (t === 'shopping') {
-      const n = Math.max(1, raw.n + Math.floor(Math.random()*6)-3);
-      if (n===raw.n) return null;
-      const item = raw.item;
-      const nounForm = n===1 ? item.unitPl : (n>=2&&n<=4 ? item.unitPl2 : item.unitPl2+'ów');
-      return `${numToPl(n)} ${nounForm}`;
-    }
-    if (t === 'prices') {
-      const n2 = Math.max(0, raw.n + Math.floor(Math.random()*6)-3);
-      const gr2 = Math.floor(Math.random()*99);
-      if (n2===raw.n && gr2===raw.gr) return null;
-      if (showDigits) return `${n2},${gr2.toString().padStart(2,'0')} zł`;
-      if (n2===0) return `${numToPl(gr2)} ${plural(gr2,'grosz','grosze','groszy')}`;
-      if (gr2===0) return `${numToPl(n2)} ${plural(n2,'złoty','złote','złotych')}`;
-      const gt = gr2<10?"zero "+numToPl(gr2):numToPl(gr2);
-      return `${numToPl(n2)} ${gt}`;
-    }
-    if (t === 'fraction') {
-      const denoms=[2,3,4,5,6,8,10,100];
-      const d2 = denoms[Math.floor(Math.random()*denoms.length)];
-      const n2 = Math.floor(Math.random()*(d2-1))+1;
-      if (n2===raw.n && d2===raw.d) return null;
-      if (showDigits) return `${n2}/${d2}`;
-      const da=FRACS[d2]; if(!da) return null;
-      const numW=n2===1?"jedna":n2===2?"dwie":numToPl(n2);
-      return `${numW} ${plural(n2,da[0],da[1],da[2])}`;
-    }
-    if (t === 'decimal') {
-      let d2 = parseFloat((raw.v + (Math.random()*4-2)).toFixed(1));
-      if (d2===raw.v||d2<0) return null;
-      if (showDigits) return d2.toString().replace('.',',');
-      const p=d2.toString().split('.');
-      return `${numToPl(parseInt(p[0]))} przecinek ${(p[1]||'0').split('').map(x=>numToPl(parseInt(x))).join(' ')}`;
-    }
-    // Integer
-    const v = raw.v;
-    let d2 = v + (Math.random()<0.5?1:-1) * Math.max(1, Math.floor(Math.abs(v)*0.2 + Math.random()*5));
-    if (!document.getElementById('chk-negatives').checked && d2<0) d2=Math.abs(d2);
-    if (d2===v) return null;
-    return showDigits ? d2.toLocaleString() : numToPl(d2);
-  } catch(e) { return null; }
-}
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 7 — WIN / LOSE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function win(btn) {
-  playTone('correct'); S.solved = true;
-  const elapsed = (Date.now()-S.startTime)/1000;
-
-  let score = 10;
-  if (elapsed < 3)  score += 5;
-  if (elapsed > 13) score -= 4;
-  else if (elapsed > 7) score -= 2;
-  if (S.subMode==='context') score += 5;
-  if (S.subMode==='shopping') score += 3;
-  if (S.isReview) { score = 5; S.mistakes.shift(); }
-  else if (elapsed>7&&elapsed<=20) recordMistake('Slow');
-  score = Math.max(1, score);
-
-  S.xp += score; S.streak++; S.dailyXP += score;
-  if (!S.catStats[S.subMode]) S.catStats[S.subMode]=0;
-  S.catStats[S.subMode] += score;
-
-  if (!S.goalMet && S.dailyXP >= S.dailyGoal) {
-    S.goalMet = true;
-    setTimeout(()=>{ fireConfetti(); showModal('goal-modal'); }, 400);
-  }
-
-  // Milestone confetti
-  if ([5,10,25,50,100].includes(S.streak)) fireConfetti(S.streak>=50?120:50);
-
-  saveState(); updateTopBar();
-
-  // Score float
-  const card = document.getElementById('num-display-card');
-  const pop  = document.createElement('div');
-  pop.className = 'score-pop'; pop.innerText = '+'+score;
-  card.style.position='relative'; card.appendChild(pop);
-  setTimeout(()=>pop.remove(), 1000);
-
-  if (btn) btn.classList.add('correct');
-  else if (document.getElementById('type-input')) document.getElementById('type-input').style.borderColor='var(--correct)';
-
-  // Reveal
-  revealAnswer();
-  document.getElementById('skip-btn').innerText = 'NEXT ▶';
-
-  setTimeout(()=>speak(1.0), 300);
-  if (!S.handsfree) setTimeout(generateNumbers, 3000);
-}
-
-function lose(btn) {
-  playTone('wrong'); S.streak = 0; S.wrongGuesses++;
-  recordMistake('Wrong');
-  if (btn) btn.classList.add('wrong');
-  else if (document.getElementById('type-input')) document.getElementById('type-input').style.borderColor='var(--wrong)';
-  updateTopBar();
-  saveState();
-  speak(1.0);
-}
-
-function revealAnswer() {
-  const plEl = document.getElementById('pl-text');
-  if (S.subMode === 'context') plEl.innerHTML = S.currentPL;
-  else plEl.innerText = S.currentPL;
-  plEl.classList.add('reveal');
-  document.getElementById('en-text').innerText = S.currentEN;
-  document.getElementById('en-text').classList.add('reveal');
-}
-
-function recordMistake(reason) {
-  S.mistakes.push({ mode:S.subMode, pl:S.currentPL, en:S.currentEN, reason, ts:Date.now() });
-  if (S.mistakes.length > 80) S.mistakes.shift();
-}
-
-function checkTyped() {
-  if (S.solved) return;
-  const val    = (document.getElementById('type-input').value||'').trim().toLowerCase();
-  const target = S.subMode==='context' ? S.speechText.toLowerCase() : S.currentPL.toLowerCase();
-  const engT   = S.currentEN.toLowerCase();
-  (val===target||val===engT||val.replace(/\s/g,'')===target.replace(/\s/g,'')) ? win(null) : lose(null);
-}
-
-function startReview() {
-  hideModal('stats-modal');
-  if (S.mistakes.length===0) { alert("No mistakes to review!"); return; }
-  S.isReview = true; switchScreen('numbers'); generateNumbers();
-}
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 8 — CALENDAR
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function renderCalendar() {
-  const vd  = S.calViewDate;
-  const yr  = vd.getFullYear();
-  const mon = vd.getMonth();
-
-  // Month name
-  const mNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  document.getElementById('cal-month-name').innerText = `${mNames[mon]} ${yr}`;
-
-  const grid = document.getElementById('cal-grid');
+  typeA.style.display='none';grid.style.display='grid';
+  const count=parseInt(sel)||8;
+  grid.className='answer-grid '+(count===12?'grid-3':'grid-2');
   grid.innerHTML='';
 
-  const diary   = getDiary();
-  const firstDow= new Date(yr, mon, 1).getDay();
-  const lastDay = new Date(yr, mon+1, 0).getDate();
+  const digits=document.getElementById('btn-style').value==='digits'&&!['context','shopping'].includes(S.subMode);
+  const correct=digits?S.enText:S.plText;
+  // strip HTML for comparison
+  const correctClean=correct.replace(/<[^>]*>/g,'');
 
-  // Spacers
-  for (let i=0; i<firstDow; i++) {
-    const sp=document.createElement('div'); sp.className='cal-day spacer'; grid.appendChild(sp);
+  let answers=[{text:correct,clean:correctClean,right:true}];
+  let safety=0;
+  while(answers.length<count&&safety<400){
+    safety++;
+    const d=makeDecoy(S.rawData,digits);
+    if(d&&d!=='—'&&d!==correct&&!answers.find(a=>a.clean===d.replace(/<[^>]*>/g,'')))
+      answers.push({text:d,clean:d.replace(/<[^>]*>/g,''),right:false});
   }
+  answers.sort(()=>Math.random()-0.5);
+  answers.forEach((a,i)=>{
+    const btn=document.createElement('button');
+    btn.className='ans-btn';
+    btn.innerHTML=`<span class="key-hint">${i+1}</span>${a.text}`;
+    btn.onclick=()=>{if(S.solved)return;a.right?winNum(btn):loseNum(btn);};
+    grid.appendChild(btn);
+  });
+}
 
-  const today = new Date();
-  for (let d=1; d<=lastDay; d++) {
-    const cell = document.createElement('div');
-    cell.className = 'cal-day';
-    cell.innerText  = d;
-
-    const hKey   = `${mon}-${d}`;
-    const dKey   = diaryKey(yr, mon, d);
-    const isToday= d===today.getDate()&&mon===today.getMonth()&&yr===today.getFullYear();
-    const isSel  = S.calSelectedDate && d===S.calSelectedDate.getDate()&&mon===S.calSelectedDate.getMonth()&&yr===S.calSelectedDate.getFullYear();
-    const hName  = HOLIDAYS[hKey];
-
-    if (isToday) cell.classList.add('today');
-    if (isSel)   cell.classList.add('selected');
-    if (hName)   cell.classList.add('holiday');
-
-    if (diary[dKey] && diary[dKey].length>0) {
-      const dot=document.createElement('div'); dot.className='diary-dot'; cell.appendChild(dot);
+function makeDecoy(raw,digits){
+  try{
+    const t=raw.type;
+    if(t==='ordinal'){const n=Math.floor(Math.random()*20)+1;return digits?n+'.':(ORD_NOM[n]||n+'.');}
+    if(t==='context'){
+      const g=GRAMMAR_CTX[raw.key];
+      let n=Math.max(1,raw.n+Math.floor(Math.random()*7)-3);if(n===raw.n)n=raw.n+1;
+      return g.phrase.replace('[N]',numToPl(n)).replace('[W]',plur(n,g.s,g.p,g.g));
     }
+    if(t==='shopping'){
+      let n=Math.max(1,raw.n+Math.floor(Math.random()*7)-3);if(n===raw.n)n=raw.n+1;
+      const noun=n===1?raw.item.s:(n>=2&&n<=4?raw.item.p:raw.item.g);
+      return`${numToPl(n)} ${noun}`;
+    }
+    if(t==='prices'){
+      const n2=Math.max(0,raw.n+Math.floor(Math.random()*8)-4);
+      const gr2=Math.floor(Math.random()*99);
+      if(n2===raw.n&&gr2===raw.gr)return null;
+      if(digits)return`${n2},${String(gr2).padStart(2,'0')} zł`;
+      if(n2===0)return`${numToPl(gr2)} ${plur(gr2,'grosz','grosze','groszy')}`;
+      if(gr2===0)return`${numToPl(n2)} ${plur(n2,'złoty','złote','złotych')}`;
+      return`${numToPl(n2)} ${gr2<10?"zero "+numToPl(gr2):numToPl(gr2)}`;
+    }
+    if(t==='fraction'){
+      const ds=[2,3,4,5,6,8,10,100],d2=ds[Math.floor(Math.random()*ds.length)];
+      let n2=Math.floor(Math.random()*(d2-1))+1;if(n2===raw.n&&d2===raw.d)return null;
+      if(digits)return`${n2}/${d2}`;
+      const da=FRACS[d2];if(!da)return null;
+      const nW=n2===1?"jedna":n2===2?"dwie":numToPl(n2);
+      return`${nW} ${plur(n2,da[0],da[1],da[2])}`;
+    }
+    if(t==='decimal'){
+      let v=parseFloat((raw.v+(Math.random()*4-2)).toFixed(1));if(v===raw.v||v<0)return null;
+      if(digits)return v.toString().replace('.',',');
+      const p=v.toString().split('.');
+      return`${numToPl(parseInt(p[0]))} przecinek ${(p[1]||'0').split('').map(x=>numToPl(+x)).join(' ')}`;
+    }
+    // integer
+    const v=raw.v;
+    let d=v+(Math.random()<0.5?1:-1)*Math.max(1,Math.floor(Math.abs(v)*0.2+Math.random()*6));
+    if(!document.getElementById('chk-neg').checked&&d<0)d=Math.abs(d);
+    if(d===v)d=v+1;
+    return digits?d.toLocaleString():numToPl(d);
+  }catch(e){return null;}
+}
 
-    cell.addEventListener('click', ()=>selectCalDay(new Date(yr,mon,d)));
+/* ═══════════════════════════════════════════════════════
+   WIN / LOSE
+═══════════════════════════════════════════════════════ */
+function winNum(btn){
+  playTone('ok');S.solved=true;
+  const t=(Date.now()-S.startTime)/1000;
+  let sc=10;
+  if(t<3)sc+=5;if(t>13)sc-=4;else if(t>7)sc-=2;
+  if(S.subMode==='context')sc+=5;if(S.subMode==='shopping')sc+=3;
+  if(S.isReview){sc=5;S.mistakes.shift();}
+  else if(t>7&&t<=20)recMistake('Slow');
+  sc=Math.max(1,sc);
+  S.xp+=sc;S.streak++;S.dailyXP+=sc;
+  if(!S.cats[S.subMode])S.cats[S.subMode]=0;S.cats[S.subMode]+=sc;
+  if(!S.goalMet&&S.dailyXP>=S.dailyGoal){S.goalMet=true;setTimeout(()=>{confetti();showModal('goal-modal');},400);}
+  if([5,10,25,50,100].includes(S.streak))confetti(S.streak>=50?120:50);
+  save();updTopBar();
+  // score pop
+  const card=document.getElementById('display-card');
+  const pop=document.createElement('div');pop.className='score-pop';pop.innerText='+'+sc;
+  card.appendChild(pop);setTimeout(()=>pop.remove(),950);
+  if(btn)btn.classList.add('correct');
+  else if(document.getElementById('type-input'))document.getElementById('type-input').style.borderColor='var(--correct)';
+  // reveal
+  const pl=document.getElementById('pl-text');
+  if(S.subMode==='context')pl.innerHTML=S.plText;else pl.innerText=S.plText;
+  pl.classList.add('show');
+  document.getElementById('en-text').innerText=S.enText;document.getElementById('en-text').classList.add('show');
+  document.getElementById('skip-btn').innerText='NEXT ▶';
+  setTimeout(()=>speak(1),300);
+  if(!S.hf)setTimeout(genNumbers,3000);
+}
+function loseNum(btn){
+  playTone('err');S.streak=0;
+  recMistake('Wrong');
+  if(btn)btn.classList.add('wrong');
+  else if(document.getElementById('type-input'))document.getElementById('type-input').style.borderColor='var(--wrong)';
+  updTopBar();save();speak(1);
+}
+function recMistake(r){S.mistakes.push({mode:S.subMode,pl:S.plText.replace(/<[^>]*>/g,''),en:S.enText,r});if(S.mistakes.length>80)S.mistakes.shift();}
+function checkTyped(){
+  if(S.solved)return;
+  const v=(document.getElementById('type-input').value||'').trim().toLowerCase();
+  const tPL=(S.subMode==='context'?S.speechText:S.plText).replace(/<[^>]*>/g,'').toLowerCase();
+  const tEN=S.enText.toLowerCase();
+  (v===tPL||v===tEN||v.replace(/\s/g,'')===tPL.replace(/\s/g,''))?winNum(null):loseNum(null);
+}
+function startReview(){
+  hideModal('stats-modal');
+  if(!S.mistakes.length){alert("No mistakes! Świetnie!");return;}
+  S.isReview=true;switchScreen('numbers');genNumbers();
+}
+
+/* ═══════════════════════════════════════════════════════
+   CALENDAR
+═══════════════════════════════════════════════════════ */
+function calRender(){
+  const v=S.calView,yr=v.getFullYear(),mon=v.getMonth();
+  const mNames=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById('cal-month-name').innerText=`${mNames[mon]} ${yr}`;
+  const grid=document.getElementById('cal-grid');grid.innerHTML='';
+  const diary=getDiary(),first=new Date(yr,mon,1).getDay(),last=new Date(yr,mon+1,0).getDate();
+  const today=new Date();
+  for(let i=0;i<first;i++){const sp=document.createElement('div');sp.className='cal-day spacer';grid.appendChild(sp);}
+  for(let d=1;d<=last;d++){
+    const cell=document.createElement('div');cell.className='cal-day';
+    const hKey=`${mon}-${d}`,dKey=dKey2(yr,mon,d);
+    const hol=HOLIDAYS[hKey],nds=getNDs(mon,d);
+    const isToday=d===today.getDate()&&mon===today.getMonth()&&yr===today.getFullYear();
+    const isSel=S.calSel&&d===S.calSel.getDate()&&mon===S.calSel.getMonth()&&yr===S.calSel.getFullYear();
+    if(isToday)cell.classList.add('today');
+    if(isSel)cell.classList.add('selected');
+    if(hol){cell.classList.add(hol.type==='holiday'?'is-holiday':'is-tradition');}
+    if(nds&&nds.length>0)cell.classList.add('is-nameday');
+    // dots
+    const dots=document.createElement('div');dots.className='day-dots';
+    cell.innerText=d;cell.appendChild(dots);
+    if(hol)dots.innerHTML+=`<div class="dot ${hol.type==='holiday'?'dot-holiday':'dot-tradition'}"></div>`;
+    if(nds&&nds.length)dots.innerHTML+=`<div class="dot dot-nameday"></div>`;
+    if(diary[dKey]&&diary[dKey].length)dots.innerHTML+=`<div class="dot dot-diary"></div>`;
+    cell.addEventListener('click',()=>calSelect(new Date(yr,mon,d)));
     grid.appendChild(cell);
   }
-
   renderUpcoming();
 }
 
-function calNav(dir) {
-  S.calViewDate.setMonth(S.calViewDate.getMonth()+dir);
-  renderCalendar();
-}
+function calNav(d){S.calView.setMonth(S.calView.getMonth()+d);calRender();}
 
-function selectCalDay(date) {
-  S.calSelectedDate = date;
-  renderCalendar();
-  renderCalInfo();
-}
-
-function renderCalInfo() {
-  const date = S.calSelectedDate;
-  if (!date) return;
-  const d=date.getDate(), mon=date.getMonth(), yr=date.getFullYear(), dow=date.getDay();
-  const gen = S.calCase==='gen';
-
-  const plText  = dateToPl(d, mon, yr, gen, S.calYear);
-  const phText  = dateToPhonetic(d, mon, gen);
-  const enText  = dateToEn(d, mon, yr, S.calYear, dow);
-
-  document.getElementById('cal-date-pl').innerText       = plText;
-  document.getElementById('cal-date-phonetic').innerText = phText;
-  document.getElementById('cal-date-en').innerText       = enText;
-  document.getElementById('cal-quick-phrase').innerText  = plText;
-  document.getElementById('cal-info-panel').style.display = 'block';
-
-  // Case pills
-  document.getElementById('case-nom').classList.toggle('active', !gen);
-  document.getElementById('case-gen').classList.toggle('active',  gen);
-
-  // Holiday info
-  const hKey = `${mon}-${d}`;
-  const hName= HOLIDAYS[hKey];
-  const hArea= document.getElementById('holiday-card-area');
-  if (hName) {
-    const info = HOLIDAY_INFO[hName] || '';
-    hArea.innerHTML = `<div class="holiday-card"><h4>${hName}</h4><p>${info}</p></div>`;
-  } else { hArea.innerHTML = ''; }
-
+function calSelect(date){
+  S.calSel=date;calRender();
+  const d=date.getDate(),mon=date.getMonth(),yr=date.getFullYear(),dow=date.getDay();
+  const gen=S.calCase==='gen';
+  const plTxt=dateFormatPl(d,mon,yr,gen,S.calYear);
+  const phTxt=datePh(d,mon,gen);
+  const enTxt=dateEn(d,mon,yr,S.calYear,dow);
+  document.getElementById('date-pl').innerText=plTxt;
+  document.getElementById('date-ph').innerText=phTxt;
+  document.getElementById('date-en').innerText=enTxt;
+  document.getElementById('cal-phrase').innerText=plTxt;
+  document.getElementById('cal-info-panel').style.display='block';
+  // name days
+  const nds=getNDs(mon,d);
+  const ndRow=document.getElementById('nameday-row');
+  if(nds&&nds.length){
+    ndRow.style.display='block';
+    ndRow.innerText='👤 '+nds.slice(0,6).join(', ')+(nds.length>6?` +${nds.length-6} more`:'');
+  }else ndRow.style.display='none';
+  // holiday card
+  const hKey=`${mon}-${d}`,hol=HOLIDAYS[hKey];
+  const hCard=document.getElementById('holiday-card');
+  if(hol){
+    hCard.className=`holiday-info-card show type-${hol.type}`;
+    hCard.innerHTML=`<h4>${hol.name}</h4><p>${hol.info}</p>`;
+  }else hCard.className='holiday-info-card';
   renderDiaryEntries();
 }
 
-function setCase(c) {
-  S.calCase = c;
-  renderCalInfo();
+function setCase(c){
+  S.calCase=c;
+  document.getElementById('case-nom').classList.toggle('active',c==='nom');
+  document.getElementById('case-gen').classList.toggle('active',c==='gen');
+  if(S.calSel)calSelect(S.calSel);
+}
+function toggleCalYear(){
+  S.calYear=!S.calYear;
+  document.getElementById('yr-lbl').innerText=S.calYear?'ON':'OFF';
+  if(S.calSel)calSelect(S.calSel);
+}
+function speakDate(){
+  if(!S.calSel)return;
+  const d=S.calSel.getDate(),m=S.calSel.getMonth(),y=S.calSel.getFullYear();
+  speakPL(dateFormatPl(d,m,y,S.calCase==='gen',S.calYear));
+}
+function openDiary(){
+  const ds=document.getElementById('diary-write');
+  const showing=ds.style.display!=='none';
+  ds.style.display=showing?'none':'block';
+  document.getElementById('diary-btn-lbl').innerText=showing?'Add Note':'Hide';
+  if(!showing){renderDiaryEntries();setTimeout(()=>document.getElementById('diary-input').focus(),50);}
 }
 
-function toggleYear() {
-  S.calYear = !S.calYear;
-  document.getElementById('year-toggle-label').innerText = S.calYear?'ON':'OFF';
-  renderCalInfo();
+// Name search
+function searchName(){
+  const q=(document.getElementById('name-search').value||'').trim();
+  const res=document.getElementById('name-result');
+  if(!q){res.classList.remove('show');return;}
+  if(typeof NAMEDAYS==='undefined'){res.innerHTML='Loading name days…';res.classList.add('show');return;}
+  const ql=q.toLowerCase();
+  const found=[];
+  Object.entries(NAMEDAYS).forEach(([key,names])=>{
+    if(names.some(n=>n.toLowerCase()===ql||n.toLowerCase().startsWith(ql))){
+      const[mon,day]=key.split('-').map(Number);
+      found.push({mon,day,names});
+    }
+  });
+  if(!found.length){res.innerHTML=`No name days found for <b>${q}</b>.`;res.classList.add('show');return;}
+  res.classList.add('show');
+  res.innerHTML=found.slice(0,5).map(({mon,day})=>{
+    const yr=S.calView.getFullYear();
+    const hol=HOLIDAYS[`${mon}-${day}`];
+    return`<span style="font-weight:700;color:var(--blue);">${ORD_GEN[day]} ${MONTHS_GEN[mon]}</span>${hol?` — ${hol.name}`:''}`;
+  }).join('<br>');
 }
 
-function speakDate() {
-  if (!S.calSelectedDate) return;
-  const d=S.calSelectedDate.getDate(), mon=S.calSelectedDate.getMonth(), yr=S.calSelectedDate.getFullYear();
-  const txt = dateToPl(d, mon, yr, S.calCase==='gen', S.calYear);
-  speakPL(txt);
-}
-
-function openDiary() {
-  const ds = document.getElementById('diary-section');
-  ds.style.display = ds.style.display==='none' ? 'block' : 'none';
-  if (ds.style.display==='block') { renderDiaryEntries(); document.getElementById('diary-input').focus(); }
-}
-
-// ── DIARY ────────────────────────────────────────────────
-
-function getDiary() { try { return JSON.parse(localStorage.getItem('pl_diary')||'{}'); } catch(e){return{};} }
-function saveDiary(d) { localStorage.setItem('pl_diary', JSON.stringify(d)); }
-function diaryKey(yr, mon, day) { return `${yr}-${String(mon+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`; }
-
-function saveDiaryEntry() {
-  const text = (document.getElementById('diary-input').value||'').trim();
-  if (!text||!S.calSelectedDate) return;
-  const date = S.calSelectedDate;
-  const k = diaryKey(date.getFullYear(), date.getMonth(), date.getDate());
-  const d = getDiary();
-  if (!d[k]) d[k]=[];
-  d[k].push({ text, ts: Date.now() });
-  saveDiary(d);
+/* ── DIARY ──────────────────────────────────────────── */
+function getDiary(){try{return JSON.parse(localStorage.getItem('pl_diary')||'{}');}catch(e){return{};}}
+function savDiary(d){localStorage.setItem('pl_diary',JSON.stringify(d));}
+function dKey2(yr,mon,day){return`${yr}-${String(mon+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;}
+function saveDiaryEntry(){
+  const txt=(document.getElementById('diary-input').value||'').trim();
+  if(!txt||!S.calSel)return;
+  const k=dKey2(S.calSel.getFullYear(),S.calSel.getMonth(),S.calSel.getDate());
+  const d=getDiary();if(!d[k])d[k]=[];
+  d[k].push({text:txt,ts:Date.now()});savDiary(d);
   document.getElementById('diary-input').value='';
-  renderDiaryEntries();
-  renderCalendar();
+  renderDiaryEntries();calRender();
 }
-
-function deleteDiaryEntry(k, idx) {
-  const d = getDiary();
-  if (!d[k]) return;
-  d[k].splice(idx,1);
-  if (!d[k].length) delete d[k];
-  saveDiary(d);
-  renderDiaryEntries(); renderCalendar();
-}
-
-function renderDiaryEntries() {
-  const container = document.getElementById('diary-entries');
-  const date = S.calSelectedDate;
-  if (!date||!container) return;
-  const k = diaryKey(date.getFullYear(), date.getMonth(), date.getDate());
-  const d = getDiary();
-  const entries = d[k]||[];
-  if (!entries.length) { container.innerHTML='<p style="font-size:0.8rem;color:var(--muted);">No notes for this date.</p>'; return; }
-  container.innerHTML = entries.map((e,i)=>`
+function delDiary(k,i){const d=getDiary();if(!d[k])return;d[k].splice(i,1);if(!d[k].length)delete d[k];savDiary(d);renderDiaryEntries();calRender();}
+function renderDiaryEntries(){
+  const c=document.getElementById('diary-entries'),sel=S.calSel;
+  if(!c||!sel){if(c)c.innerHTML='';return;}
+  const k=dKey2(sel.getFullYear(),sel.getMonth(),sel.getDate());
+  const entries=(getDiary()[k]||[]);
+  if(!entries.length){c.innerHTML='<p style="font-size:0.78rem;color:var(--muted);">No notes for this date.</p>';return;}
+  c.innerHTML=entries.map((e,i)=>`
     <div class="diary-entry">
       <div class="diary-entry-text">${e.text}</div>
-      <button class="diary-del" onclick="deleteDiaryEntry('${k}',${i})">🗑</button>
+      <button class="diary-del" onclick="delDiary('${k}',${i})">🗑</button>
     </div>`).join('');
 }
-
-function renderUpcoming() {
-  const container = document.getElementById('upcoming-entries');
-  const d = getDiary();
-  const now = Date.now();
-  const upcoming = Object.entries(d)
-    .filter(([k])=>new Date(k).getTime()>=new Date().setHours(0,0,0,0))
-    .sort(([a],[b])=>a.localeCompare(b))
-    .slice(0,5);
-
-  if (!upcoming.length) { container.innerHTML='<p style="font-size:0.8rem;color:var(--muted);">No upcoming appointments.</p>'; return; }
-  container.innerHTML = upcoming.map(([k, entries])=>{
-    const date = new Date(k);
-    const plDate = dateToPl(date.getDate(), date.getMonth(), date.getFullYear(), true, false);
+function renderUpcoming(){
+  const c=document.getElementById('upcoming-entries');const d=getDiary();
+  const now=new Date();now.setHours(0,0,0,0);
+  const rows=Object.entries(d).filter(([k])=>new Date(k)>=now).sort(([a],[b])=>a.localeCompare(b)).slice(0,5);
+  if(!rows.length){c.innerHTML='<p style="font-size:0.78rem;color:var(--muted);">No upcoming notes.</p>';return;}
+  c.innerHTML=rows.map(([k,entries])=>{
+    const dt=new Date(k);
+    const plDate=dateFormatPl(dt.getDate(),dt.getMonth(),dt.getFullYear(),true,false);
     return entries.map((e,i)=>`
       <div class="diary-entry">
         <div class="diary-entry-text">
-          <div class="diary-entry-date">${plDate}</div>
-          ${e.text}
+          <div class="diary-entry-meta">${plDate}</div>${e.text}
         </div>
-        <button class="diary-del" onclick="deleteDiaryEntry('${k}',${i});renderUpcoming();">🗑</button>
+        <button class="diary-del" onclick="delDiary('${k}',${i});renderUpcoming()">🗑</button>
       </div>`).join('');
   }).join('');
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 9 — CLOCK
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function buildClockFace() {
-  const face = document.getElementById('clock-face');
-  // Draw 60 tick marks
-  for (let i=0; i<60; i++) {
-    const mark = document.createElement('div');
-    mark.className = 'clock-mark' + (i%5===0?' major':'');
-    mark.style.transform = `rotate(${i*6}deg)`;
-    mark.style.transformOrigin = `1px ${face.offsetHeight/2||90}px`;
-    // Position from center
-    mark.style.position='absolute';
-    mark.style.bottom='50%';
-    mark.style.left='50%';
-    mark.style.marginLeft= i%5===0?'-1.5px':'-1px';
-    face.appendChild(mark);
+/* ═══════════════════════════════════════════════════════
+   CLOCK — SVG-based, exact geometry
+═══════════════════════════════════════════════════════ */
+function buildSVGTicks(){
+  // viewBox is -95,-95,190,190 so centre is 0,0, radius 90
+  const g=document.getElementById('clock-ticks');
+  if(!g)return;g.innerHTML='';
+  for(let i=0;i<60;i++){
+    const major=i%5===0;
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    const r=90,len=major?10:5,w=major?2.5:1;
+    const angleRad=(i/60)*2*Math.PI-Math.PI/2;
+    const x1=Math.cos(angleRad)*(r-len),y1=Math.sin(angleRad)*(r-len);
+    const x2=Math.cos(angleRad)*r,y2=Math.sin(angleRad)*r;
+    line.setAttribute('x1',x1.toFixed(2));line.setAttribute('y1',y1.toFixed(2));
+    line.setAttribute('x2',x2.toFixed(2));line.setAttribute('y2',y2.toFixed(2));
+    line.setAttribute('stroke',major?'var(--ink)':'var(--border)');
+    line.setAttribute('stroke-width',w);line.setAttribute('stroke-linecap','round');
+    g.appendChild(line);
   }
-  face.addEventListener('mousedown', startDrag);
-  face.addEventListener('touchstart', startDrag, {passive:false});
-}
-
-function clockTick() {
-  if (S.clkQuiz) return;
-  if (S.clkLive) {
-    const now=new Date(); S.clkH=now.getHours(); S.clkM=now.getMinutes(); S.clkS=now.getSeconds();
-  } else {
-    S.clkS++;
-    if (S.clkS>=60) { S.clkS=0; S.clkM++; if(S.clkM>=60){S.clkM=0;S.clkH=(S.clkH+1)%24;} }
-  }
-  if (document.getElementById('screen-clock').classList.contains('active')) updateClockDisplay();
-}
-
-function updateClockDisplay() {
-  const {clkH:h, clkM:m, clkS:s} = S;
-
-  // Hands
-  document.getElementById('hand-hour').style.transform = `rotate(${(h%12)*30+m*0.5}deg)`;
-  document.getElementById('hand-min').style.transform  = `rotate(${m*6}deg)`;
-  const sh = document.getElementById('hand-sec');
-  sh.style.display = S.clkSec ? 'block' : 'none';
-  if (S.clkSec) sh.style.transform = `rotate(${s*6}deg)`;
-
-  // Digital
-  const pad=n=>n.toString().padStart(2,'0');
-  document.getElementById('time-input').value = `${pad(h)}:${pad(m)}${S.clkSec?':'+pad(s):''}`;
-
-  // Polish
-  const plText = timeToPl(h, m, S.clkFormal);
-  const phText = S.clkPh ? timeToPhonetic(h, m, S.clkFormal) : '';
-  const enText = timeToEn(h, m);
-
-  if (S.clkQuiz && !S.clkQuizRevealed) {
-    document.getElementById('time-pl-main').innerText = '?';
-    document.getElementById('time-phonetic').innerText = '';
-    document.getElementById('time-en').innerText = '';
-  } else {
-    document.getElementById('time-pl-main').innerHTML = formatTimeDisplay(h, m, S.clkFormal);
-    document.getElementById('time-phonetic').innerText = phText;
-    document.getElementById('time-en').innerText = enText;
-  }
-
-  // Grammar note
-  const noteArea = document.getElementById('grammar-note-area');
-  if (!S.clkFormal) {
-    let noteClass='', noteText='';
-    if (m===0)       { noteClass='note-nom'; noteText='Nominative — naming the hour'; }
-    else if (m===30) { noteClass='note-gen'; noteText='Genitive — "half to" the next hour'; }
-    else if (m<30)   { noteClass='note-gen'; noteText='Genitive — "X past" (po)'; }
-    else             { noteClass='note-nom'; noteText='Nominative — "X to" (za)'; }
-    noteArea.innerHTML = `<span class="grammar-note ${noteClass}">${noteText}</span>`;
-  } else {
-    noteArea.innerHTML = '<span class="grammar-note note-card">Formal 24h — Godzina + hour + minutes</span>';
-  }
-}
-
-function formatTimeDisplay(h, m, formal) {
-  if (formal) {
-    const hStr = H_NOM[h]||numToPl(h);
-    const mStr = m===0?'':`<span class="card"> ${m<10?'zero ':''} ${M_ALL[m]}</span>`;
-    return `<span class="nom">Godzina ${hStr}</span>${mStr}`;
-  }
-  const h12=h%12, next12=(h+1)%12;
-  const hFem  = H_NOM[h12===0?12:h12];
-  const hGen  = H_GEN[h12===0?12:h12];
-  const hNextFem = H_NOM[next12===0?12:next12];
-  const hNextGen = H_GEN[next12===0?12:next12];
-  if (m===0)  return `<span class="nom">${hFem}</span>`;
-  if (m===30) return `wpół do <span class="gen">${hNextGen}</span>`;
-  if (m<30)   return `<span class="card">${M_ALL[m]}</span> po <span class="gen">${hGen}</span>`;
-  return `za <span class="card">${M_ALL[60-m]}</span> <span class="nom">${hNextFem}</span>`;
-}
-
-function setRealTime() {
-  S.clkLive=true; const now=new Date();
-  S.clkH=now.getHours(); S.clkM=now.getMinutes(); S.clkS=now.getSeconds();
-  S.clkQuizRevealed=true; updateClockDisplay();
-}
-
-function rollTime() {
-  S.clkLive=false; S.clkH=Math.floor(Math.random()*24); S.clkM=Math.floor(Math.random()*12)*5; S.clkS=0;
-  S.clkQuizRevealed=!S.clkQuiz; updateClockDisplay();
-  if (S.clkQuiz) buildClockQuizOptions();
-}
-
-function setClockMode(mode) {
-  S.clkFormal = (mode==='formal');
-  document.getElementById('pill-casual').classList.toggle('active', !S.clkFormal);
-  document.getElementById('pill-formal').classList.toggle('active',  S.clkFormal);
-  updateClockDisplay();
-  if (S.clkQuiz) buildClockQuizOptions();
-}
-
-function toggleSec() {
-  S.clkSec=!S.clkSec;
-  document.getElementById('pill-sec').classList.toggle('active', S.clkSec);
-  document.getElementById('pill-sec').innerText = S.clkSec?'Sec: ON':'Sec: OFF';
-  updateClockDisplay();
-}
-
-function togglePhonetics() {
-  S.clkPh=!S.clkPh;
-  document.getElementById('pill-ph').classList.toggle('active', S.clkPh);
-  document.getElementById('pill-ph').innerText = S.clkPh?'Phonetic: ON':'Phonetic: OFF';
-  updateClockDisplay();
-}
-
-function toggleClockQuiz() {
-  S.clkQuiz=!S.clkQuiz; S.clkLive=false;
-  document.getElementById('pill-quiz').classList.toggle('active', S.clkQuiz);
-  document.getElementById('pill-quiz').innerText = S.clkQuiz?'Quiz: ON':'Quiz: OFF';
-  if (S.clkQuiz) { rollTime(); }
-  else {
-    S.clkQuizRevealed=true; updateClockDisplay();
-    document.getElementById('clock-quiz-grid').classList.remove('show');
-    document.getElementById('clock-quiz-grid').innerHTML='';
-  }
-}
-
-function buildClockQuizOptions() {
-  S.clkQuizRevealed=false; updateClockDisplay();
-  const correct = timeToPl(S.clkH, S.clkM, S.clkFormal);
-  let opts=[correct];
-  let safety=0;
-  while (opts.length<4&&safety<100) {
-    safety++;
-    const rh=Math.floor(Math.random()*24), rm=Math.floor(Math.random()*12)*5;
-    const w = timeToPl(rh, rm, S.clkFormal);
-    if (!opts.includes(w)) opts.push(w);
-  }
-  opts.sort(()=>Math.random()-0.5);
-
-  const grid = document.getElementById('clock-quiz-grid');
-  grid.classList.add('show'); grid.innerHTML='';
-  opts.forEach(o=>{
-    const btn=document.createElement('button');
-    btn.className='quiz-opt'; btn.innerText=o;
-    btn.onclick=()=>{
-      if (o===correct) {
-        btn.classList.add('correct');
-        S.xp+=10; S.streak++; saveState(); updateTopBar();
-        setTimeout(()=>{ S.clkQuizRevealed=true; updateClockDisplay(); setTimeout(rollTime,600); }, 500);
-      } else {
-        btn.classList.add('wrong'); btn.disabled=true; S.streak=0; saveState(); updateTopBar();
-      }
-    };
-    grid.appendChild(btn);
+  // hour numbers 12,3,6,9
+  [[0,-72,'12'],[72,0,'3'],[0,72,'6'],[-72,0,'9']].forEach(([x,y,t])=>{
+    const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',x);txt.setAttribute('y',y);
+    txt.setAttribute('text-anchor','middle');txt.setAttribute('dominant-baseline','middle');
+    txt.setAttribute('font-size','12');txt.setAttribute('font-family','DM Serif Display,serif');
+    txt.setAttribute('fill','var(--ink)');txt.setAttribute('font-weight','700');
+    txt.textContent=t;g.appendChild(txt);
   });
 }
 
-function manualTime(val) {
-  S.clkLive=false;
-  const parts=(val||'').split(':');
-  if (parts.length<2) return;
-  const h=parseInt(parts[0]), m=parseInt(parts[1]);
-  if (!isNaN(h)&&!isNaN(m)) { S.clkH=Math.min(23,Math.max(0,h)); S.clkM=Math.min(59,Math.max(0,m)); }
-  updateClockDisplay();
+function rotHand(id,deg){
+  const el=document.getElementById(id);if(!el)return;
+  el.setAttribute('transform',`rotate(${deg})`);
 }
 
-function clockSpeak(rate) { speakPL(timeToPl(S.clkH, S.clkM, S.clkFormal), rate); }
+function clockTick(){
+  if(S.clkQuiz)return;
+  if(S.clkLive){const n=new Date();S.clkH=n.getHours();S.clkM=n.getMinutes();S.clkS=n.getSeconds();}
+  else{S.clkS++;if(S.clkS>=60){S.clkS=0;S.clkM++;if(S.clkM>=60){S.clkM=0;S.clkH=(S.clkH+1)%24;}}}
+  if(document.getElementById('screen-clock').classList.contains('active'))updClock();
+}
 
-// Drag to set clock
-function startDrag(e) {
-  S.clkLive=false; e.preventDefault();
-  const face=document.getElementById('clock-face');
-  const move=(ev)=>{
-    const rect=face.getBoundingClientRect();
+function updClock(){
+  const{clkH:h,clkM:m,clkS:s,clkFormal:f,clkPh:ph,clkSec:sec}=S;
+  // Hands use SVG rotate() — pivots exactly at 0,0 (centre)
+  rotHand('hand-hour',(h%12)*30+m*0.5);
+  rotHand('hand-min',m*6);
+  const sH=document.getElementById('hand-sec');
+  if(sH){sH.style.display=sec?'':'none';if(sec)sH.setAttribute('transform',`rotate(${s*6})`);}
+  // Digital
+  const pad=n=>String(n).padStart(2,'0');
+  const inp=document.getElementById('time-input');
+  if(inp&&document.activeElement!==inp)inp.value=`${pad(h)}:${pad(m)}${sec?':'+pad(s):''}`;
+  // Polish
+  if(!S.clkQuiz||S.clkQRev){
+    document.getElementById('time-pl').innerHTML=timeHTML(h,m,f);
+    document.getElementById('time-ph').innerText=ph?timePh(h,m,f):'';
+    document.getElementById('time-en').innerText=`${pad(h)}:${pad(m)}`;
+  }else{
+    document.getElementById('time-pl').innerText='?';
+    document.getElementById('time-ph').innerText='';
+    document.getElementById('time-en').innerText='';
+  }
+  // Grammar note
+  let nc='',nt='';
+  if(f){nc='note-formal';nt='Formal 24h — hour + minutes as cardinals';}
+  else if(m===0){nc='note-nom';nt='On the hour → Nominative';}
+  else if(m===30){nc='note-gen';nt='"Half to" → Genitive (do)';}
+  else if(m<30){nc='note-gen';nt='"X past" → Genitive (po)';}
+  else{nc='note-nom';nt='"X to" → Nominative (za)';}
+  document.getElementById('grammar-note').innerHTML=`<span class="grammar-note ${nc}">${nt}</span>`;
+}
+
+function setRealTime(){S.clkLive=true;const n=new Date();S.clkH=n.getHours();S.clkM=n.getMinutes();S.clkS=n.getSeconds();S.clkQRev=true;updClock();}
+function rollTime(){S.clkLive=false;S.clkH=Math.floor(Math.random()*24);S.clkM=Math.floor(Math.random()*12)*5;S.clkS=0;S.clkQRev=!S.clkQuiz;updClock();if(S.clkQuiz)buildQuizOpts();}
+function setClockStyle(m){S.clkFormal=m==='formal';document.getElementById('pill-casual').classList.toggle('active',!S.clkFormal);document.getElementById('pill-formal').classList.toggle('active',S.clkFormal);updClock();if(S.clkQuiz)buildQuizOpts();}
+function toggleSec(){S.clkSec=!S.clkSec;document.getElementById('pill-sec').classList.toggle('active',S.clkSec);document.getElementById('pill-sec').innerText=S.clkSec?'Sec: ON':'Sec: OFF';updClock();}
+function togglePh(){S.clkPh=!S.clkPh;document.getElementById('pill-ph').classList.toggle('active',S.clkPh);document.getElementById('pill-ph').innerText=S.clkPh?'Phonetic: ON':'Phonetic: OFF';updClock();}
+function toggleQuiz(){
+  S.clkQuiz=!S.clkQuiz;S.clkLive=false;
+  document.getElementById('pill-quiz').classList.toggle('active',S.clkQuiz);
+  document.getElementById('pill-quiz').innerText=S.clkQuiz?'Quiz: ON':'Quiz: OFF';
+  if(S.clkQuiz){rollTime();}
+  else{S.clkQRev=true;updClock();const qg=document.getElementById('quiz-grid');qg.classList.remove('show');qg.innerHTML='';}
+}
+function buildQuizOpts(){
+  S.clkQRev=false;updClock();
+  const correct=timeToPl(S.clkH,S.clkM,S.clkFormal);
+  let opts=[correct];let safety=0;
+  while(opts.length<4&&safety<100){safety++;const rh=Math.floor(Math.random()*24),rm=Math.floor(Math.random()*12)*5,w=timeToPl(rh,rm,S.clkFormal);if(!opts.includes(w))opts.push(w);}
+  opts.sort(()=>Math.random()-0.5);
+  const qg=document.getElementById('quiz-grid');qg.classList.add('show');qg.innerHTML='';
+  opts.forEach(o=>{
+    const btn=document.createElement('button');btn.className='quiz-opt';btn.innerText=o;
+    btn.onclick=()=>{
+      if(o===correct){btn.classList.add('correct');S.xp+=10;S.streak++;save();updTopBar();setTimeout(()=>{S.clkQRev=true;updClock();setTimeout(rollTime,500);},500);}
+      else{btn.classList.add('wrong');btn.disabled=true;S.streak=0;save();updTopBar();}
+    };
+    qg.appendChild(btn);
+  });
+}
+function clockSpeak(r){speakPL(timeToPl(S.clkH,S.clkM,S.clkFormal),r);}
+function manualTime(v){
+  S.clkLive=false;if(!v.includes(':'))return;
+  const p=v.split(':');const h=parseInt(p[0]),m=parseInt(p[1]);
+  if(!isNaN(h)&&!isNaN(m)){S.clkH=Math.min(23,Math.max(0,h));S.clkM=Math.min(59,Math.max(0,m));}
+  updClock();
+}
+
+// Drag clock — works with SVG, uses getBoundingClientRect for pointer offset
+function startDrag(e){
+  S.clkLive=false;e.preventDefault();
+  const svg=document.getElementById('clock-svg');
+  const move=ev=>{
+    const rect=svg.getBoundingClientRect();
     const cx=ev.touches?ev.touches[0].clientX:ev.clientX;
     const cy=ev.touches?ev.touches[0].clientY:ev.clientY;
-    const x=cx-rect.left-rect.width/2, y=cy-rect.top-rect.height/2;
-    let angle=(Math.atan2(y,x)*(180/Math.PI)+90+360)%360;
-    const dist=Math.sqrt(x*x+y*y);
-    if (dist<rect.width*0.2) {
-      S.clkH=((Math.round(angle/30)%12)+(S.clkH>=12?12:0));
-    } else {
-      const nm=Math.round(angle/30)*5;
-      if (S.clkM>45&&nm<15) S.clkH=(S.clkH+1)%24;
-      else if (S.clkM<15&&nm>45) S.clkH=(S.clkH-1+24)%24;
-      S.clkM=nm%60;
-    }
-    updateClockDisplay();
+    const x=cx-rect.left-rect.width/2,y=cy-rect.top-rect.height/2;
+    let ang=(Math.atan2(y,x)*(180/Math.PI)+90+360)%360;
+    const dist=Math.sqrt(x*x+y*y)/Math.min(rect.width,rect.height)*2;
+    if(dist<0.4){S.clkH=((Math.round(ang/30)%12)+(S.clkH>=12?12:0));}
+    else{const nm=Math.round(ang/30)*5;if(S.clkM>45&&nm<15)S.clkH=(S.clkH+1)%24;else if(S.clkM<15&&nm>45)S.clkH=(S.clkH-1+24)%24;S.clkM=nm%60;}
+    updClock();
   };
-  const stop=()=>{ window.removeEventListener('mousemove',move); window.removeEventListener('touchmove',move); };
-  window.addEventListener('mousemove',move); window.addEventListener('touchmove',move,{passive:false});
-  window.addEventListener('mouseup',stop,{once:true}); window.addEventListener('touchend',stop,{once:true});
+  const stop=()=>{window.removeEventListener('mousemove',move);window.removeEventListener('touchmove',move);};
+  window.addEventListener('mousemove',move);window.addEventListener('touchmove',move,{passive:false});
+  window.addEventListener('mouseup',stop,{once:true});window.addEventListener('touchend',stop,{once:true});
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 10 — AUDIO
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function setupAudioUnlock() {
-  const unlock = () => {
-    if (S.userInteracted) return;
-    S.userInteracted = true;
-    if (!S.audioCtx) { const AC=window.AudioContext||window.webkitAudioContext; if(AC){S.audioCtx=new AC();} }
-    if (S.audioCtx&&S.audioCtx.state==='suspended') S.audioCtx.resume();
-    const u=new SpeechSynthesisUtterance(' '); u.volume=0; window.speechSynthesis.speak(u);
+/* ═══════════════════════════════════════════════════════
+   AUDIO
+═══════════════════════════════════════════════════════ */
+function setupAudioUnlock(){
+  const unlock=()=>{
+    if(S.interacted)return;S.interacted=true;
+    if(!S.audioCtx){const AC=window.AudioContext||window.webkitAudioContext;if(AC)S.audioCtx=new AC();}
+    if(S.audioCtx&&S.audioCtx.state==='suspended')S.audioCtx.resume();
+    const u=new SpeechSynthesisUtterance(' ');u.volume=0;window.speechSynthesis.speak(u);
     ['click','touchstart','keydown'].forEach(ev=>document.removeEventListener(ev,unlock,true));
   };
-  ['click','touchstart','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{capture:true,once:false}));
+  ['click','touchstart','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{capture:true}));
 }
+function ensureAudio(){if(!S.audioCtx){const AC=window.AudioContext||window.webkitAudioContext;if(AC)S.audioCtx=new AC();}if(S.audioCtx&&S.audioCtx.state==='suspended')S.audioCtx.resume();}
 
-function speak(rate) {
-  if (!S.userInteracted) return;
+function speak(rate){
+  if(!S.interacted)return;
   window.speechSynthesis.cancel();
-  setTimeout(()=>{
-    const txt = S.subMode==='context' ? S.speechText : S.currentPL;
-    speakPL(txt, rate);
-  }, 150);
+  setTimeout(()=>{const txt=S.subMode==='context'?S.speechText:S.plText;speakPL(txt.replace(/<[^>]*>/g,''),rate);},150);
 }
-
-function speakPL(text, rate=1.0) {
-  if (!text) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text.replace(/<[^>]*>/g,''));
-  u.lang='pl-PL'; u.rate=rate;
-  const voices = window.speechSynthesis.getVoices();
-  const pl = voices.find(v=>v.lang.startsWith('pl'));
-  if (pl) u.voice=pl;
+function speakPL(text,rate=1){
+  if(!text)return;window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='pl-PL';u.rate=rate;
+  const v=window.speechSynthesis.getVoices().find(v=>v.lang.startsWith('pl'));if(v)u.voice=v;
   window.speechSynthesis.speak(u);
 }
-
-function testVoice() { speakPL('Dzień dobry! Ile to kosztuje?'); }
-
-// Speaker multi-tap (1x=normal, 2x=0.5x, 3x=0.25x)
-function handleSpeakerTap() {
-  S.speakerTaps++;
-  if (S.speakerTimer) clearTimeout(S.speakerTimer);
-  S.speakerTimer = setTimeout(()=>{
-    let rate=1.0, msg='';
-    if (S.speakerTaps===2){rate=0.5;msg='🐢 Slow';}
-    else if (S.speakerTaps>=3){rate=0.25;msg='🐢🐢 Very slow';}
-    if (msg){ const fb=document.getElementById('voice-feedback'); fb.innerText=msg; fb.style.color='var(--gold)'; setTimeout(()=>{if(fb.innerText===msg)fb.innerText='';},1400); }
-    speak(rate); S.speakerTaps=0;
+let spkTapTimer=null,spkTaps=0;
+function handleSpkTap(){
+  spkTaps++;if(spkTapTimer)clearTimeout(spkTapTimer);
+  spkTapTimer=setTimeout(()=>{
+    let r=1,msg='';
+    if(spkTaps===2){r=0.5;msg='🐢 Slow';}else if(spkTaps>=3){r=0.25;msg='🐢🐢 Very slow';}
+    if(msg){const fb=document.getElementById('voice-fb');fb.innerText=msg;fb.style.color='var(--gold)';setTimeout(()=>{if(fb.innerText===msg)fb.innerText='';},1400);}
+    speak(r);spkTaps=0;
   },280);
 }
-
-// Tone sounds
-function playTone(type) {
-  if (!S.audioCtx) { const AC=window.AudioContext||window.webkitAudioContext; if(AC) S.audioCtx=new AC(); else return; }
-  if (S.audioCtx.state==='suspended') S.audioCtx.resume();
-  const ctx=S.audioCtx, osc=ctx.createOscillator(), gain=ctx.createGain();
-  osc.connect(gain); gain.connect(ctx.destination);
-  if (type==='correct') {
-    const scale=[0,2,4,5,7,9,11,12,14,16];
-    const step=Math.min(S.streak%10,scale.length-1);
+function playTone(type){
+  ensureAudio();if(!S.audioCtx)return;
+  const ctx=S.audioCtx,o=ctx.createOscillator(),g=ctx.createGain();
+  o.connect(g);g.connect(ctx.destination);
+  if(type==='ok'){
+    const scale=[0,2,4,5,7,9,11,12,14,16],step=Math.min(S.streak%10,scale.length-1);
     const pm=Math.pow(1.059463,scale[step]);
-    osc.frequency.value=523*pm; osc.type='sine';
-    gain.gain.setValueAtTime(0,ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.15,ctx.currentTime+0.02);
-    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.35);
-    osc.start(); osc.stop(ctx.currentTime+0.35);
-    setTimeout(()=>{ const o2=ctx.createOscillator(),g2=ctx.createGain(); o2.connect(g2);g2.connect(ctx.destination); o2.frequency.value=659*pm; o2.type='sine'; g2.gain.setValueAtTime(0,ctx.currentTime); g2.gain.linearRampToValueAtTime(0.15,ctx.currentTime+0.02); g2.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.4); o2.start(); o2.stop(ctx.currentTime+0.4); },100);
-  } else {
-    osc.frequency.value=150; osc.type='triangle';
-    gain.gain.setValueAtTime(0.2,ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.25);
-    osc.start(); osc.stop(ctx.currentTime+0.25);
-  }
+    o.frequency.value=523*pm;o.type='sine';
+    g.gain.setValueAtTime(0,ctx.currentTime);g.gain.linearRampToValueAtTime(0.14,ctx.currentTime+0.02);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.35);
+    o.start();o.stop(ctx.currentTime+0.35);
+    setTimeout(()=>{const o2=ctx.createOscillator(),g2=ctx.createGain();o2.connect(g2);g2.connect(ctx.destination);o2.frequency.value=659*pm;o2.type='sine';g2.gain.setValueAtTime(0,ctx.currentTime);g2.gain.linearRampToValueAtTime(0.14,ctx.currentTime+0.02);g2.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.4);o2.start();o2.stop(ctx.currentTime+0.4);},100);
+  }else{o.frequency.value=150;o.type='triangle';g.gain.setValueAtTime(0.18,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.25);o.start();o.stop(ctx.currentTime+0.25);}
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 11 — SPEECH RECOGNITION
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function setupSpeech() {
-  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
-  if (!SR) { document.getElementById('mic-btn').style.display='none'; return; }
-  recognition = new SR();
-  recognition.lang='pl-PL'; recognition.continuous=false; recognition.maxAlternatives=1;
-  recognition.onstart=()=>{ document.getElementById('mic-btn').style.background='var(--correct)'; document.getElementById('voice-feedback').innerText='🎙️ Listening…'; };
-  recognition.onend  =()=>{ document.getElementById('mic-btn').style.background='var(--wrong)'; };
-  recognition.onresult=(e)=>{
-    const spoken=(e.results[0][0].transcript||'').toLowerCase().trim();
-    const target=(S.subMode==='context'?S.speechText:S.currentPL).toLowerCase().replace(/<[^>]*>/g,'');
-    const fb=document.getElementById('voice-feedback');
-    if (spoken===target||spoken===S.currentEN.toLowerCase()) {
-      fb.innerText='✓ '+spoken; fb.style.color='var(--correct)'; win(document.getElementById('mic-btn'));
-    } else {
-      fb.innerText='Heard: '+spoken; fb.style.color='var(--wrong)';
-    }
+/* ── SPEECH RECOGNITION ─────────────────────────────── */
+function setupRecog(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){document.getElementById('mic-btn').style.display='none';return;}
+  recog=new SR();recog.lang='pl-PL';recog.continuous=false;recog.maxAlternatives=1;
+  recog.onstart=()=>{document.getElementById('mic-btn').style.background='var(--sage)';const fb=document.getElementById('voice-fb');fb.innerText='🎙️ Listening…';fb.style.color='var(--sage)';};
+  recog.onend=()=>{document.getElementById('mic-btn').style.background='var(--crimson)';micOn=false;};
+  recog.onresult=e=>{
+    const sp=(e.results[0][0].transcript||'').toLowerCase().trim();
+    const tgt=(S.subMode==='context'?S.speechText:S.plText).replace(/<[^>]*>/g,'').toLowerCase();
+    const fb=document.getElementById('voice-fb');
+    if(sp===tgt||sp===S.enText.toLowerCase()){fb.innerText='✓ '+sp;fb.style.color='var(--correct)';winNum(document.getElementById('mic-btn'));}
+    else{fb.innerText='Heard: '+sp;fb.style.color='var(--wrong)';}
   };
-  recognition.onerror=(e)=>console.warn('Speech:',e.error);
+  recog.onerror=e=>console.warn('SR:',e.error);
+}
+function toggleMic(){if(!recog)return;if(micOn){recog.stop();micOn=false;}else{ensureAudio();recog.start();micOn=true;}}
+
+/* ── HANDSFREE ──────────────────────────────────────── */
+function toggleHF(){
+  S.hf=!S.hf;
+  document.getElementById('hf-overlay').classList.toggle('show',S.hf);
+  document.getElementById('hf-btn').style.background=S.hf?'var(--crimson)':'#5a3a8a';
+  if(S.hf)doHF();else{if(S.hfTimer)clearTimeout(S.hfTimer);window.speechSynthesis.cancel();}
+}
+function doHF(){
+  if(!S.hf)return;if(S.hfTimer)clearTimeout(S.hfTimer);window.speechSynthesis.cancel();
+  let raw,safety=0;do{raw=makeRaw();safety++;}while(histRepeated(raw)&&safety<10);
+  histAdd(raw);processRaw(raw);
+  document.getElementById('hf-pl').innerHTML=S.plText;
+  document.getElementById('hf-en').innerText=S.enText;
+  const txt=S.speechText.replace(/<[^>]*>/g,'');
+  const u1=Object.assign(new SpeechSynthesisUtterance(' '+txt),{lang:'pl-PL',rate:1});
+  const u2=Object.assign(new SpeechSynthesisUtterance(' '+S.enText),{lang:'en-GB',rate:1});
+  const u3=Object.assign(new SpeechSynthesisUtterance(' '+txt),{lang:'pl-PL',rate:0.5});
+  const go=u=>{if(S.hf)window.speechSynthesis.speak(u);};
+  const done=()=>{if(S.hf)S.hfTimer=setTimeout(doHF,3000);};
+  u1.onend=u1.onerror=()=>go(u2);u2.onend=u2.onerror=()=>go(u3);u3.onend=u3.onerror=done;go(u1);
 }
 
-let micOn=false;
-function toggleMic() {
-  if (!recognition) return;
-  if (micOn) { recognition.stop(); micOn=false; }
-  else { setupAudio(); recognition.start(); micOn=true; }
+/* ═══════════════════════════════════════════════════════
+   UI UTILITIES
+═══════════════════════════════════════════════════════ */
+function updTopBar(){
+  const rank=RANKS.reduce((r,rk)=>S.xp>=rk.l?rk:r,RANKS[0]);
+  document.getElementById('xp-badge').innerText=`${S.xp.toLocaleString()} XP · ${rank.n}`;
+  document.getElementById('streak-badge').innerText=`🔥 ${S.streak}`;
 }
-function setupAudio(){if(!S.audioCtx){const AC=window.AudioContext||window.webkitAudioContext;if(AC)S.audioCtx=new AC();}if(S.audioCtx&&S.audioCtx.state==='suspended')S.audioCtx.resume();}
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 12 — HANDSFREE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function toggleHandsfree() {
-  S.handsfree=!S.handsfree;
-  document.getElementById('hf-overlay').classList.toggle('show', S.handsfree);
-  document.getElementById('hf-btn').style.background=S.handsfree?'var(--crimson)':'#5a3a8a';
-  if (S.handsfree) doHandsfree(); else { if(S.hfTimer)clearTimeout(S.hfTimer); window.speechSynthesis.cancel(); }
+function save(){
+  localStorage.setItem('pl_xp',S.xp);localStorage.setItem('pl_streak',S.streak);
+  localStorage.setItem('pl_level',S.campLevel);localStorage.setItem('pl_daily',S.dailyXP);
+  localStorage.setItem('pl_mis',JSON.stringify(S.mistakes.slice(-50)));
+  localStorage.setItem('pl_cats',JSON.stringify(S.cats));
 }
-
-function doHandsfree() {
-  if (!S.handsfree) return;
-  if (S.hfTimer) clearTimeout(S.hfTimer);
-  window.speechSynthesis.cancel();
-
-  let raw, safety=0;
-  do { raw=generateRaw(); safety++; } while(isRepeated(raw)&&safety<10);
-  addHistory(raw); processRaw(raw);
-
-  document.getElementById('hf-pl').innerHTML=S.currentPL;
-  document.getElementById('hf-en').innerText=S.currentEN;
-
-  const u1=Object.assign(new SpeechSynthesisUtterance(' '+S.speechText.replace(/<[^>]*>/g,'')),{lang:'pl-PL',rate:1.0});
-  const u2=Object.assign(new SpeechSynthesisUtterance(' '+S.currentEN),{lang:'en-GB',rate:1.0});
-  const u3=Object.assign(new SpeechSynthesisUtterance(' '+S.speechText.replace(/<[^>]*>/g,'')),{lang:'pl-PL',rate:0.5});
-  const go=(u)=>{ if(S.handsfree) window.speechSynthesis.speak(u); };
-  const done=()=>{ if(S.handsfree) S.hfTimer=setTimeout(doHandsfree,3000); };
-  u1.onend=u1.onerror=()=>go(u2);
-  u2.onend=u2.onerror=()=>go(u3);
-  u3.onend=u3.onerror=done;
-  go(u1);
+function updRange(){
+  document.getElementById('r-min-lbl').innerText=Math.pow(10,+document.getElementById('r-min').value).toLocaleString();
+  document.getElementById('r-max-lbl').innerText=Math.pow(10,+document.getElementById('r-max').value).toLocaleString();
 }
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PART 13 — UI UTILITIES
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function updateTopBar() {
-  const rank = RANKS.reduce((r,rk)=>S.xp>=rk.limit?rk:r, RANKS[0]);
-  document.getElementById('xp-display').innerText=`⭐ ${S.xp.toLocaleString()} XP · ${rank.name}`;
-  document.getElementById('streak-display').innerText=`🔥 ${S.streak}`;
-}
-
-function updateRange() {
-  const mn=Math.pow(10,parseInt(document.getElementById('range-min').value));
-  const mx=Math.pow(10,parseInt(document.getElementById('range-max').value));
-  document.getElementById('range-min-val').innerText=mn.toLocaleString();
-  document.getElementById('range-max-val').innerText=mx.toLocaleString();
-}
-
-function toggleAutoCampaign() {
-  const auto = document.getElementById('auto-campaign').checked;
-  document.getElementById('manual-range-section').style.display=auto?'none':'block';
-}
-
-function adjustCampLevel(d) {
-  S.campLevel=Math.max(1,Math.min(6,S.campLevel+d));
-  const descs=["Novice (1–20)","Apprentice (1–100)","Journeyman (1–1,000)","Expert (1–10,000)","Master (1–100,000)","Guru (1–10,000,000)"];
-  document.getElementById('camp-level-desc').innerText=`Level ${S.campLevel} — ${descs[S.campLevel-1]}`;
-  saveState();
-}
-
-function applyTheme() {
-  const t=document.getElementById('theme-sel').value;
-  document.documentElement.classList.remove('force-dark','force-light');
-  if(t==='dark') document.documentElement.classList.add('force-dark');
-  if(t==='light') document.documentElement.classList.add('force-light');
-}
-
-function showModal(id) {
-  document.getElementById(id).classList.add('show');
-  if (id==='stats-modal') renderStats();
-}
-function hideModal(id) { document.getElementById(id).classList.remove('show'); }
-
-function renderStats() {
-  const rank    = RANKS.reduce((r,rk)=>S.xp>=rk.limit?rk:r, RANKS[0]);
-  const nextRank= RANKS[RANKS.indexOf(rank)+1];
-  const pct     = nextRank ? Math.min(100,Math.round((S.xp-rank.limit)/(nextRank.limit-rank.limit)*100)) : 100;
-  const cats    = Object.entries(S.catStats).filter(([,v])=>v>0);
-  const lvl     = Math.floor(S.xp/500)+1;
-  const goalPct = Math.min(100,Math.round(S.dailyXP/S.dailyGoal*100));
-
-  document.getElementById('stats-content').innerHTML=`
+function toggleAutoCamp(){document.getElementById('manual-range').style.display=document.getElementById('auto-camp').checked?'none':'block';}
+function adjLevel(d){S.campLevel=Math.max(1,Math.min(6,S.campLevel+d));save();updCampDesc();}
+function updCampDesc(){const ds=["Novice (1–20)","Apprentice (1–100)","Journeyman (1–1,000)","Expert (1–10,000)","Master (1–100,000)","Guru (1–10M)"];document.getElementById('camp-desc').innerText=`Level ${S.campLevel} — ${ds[S.campLevel-1]}`;}
+function applyTheme(){const t=document.getElementById('theme-sel').value;document.body.className=t==='auto'?'':(t==='dark'?'dark':'light');}
+function showModal(id){document.getElementById(id).classList.add('show');if(id==='stats-modal')buildStats();}
+function hideModal(id){document.getElementById(id).classList.remove('show');}
+function buildStats(){
+  const rank=RANKS.reduce((r,rk)=>S.xp>=rk.l?rk:r,RANKS[0]);
+  const nxt=RANKS[RANKS.indexOf(rank)+1];
+  const pct=nxt?Math.min(100,Math.round((S.xp-rank.l)/(nxt.l-rank.l)*100)):100;
+  const gPct=Math.min(100,Math.round(S.dailyXP/S.dailyGoal*100));
+  const lvl=Math.floor(S.xp/500)+1;
+  const cats=Object.entries(S.cats).filter(([,v])=>v>0);
+  document.getElementById('stats-body').innerHTML=`
     <div class="stat-card">
-      <div class="stat-card-title">RANK</div>
-      <div class="stat-card-value">${rank.name}</div>
-      <div style="font-size:0.78rem;color:var(--muted);margin-top:2px;">Player Level ${lvl} · ${S.xp.toLocaleString()} XP total</div>
-      ${nextRank?`<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><div style="font-size:0.7rem;color:var(--muted);text-align:right;">${pct}% to ${nextRank.name}</div>`:'<div style="color:var(--gold);font-weight:700;margin-top:4px;">Maximum rank!</div>'}
+      <div class="stat-label">RANK</div>
+      <div class="stat-value">${rank.n}</div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:1px;">Level ${lvl} · ${S.xp.toLocaleString()} XP</div>
+      ${nxt?`<div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div><div style="font-size:0.68rem;color:var(--muted);text-align:right;">${pct}% to ${nxt.n}</div>`:'<div style="color:var(--gold);font-weight:700;margin-top:4px;">Maximum rank!</div>'}
     </div>
     <div class="stat-card">
-      <div class="stat-card-title">TODAY</div>
-      <div class="stat-card-value">${S.dailyXP} / ${S.dailyGoal} XP</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${goalPct}%"></div></div>
+      <div class="stat-label">TODAY</div>
+      <div class="stat-value">${S.dailyXP} / ${S.dailyGoal} XP</div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${gPct}%"></div></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-card-title">STREAK · MISTAKES</div>
-      <div style="display:flex;gap:16px;">
-        <div><div class="stat-card-value" style="color:var(--gold)">🔥 ${S.streak}</div></div>
-        <div><div class="stat-card-value" style="color:var(--muted)">${S.mistakes.length}</div></div>
-      </div>
+    <div class="stat-card" style="display:flex;gap:20px;">
+      <div><div class="stat-label">STREAK</div><div class="stat-value" style="color:var(--gold)">🔥 ${S.streak}</div></div>
+      <div><div class="stat-label">MISTAKES</div><div class="stat-value" style="color:var(--muted)">${S.mistakes.length}</div></div>
     </div>
-    ${cats.length?`<div class="stat-card">
-      <div class="stat-card-title">TOPIC MASTERY</div>
-      ${cats.map(([k,v])=>`
-        <div style="margin-bottom:6px;">
-          <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:2px;"><span>${k}</span><span>${v} pts</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,v/50)}%;background:var(--gold)"></div></div>
-        </div>`).join('')}
-    </div>`:''}
-    ${S.mistakes.length?`<div class="stat-card">
-      <div class="stat-card-title">RECENT MISTAKES</div>
-      ${S.mistakes.slice(-5).reverse().map(m=>`
-        <div style="padding:6px 0;border-bottom:1px solid var(--border);">
-          <div style="font-weight:600;font-size:0.88rem;">${m.pl||'—'}</div>
-          <div style="font-size:0.75rem;color:var(--muted);">${m.en||''} · ${m.reason||''}</div>
-        </div>`).join('')}
-    </div>`:''}
+    ${cats.length?`<div class="stat-card"><div class="stat-label">TOPIC MASTERY</div>${cats.map(([k,v])=>`
+      <div style="margin-bottom:5px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:2px;"><span>${k}</span><span>${v}</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:${Math.min(100,v/30)}%;background:var(--gold)"></div></div>
+      </div>`).join('')}</div>`:''}
+    ${S.mistakes.length?`<div class="stat-card"><div class="stat-label">RECENT MISTAKES</div>${S.mistakes.slice(-5).reverse().map(m=>`
+      <div style="padding:5px 0;border-bottom:1px solid var(--border);"><div style="font-weight:600;font-size:0.85rem;">${m.pl||'—'}</div><div style="font-size:0.72rem;color:var(--muted);">${m.en||''} · ${m.r||''}</div></div>`).join('')}</div>`:''}
   `;
 }
-
-function handleKey(e) {
-  if (e.key==='Enter'&&S.solved) { generateNumbers(); return; }
-  if (!isNaN(e.key)&&e.key>='1'&&e.key<='8') {
-    const btns=document.querySelectorAll('.ans-btn');
-    if (btns[e.key-1]) btns[e.key-1].click();
-  }
+function handleKey(e){
+  if(e.key==='Enter'&&S.solved){genNumbers();return;}
+  if(!isNaN(e.key)&&e.key>='1'&&e.key<='8'){const btns=document.querySelectorAll('.ans-btn');if(btns[e.key-1])btns[e.key-1].click();}
 }
-
-function fireConfetti(n=50) {
-  const colors=['#c8102e','#b8860b','#2d6a2d','#1a6bb5','#faf6ef'];
-  for (let i=0;i<n;i++) {
+function confetti(n=50){
+  const cols=['#c8102e','#c49a1a','#2d6a4f','#1a4fa0','#f7f4ee'];
+  for(let i=0;i<n;i++){
     const c=document.createElement('div');
-    Object.assign(c.style,{
-      position:'fixed', top:'-10px', left:(Math.random()*100)+'vw',
-      width:(Math.random()*8+4)+'px', height:(Math.random()*8+4)+'px',
-      background:colors[Math.floor(Math.random()*colors.length)],
-      borderRadius:'50%', opacity:Math.random(),
-      animation:`confettiFall ${Math.random()*3+2}s linear forwards`,
-      pointerEvents:'none', zIndex:9999
-    });
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(), 5500);
+    Object.assign(c.style,{position:'fixed',top:'-10px',left:(Math.random()*100)+'vw',
+      width:(Math.random()*8+4)+'px',height:(Math.random()*8+4)+'px',
+      background:cols[Math.floor(Math.random()*cols.length)],borderRadius:'50%',
+      opacity:Math.random(),animation:`confettiFall ${Math.random()*3+2}s linear forwards`,
+      pointerEvents:'none',zIndex:'9999'});
+    document.body.appendChild(c);setTimeout(()=>c.remove(),5500);
   }
 }
 
-window.addEventListener('load', init);
+window.addEventListener('load',init);
 </script>
-</body></html>
+
+<!-- NAMEDAYS DATA — loaded last so parser isn't slowed -->
+<script>
+// Namedays loaded via fetch from GitHub CDN to avoid 77KB inline
+const NAMEDAYS = {};
+fetch('https://raw.githubusercontent.com/newbroman/Polishdate2/main/namedays.json')
+  .then(r=>r.json())
+  .then(data=>{
+    // Convert MM-DD keys to M-D (0-indexed month)
+    Object.entries(data).forEach(([k,v])=>{
+      const[mm,dd]=k.split('-');
+      NAMEDAYS[`${parseInt(mm)-1}-${parseInt(dd)}`]=v;
+    });
+    // If calendar is showing, re-render to add nameday dots
+    if(document.getElementById('screen-calendar').classList.contains('active'))calRender();
+  })
+  .catch(()=>{}); // silently fail — app works without namedays
+</script>
+</body>
+</html>
