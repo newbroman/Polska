@@ -51,7 +51,22 @@
 body.dark  { --ink:#f7f4ee;--ink2:#e8e2d4;--cream:#0f0f14;--parch:#1a1820;--card:#1e1e28;--crimson:#e8384f;--gold:#d4a820;--sage:#4a9a6f;--blue:#4a7fd4;--muted:#9a9090;--border:#2e2c38;--correct:#4a9a6f;--wrong:#e8384f;--phonetic:#c4940a;--holiday:#e8384f;--tradition:#d4a820;--nameday:#4a7fd4; }
 body.light { --ink:#0f0f14;--ink2:#1e1e28;--cream:#f7f4ee;--parch:#ede8dc;--card:#ffffff;--crimson:#c8102e;--gold:#c49a1a;--sage:#2d6a4f;--blue:#1a4fa0;--muted:#7a7068;--border:#ddd8cc;--correct:#2d6a4f;--wrong:#c8102e;--phonetic:#8b6000;--holiday:#c8102e;--tradition:#c49a1a;--nameday:#1a4fa0; }
 
-/* ── RESET & BASE ────────────────────────────────────── */
+/* ── FONT RULES — strict separation ──────────────────
+   DM Serif Display: Polish text, numbers, display values
+   DM Sans: ALL UI — buttons, labels, inputs, nav, chips
+─────────────────────────────────────────────────── */
+body, button, input, select, textarea, .mode-tab, .clock-pill,
+.case-pill, .cal-pill, .act-btn, .clk-act, .check-btn, .diary-save,
+.name-search-btn, .cal-nav-btn, .nav-tab, .top-icon-btn,
+.modal-close, .hf-stop, .key-hint, .mode-chip, .grammar-chip,
+.scenario-tag, .voice-fb, .ph-text, .date-ph, .time-ph,
+.stat-label, .cal-legend, .settings-strip, .wordmark {
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+/* Polish text & numbers get the serif display font */
+.pl-text, .date-pl, .time-pl, .time-input, .ans-btn,
+.hf-pl, .stat-value, .cal-month-name, .score-pop, .range-val,
+.modal-title { font-family: 'DM Serif Display', serif; }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 html { height:100%; height:100dvh; }
 body {
@@ -408,6 +423,96 @@ body {
 .diary-entry-text { flex:1; font-size:0.85rem; line-height:1.4; }
 .diary-entry-meta { font-size:0.68rem; color:var(--muted); margin-bottom:2px; }
 .diary-del { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.95rem; flex-shrink:0; padding:0 2px; }
+.diary-entry-time { font-size:0.68rem; font-weight:700; color:var(--crimson); margin-bottom:2px; font-family:'DM Sans',sans-serif; }
+
+/* ── DAY VIEW PANEL ──────────────────────────────────── */
+.day-view-overlay {
+  display:none; position:fixed; inset:0; z-index:500;
+  background:rgba(15,15,20,0.6); backdrop-filter:blur(3px);
+  align-items:flex-end; justify-content:center;
+}
+.day-view-overlay.show { display:flex; }
+.day-view-panel {
+  background:var(--cream); border-radius:20px 20px 0 0;
+  width:100%; max-width:540px;
+  height:88dvh; display:flex; flex-direction:column;
+  box-shadow:0 -8px 30px rgba(0,0,0,0.2);
+}
+.day-view-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px 10px; border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.day-view-title { font-size:1rem; font-weight:700; }
+.day-view-subtitle { font-size:0.75rem; color:var(--muted); font-style:italic; margin-top:1px; }
+.day-view-close {
+  background:var(--parch); border:1px solid var(--border);
+  width:30px; height:30px; border-radius:50%; font-size:1rem;
+  cursor:pointer; color:var(--ink); display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.day-view-scroll { flex:1; overflow-y:auto; padding:8px 0 40px; }
+
+/* Timeline */
+.time-slot {
+  display:flex; align-items:stretch; min-height:52px;
+  border-bottom:1px solid var(--border); cursor:pointer;
+  transition:background 0.12s; position:relative;
+}
+.time-slot:hover { background:var(--parch); }
+.time-slot.has-appt { background:rgba(200,16,46,0.04); }
+.time-label {
+  width:52px; flex-shrink:0; padding:8px 6px 8px 12px;
+  font-size:0.7rem; font-weight:700; color:var(--muted);
+  text-align:right; line-height:1; padding-top:10px;
+}
+.time-label.hour { color:var(--ink); font-size:0.75rem; }
+.time-content { flex:1; padding:6px 12px 6px 10px; display:flex; align-items:flex-start; gap:8px; }
+.time-appt {
+  flex:1; background:var(--crimson); color:#fff;
+  border-radius:8px; padding:6px 10px; font-size:0.82rem; line-height:1.3;
+  word-break:break-word;
+}
+.time-appt-del {
+  background:none; border:none; color:rgba(255,255,255,0.7);
+  cursor:pointer; font-size:0.9rem; padding:0 2px; flex-shrink:0; align-self:flex-start; margin-top:4px;
+}
+.time-slot-add {
+  font-size:0.72rem; color:var(--muted); opacity:0; padding-top:10px;
+  pointer-events:none;
+}
+.time-slot:hover .time-slot-add { opacity:1; }
+
+/* Add appointment modal */
+.add-appt-modal {
+  display:none; position:fixed; inset:0; z-index:600;
+  background:rgba(15,15,20,0.7); backdrop-filter:blur(3px);
+  align-items:center; justify-content:center;
+}
+.add-appt-modal.show { display:flex; }
+.add-appt-box {
+  background:var(--card); border-radius:16px;
+  width:94%; max-width:360px; padding:20px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.25);
+}
+.add-appt-title { font-size:0.95rem; font-weight:700; margin-bottom:12px; color:var(--crimson); }
+.add-appt-time { font-size:0.78rem; color:var(--muted); margin-bottom:10px; }
+.add-appt-input {
+  width:100%; padding:10px 12px; border-radius:9px;
+  border:1.5px solid var(--border); background:var(--parch); color:var(--ink);
+  font-size:0.9rem; margin-bottom:10px; outline:none;
+  font-family:'DM Sans',sans-serif;
+}
+.add-appt-input:focus { border-color:var(--crimson); }
+.add-appt-btns { display:flex; gap:8px; }
+.add-appt-save {
+  flex:1; background:var(--crimson); color:#fff; border:none;
+  border-radius:9px; padding:10px; font-weight:700; font-size:0.85rem;
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+}
+.add-appt-cancel {
+  padding:10px 16px; border-radius:9px; border:1.5px solid var(--border);
+  background:none; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif;
+}
 
 /* ═══════════════════════════════════════════════════════
    SCREEN 3: CLOCK
@@ -660,10 +765,9 @@ svg.clock-face:active { cursor:grabbing; }
   <div class="cal-body" id="cal-body">
     <!-- Legend -->
     <div class="cal-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div>National Holiday</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div>Public Holiday</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--tradition)"></div>Tradition</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--nameday)"></div>Name Days</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div>Your Notes</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div>Appointment</div>
     </div>
 
     <div class="cal-grid" id="cal-grid"></div>
@@ -681,23 +785,14 @@ svg.clock-face:active { cursor:grabbing; }
       <div class="cal-btn-row">
         <button class="cal-pill primary" onclick="speakDate()">🔊 Listen</button>
         <button class="cal-pill" onclick="toggleCalYear()">Year: <span id="yr-lbl">ON</span></button>
-        <button class="cal-pill gold" onclick="openDiary()">📓 <span id="diary-btn-lbl">Add Note</span></button>
+        <button class="cal-pill gold" onclick="openDayView()">📅 Day View</button>
       </div>
     </div>
 
     <div class="holiday-info-card" id="holiday-card"></div>
 
-    <div class="diary-section" id="diary-write" style="display:none;">
-      <h3>📓 Note for this date</h3>
-      <div class="diary-input-row">
-        <textarea class="diary-textarea" id="diary-input" rows="2" placeholder="Add appointment or note…"></textarea>
-        <button class="diary-save" onclick="saveDiaryEntry()">Save</button>
-      </div>
-      <div id="diary-entries"></div>
-    </div>
-
     <div class="diary-section" id="upcoming-wrap" style="margin-top:8px;">
-      <h3>📌 Upcoming</h3>
+      <h3>📌 Upcoming Appointments</h3>
       <div id="upcoming-entries"></div>
     </div>
   </div>
@@ -1013,8 +1108,10 @@ function grammarRule(n){
   return"Rule: 5+ — Gen. Plural";
 }
 function getNDs(mon,day){
-  if(typeof NAMEDAYS==='undefined')return[];
-  return NAMEDAYS[`${mon}-${day}`]||[];
+  if(typeof NAMEDAYS==='undefined'||!NAMEDAYS)return[];
+  // Data keys are DD-MM format (day first, then month 1-indexed)
+  const k=String(day).padStart(2,'0')+'-'+String(mon+1).padStart(2,'0');
+  return NAMEDAYS[k]||[];
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1352,12 +1449,10 @@ function calRender(){
     if(isToday)cell.classList.add('today');
     if(isSel)cell.classList.add('selected');
     if(hol){cell.classList.add(hol.type==='holiday'?'is-holiday':'is-tradition');}
-    if(nds&&nds.length>0)cell.classList.add('is-nameday');
     // dots
     const dots=document.createElement('div');dots.className='day-dots';
     cell.innerText=d;cell.appendChild(dots);
     if(hol)dots.innerHTML+=`<div class="dot ${hol.type==='holiday'?'dot-holiday':'dot-tradition'}"></div>`;
-    if(nds&&nds.length)dots.innerHTML+=`<div class="dot dot-nameday"></div>`;
     if(diary[dKey]&&diary[dKey].length)dots.innerHTML+=`<div class="dot dot-diary"></div>`;
     cell.addEventListener('click',()=>calSelect(new Date(yr,mon,d)));
     grid.appendChild(cell);
@@ -1412,14 +1507,6 @@ function speakDate(){
   const d=S.calSel.getDate(),m=S.calSel.getMonth(),y=S.calSel.getFullYear();
   speakPL(dateFormatPl(d,m,y,S.calCase==='gen',S.calYear));
 }
-function openDiary(){
-  const ds=document.getElementById('diary-write');
-  const showing=ds.style.display!=='none';
-  ds.style.display=showing?'none':'block';
-  document.getElementById('diary-btn-lbl').innerText=showing?'Add Note':'Hide';
-  if(!showing){renderDiaryEntries();setTimeout(()=>document.getElementById('diary-input').focus(),50);}
-}
-
 // Name search
 function searchName(){
   const q=(document.getElementById('name-search').value||'').trim();
@@ -1447,44 +1534,122 @@ function searchName(){
 function getDiary(){try{return JSON.parse(localStorage.getItem('pl_diary')||'{}');}catch(e){return{};}}
 function savDiary(d){localStorage.setItem('pl_diary',JSON.stringify(d));}
 function dKey2(yr,mon,day){return`${yr}-${String(mon+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;}
-function saveDiaryEntry(){
-  const txt=(document.getElementById('diary-input').value||'').trim();
-  if(!txt||!S.calSel)return;
-  const k=dKey2(S.calSel.getFullYear(),S.calSel.getMonth(),S.calSel.getDate());
+
+// ── DAY VIEW ─────────────────────────────────────────────────
+let dvDate=null, dvPendingSlot=null;
+
+function openDayView(){
+  if(!S.calSel)return;
+  dvDate=S.calSel;
+  const d=dvDate.getDate(),mon=dvDate.getMonth(),yr=dvDate.getFullYear();
+  const en=dateEn(d,mon,yr,false,dvDate.getDay());
+  const pl=dateFormatPl(d,mon,yr,true,false);
+  document.getElementById('dv-title').innerText=en;
+  document.getElementById('dv-subtitle').innerText=pl;
+  renderDayView();
+  document.getElementById('day-view-overlay').classList.add('show');
+}
+
+function closeDayView(){
+  document.getElementById('day-view-overlay').classList.remove('show');
+  // refresh calendar dots in case something was added
+  calRender();
+  renderUpcoming();
+}
+
+function closeDayViewIfBg(e){
+  if(e.target===document.getElementById('day-view-overlay'))closeDayView();
+}
+
+function renderDayView(){
+  const scroll=document.getElementById('dv-scroll');
+  scroll.innerHTML='';
+  const k=dKey2(dvDate.getFullYear(),dvDate.getMonth(),dvDate.getDate());
+  const diary=getDiary();
+  const entries=diary[k]||[];
+
+  // Build slots 07:00 – 22:30 in 30-min increments
+  for(let h=7;h<=22;h++){
+    for(let m=0;m<60;m+=30){
+      const slotKey=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+      const appts=entries.filter(e=>e.time===slotKey);
+      const isHour=m===0;
+
+      const slot=document.createElement('div');
+      slot.className='time-slot'+(appts.length?' has-appt':'');
+
+      const label=document.createElement('div');
+      label.className='time-label'+(isHour?' hour':'');
+      label.innerText=isHour?slotKey:(m===30?'· 30':'');
+      slot.appendChild(label);
+
+      const content=document.createElement('div');
+      content.className='time-content';
+
+      if(appts.length){
+        appts.forEach((ap,i)=>{
+          const globalIdx=entries.indexOf(ap);
+          const bubble=document.createElement('div');
+          bubble.className='time-appt';
+          bubble.innerHTML=`${ap.text}<button class="time-appt-del" onclick="delAppt('${k}',${globalIdx},event)">✕</button>`;
+          content.appendChild(bubble);
+        });
+      } else {
+        const addHint=document.createElement('div');
+        addHint.className='time-slot-add';
+        addHint.innerText='+ Add appointment';
+        content.appendChild(addHint);
+        slot.onclick=()=>openApptModal(slotKey);
+      }
+
+      slot.appendChild(content);
+      scroll.appendChild(slot);
+    }
+  }
+
+  // Scroll to 08:00 on open
+  const firstSlot=scroll.querySelector('.time-slot');
+  if(firstSlot)setTimeout(()=>scroll.scrollTop=52,50);
+}
+
+// ── APPOINTMENT MODAL ─────────────────────────────────────────
+function openApptModal(slotKey){
+  dvPendingSlot=slotKey;
+  const d=dvDate.getDate(),mon=dvDate.getMonth(),yr=dvDate.getFullYear();
+  const en=dateEn(d,mon,yr,false,dvDate.getDay());
+  document.getElementById('appt-time-label').innerText=`${slotKey}  ·  ${en}`;
+  const inp=document.getElementById('appt-input');inp.value='';
+  document.getElementById('add-appt-modal').classList.add('show');
+  setTimeout(()=>inp.focus(),80);
+  inp.onkeydown=e=>{if(e.key==='Enter')saveAppt();if(e.key==='Escape')closeApptModal();};
+}
+
+function closeApptModal(){
+  document.getElementById('add-appt-modal').classList.remove('show');
+  dvPendingSlot=null;
+}
+
+function saveAppt(){
+  const txt=(document.getElementById('appt-input').value||'').trim();
+  if(!txt||!dvPendingSlot||!dvDate)return;
+  const k=dKey2(dvDate.getFullYear(),dvDate.getMonth(),dvDate.getDate());
   const d=getDiary();if(!d[k])d[k]=[];
-  d[k].push({text:txt,ts:Date.now()});savDiary(d);
-  document.getElementById('diary-input').value='';
-  renderDiaryEntries();calRender();
+  // insert in time order
+  const entry={text:txt,time:dvPendingSlot,ts:Date.now()};
+  d[k].push(entry);
+  d[k].sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  savDiary(d);
+  closeApptModal();
+  renderDayView();
+  // refresh dot on calendar
+  calRender();renderUpcoming();
 }
-function delDiary(k,i){const d=getDiary();if(!d[k])return;d[k].splice(i,1);if(!d[k].length)delete d[k];savDiary(d);renderDiaryEntries();calRender();}
-function renderDiaryEntries(){
-  const c=document.getElementById('diary-entries'),sel=S.calSel;
-  if(!c||!sel){if(c)c.innerHTML='';return;}
-  const k=dKey2(sel.getFullYear(),sel.getMonth(),sel.getDate());
-  const entries=(getDiary()[k]||[]);
-  if(!entries.length){c.innerHTML='<p style="font-size:0.78rem;color:var(--muted);">No notes for this date.</p>';return;}
-  c.innerHTML=entries.map((e,i)=>`
-    <div class="diary-entry">
-      <div class="diary-entry-text">${e.text}</div>
-      <button class="diary-del" onclick="delDiary('${k}',${i})">🗑</button>
-    </div>`).join('');
-}
-function renderUpcoming(){
-  const c=document.getElementById('upcoming-entries');const d=getDiary();
-  const now=new Date();now.setHours(0,0,0,0);
-  const rows=Object.entries(d).filter(([k])=>new Date(k)>=now).sort(([a],[b])=>a.localeCompare(b)).slice(0,5);
-  if(!rows.length){c.innerHTML='<p style="font-size:0.78rem;color:var(--muted);">No upcoming notes.</p>';return;}
-  c.innerHTML=rows.map(([k,entries])=>{
-    const dt=new Date(k);
-    const plDate=dateFormatPl(dt.getDate(),dt.getMonth(),dt.getFullYear(),true,false);
-    return entries.map((e,i)=>`
-      <div class="diary-entry">
-        <div class="diary-entry-text">
-          <div class="diary-entry-meta">${plDate}</div>${e.text}
-        </div>
-        <button class="diary-del" onclick="delDiary('${k}',${i});renderUpcoming()">🗑</button>
-      </div>`).join('');
-  }).join('');
+
+function delAppt(k,idx,e){
+  e.stopPropagation();
+  const d=getDiary();if(!d[k])return;
+  d[k].splice(idx,1);if(!d[k].length)delete d[k];
+  savDiary(d);renderDayView();calRender();renderUpcoming();
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1783,22 +1948,45 @@ function confetti(n=50){
 window.addEventListener('load',init);
 </script>
 
+<!-- DAY VIEW PANEL -->
+<div class="day-view-overlay" id="day-view-overlay" onclick="closeDayViewIfBg(event)">
+  <div class="day-view-panel" id="day-view-panel">
+    <div class="day-view-header">
+      <div>
+        <div class="day-view-title" id="dv-title">—</div>
+        <div class="day-view-subtitle" id="dv-subtitle">—</div>
+      </div>
+      <button class="day-view-close" onclick="closeDayView()">×</button>
+    </div>
+    <div class="day-view-scroll" id="dv-scroll"></div>
+  </div>
+</div>
+
+<!-- ADD APPOINTMENT MODAL -->
+<div class="add-appt-modal" id="add-appt-modal">
+  <div class="add-appt-box">
+    <div class="add-appt-title">📅 Add Appointment</div>
+    <div class="add-appt-time" id="appt-time-label">—</div>
+    <input class="add-appt-input" id="appt-input" type="text" placeholder="e.g. Doctor's appointment…" maxlength="80">
+    <div class="add-appt-btns">
+      <button class="add-appt-cancel" onclick="closeApptModal()">Cancel</button>
+      <button class="add-appt-save" onclick="saveAppt()">Save</button>
+    </div>
+  </div>
+</div>
+
 <!-- NAMEDAYS DATA — loaded last so parser isn't slowed -->
 <script>
-// Namedays loaded via fetch from GitHub CDN to avoid 77KB inline
+// Namedays: keys in the source JSON are DD-MM (e.g. "05-04" = 5th April)
+// getNDs() looks up using the same format, so store as-is
 const NAMEDAYS = {};
 fetch('https://raw.githubusercontent.com/newbroman/Polishdate2/main/namedays.json')
   .then(r=>r.json())
   .then(data=>{
-    // Convert MM-DD keys to M-D (0-indexed month)
-    Object.entries(data).forEach(([k,v])=>{
-      const[mm,dd]=k.split('-');
-      NAMEDAYS[`${parseInt(mm)-1}-${parseInt(dd)}`]=v;
-    });
-    // If calendar is showing, re-render to add nameday dots
+    Object.assign(NAMEDAYS, data);
     if(document.getElementById('screen-calendar').classList.contains('active'))calRender();
   })
-  .catch(()=>{}); // silently fail — app works without namedays
+  .catch(()=>{});
 </script>
 </body>
 </html>
