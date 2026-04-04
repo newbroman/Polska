@@ -336,10 +336,11 @@ body {
 .cal-day.today { background:var(--gold); color:var(--ink) !important; font-weight:800; border-color:transparent; }
 .cal-day.selected { background:var(--crimson) !important; color:#fff !important; border-color:transparent !important; }
 
-/* Holiday/tradition markers — coloured top border */
-.cal-day.is-holiday   { border-top:3px solid var(--holiday) !important; }
-.cal-day.is-tradition { border-top:3px solid var(--tradition) !important; }
-.cal-day.is-nameday   { border-bottom-color:var(--nameday); border-bottom-width:2px; }
+/* Holiday/tradition markers */
+.cal-day.is-holiday   { border-top:3px solid var(--holiday) !important; background:rgba(200,16,46,0.07); }
+.cal-day.is-tradition { border-top:3px solid var(--tradition) !important; background:rgba(196,154,26,0.07); }
+.cal-day.is-holiday   .day-num { color:var(--holiday); font-weight:800; }
+.cal-day.is-tradition .day-num { color:var(--tradition); font-weight:800; }
 
 /* Small dots below the number */
 .cal-day .day-dots { display:flex; gap:2px; justify-content:center; }
@@ -367,7 +368,28 @@ body {
 .date-pl   { font-family:'DM Sans',sans-serif; font-size:1.25rem; color:var(--crimson); margin-bottom:2px; }
 .date-ph   { font-style:italic; font-size:0.76rem; color:var(--phonetic); margin-bottom:3px; }
 .date-en   { font-size:0.8rem; color:var(--muted); margin-bottom:10px; }
-.nameday-row { font-size:0.78rem; color:var(--blue); margin-bottom:10px; font-weight:600; }
+.nameday-row { font-size:0.78rem; color:var(--blue); margin-bottom:10px; font-weight:600; cursor:pointer; }
+.nameday-row:hover { text-decoration:underline; }
+.nameday-expand { display:none; margin-top:6px; padding:8px 10px; background:rgba(26,79,160,0.06); border-radius:8px; border-left:3px solid var(--blue); font-size:0.78rem; color:var(--ink); line-height:1.7; }
+.nameday-expand.show { display:block; }
+
+.culture-card {
+  background:var(--parch); border:1px solid var(--border);
+  border-radius:10px; padding:10px 12px; margin-bottom:8px;
+  font-size:0.8rem;
+}
+.culture-card .culture-label { font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+.culture-card .culture-text  { color:var(--ink); line-height:1.5; }
+
+.history-card {
+  background:rgba(15,15,20,0.04); border:1px solid var(--border);
+  border-left:3px solid var(--ink2);
+  border-radius:0 10px 10px 0; padding:10px 12px; margin-bottom:6px;
+  font-size:0.8rem;
+}
+body.dark .history-card { background:rgba(247,244,238,0.04); }
+.history-year { font-size:0.68rem; font-weight:700; color:var(--crimson); letter-spacing:0.08em; margin-bottom:2px; }
+.history-event { color:var(--ink); line-height:1.5; }
 
 .cal-btn-row { display:flex; gap:6px; flex-wrap:wrap; }
 .cal-pill {
@@ -781,7 +803,10 @@ svg.clock-face:active { cursor:grabbing; }
       <div class="date-pl"       id="date-pl">—</div>
       <div class="date-ph"       id="date-ph">—</div>
       <div class="date-en"       id="date-en">—</div>
-      <div class="nameday-row"   id="nameday-row" style="display:none;"></div>
+      <div class="nameday-row" id="nameday-row" style="display:none;" onclick="toggleAllNames()"></div>
+      <div class="nameday-expand" id="nameday-expand"></div>
+      <div class="culture-card" id="culture-card" style="display:none;"></div>
+      <div id="history-section" style="display:none;"></div>
       <div class="cal-btn-row">
         <button class="cal-pill primary" onclick="speakDate()">🔊 Listen</button>
         <button class="cal-pill" onclick="toggleCalYear()">Year: <span id="yr-lbl">ON</span></button>
@@ -1029,6 +1054,80 @@ const HOLIDAYS={
   "11-24":{name:"Wigilia 🎄",type:"tradition",info:"Christmas Eve — the centrepiece of the Polish year. A 12-dish meatless supper, sharing the Opłatek wafer, then Midnight Mass."},
   "11-25":{name:"Boże Narodzenie",type:"holiday",info:"Christmas Day. A quiet family day of carols, gingerbread and visiting the nativity scene at church."},
   "11-26":{name:"Drugi Dzień Świąt",type:"holiday",info:"St Stephen's Day. Traditionally for visiting friends and relatives, away from immediate family."}
+};
+
+const MONTH_CULTURE=[
+  {season:"❄️ Zima",derivation:"From 'stykać' (to connect) — joins the old year to the new."},
+  {season:"❄️ Zima",derivation:"From 'luty' meaning harsh or fierce — Poland's coldest month."},
+  {season:"🌱 Wiosna",derivation:"From Latin 'Martius'. Old Slavic name: 'brzezień' (birch trees)."},
+  {season:"🌱 Wiosna",derivation:"The blooming month — from 'kwiat' (flower)."},
+  {season:"🌱 Wiosna",derivation:"From Latin 'Maius'. Traditionally Poland's most beautiful month."},
+  {season:"☀️ Lato",derivation:"From 'czerwie' (larvae) — used to produce red dye historically."},
+  {season:"☀️ Lato",derivation:"Named after 'lipa' (linden tree), which fills the air with scent."},
+  {season:"☀️ Lato",derivation:"From 'sierp' (sickle) — the harvest month."},
+  {season:"🍂 Jesień",derivation:"From 'wrzosy' (heather), which blooms purple in Polish forests."},
+  {season:"🍂 Jesień",derivation:"From 'paździer' (flax husks) — the month of processing linen."},
+  {season:"🍂 Jesień",derivation:"From 'liść' (leaf) + 'padać' (to fall) — leaves falling."},
+  {season:"❄️ Zima",derivation:"From 'gruda' (frozen lump of earth) — the ground freezes solid."}
+];
+
+const DAY_CULTURE=[
+  {pl:"Niedziela",meaning:"From 'nie działać' (not to work). The day of rest."},
+  {pl:"Poniedziałek",meaning:"Means 'after Sunday' (po niedzieli). Back to work."},
+  {pl:"Wtorek",meaning:"From 'wtóry' (second). The second day of the working week."},
+  {pl:"Środa",meaning:"Means 'middle' (środek). The midpoint of the week."},
+  {pl:"Czwartek",meaning:"From 'czwarty' (fourth day)."},
+  {pl:"Piątek",meaning:"From 'piąty' (fifth day)."},
+  {pl:"Sobota",meaning:"Derived from 'Sabbath' (Szabat). A day of rest in Jewish tradition."}
+];
+
+const HISTORY={
+"0-1":[{y:1918,e:"Poland proclaimed an independent republic after 123 years of partition."},{y:1999,e:"Sixteen new voivodeships created — a landmark reform of Polish local government."}],
+"0-6":[{y:1919,e:"Greater Poland Uprising begins — Poles reclaim the Poznań region from Germany."}],
+"0-14":[{y:1814,e:"Józef Poniatowski posthumously made Marshal of France — the only foreign-born holder of the rank."}],
+"0-17":[{y:1945,e:"Soviet and Polish forces liberate Warsaw after five years of brutal Nazi occupation."}],
+"0-19":[{y:1945,e:"Kraków liberated without destruction — its medieval centre saved from the fate of Warsaw."}],
+"0-22":[{y:1863,e:"January Uprising begins — a major Polish rebellion against Russian rule, lasting 18 months."}],
+"1-7":[{y:1831,e:"Battle of Grochów — Polish forces resist the Russian Empire during the November Uprising."}],
+"1-10":[{y:1920,e:"Poland's 'Wedding to the Sea' — General Haller symbolically unites Poland with the Baltic at Puck."}],
+"1-14":[{y:1919,e:"Polish-Soviet War begins — Poland halts the Bolshevik advance into Europe."}],
+"1-22":[{y:1810,e:"Frédéric Chopin born in Żelazowa Wola — Poland's greatest composer and 'poet of the piano'."}],
+"2-1":[{y:2011,e:"Cursed Soldiers Remembrance Day established — honouring anti-communist partisans murdered after WWII."}],
+"2-8":[{y:1817,e:"The University of Warsaw founded — today one of Poland's leading academic institutions."}],
+"2-12":[{y:1999,e:"Poland joins NATO — ending decades of Soviet-era military domination and securing its future."}],
+"2-17":[{y:1921,e:"The March Constitution adopted — establishing Poland as a parliamentary republic."}],
+"2-21":[{y:1990,e:"First free local elections in Poland since WWII — following the fall of communism."}],
+"2-24":[{y:2018,e:"National Day remembering Poles who rescued Jews during German Occupation established."}],
+"3-1":[{y:1794,e:"Kościuszko Uprising begins in Kraków — national rebellion against the partition of Poland."}],
+"3-2":[{y:1997,e:"Poland adopts its current constitution — the foundation of its modern democratic state."},{y:2005,e:"Pope John Paul II (Karol Wojtyła) dies in Rome. Poland mourns its greatest modern son."}],
+"3-4":[{y:1989,e:"Round Table Agreement signed — legalising Solidarity and paving the way for free elections."}],
+"3-10":[{y:2010,e:"Smolensk disaster: President Lech Kaczyński and 95 officials killed flying to the Katyń commemoration."}],
+"3-13":[{y:2007,e:"Katyn Memorial Day established — honouring 22,000 Polish officers murdered by Soviets in 1940."}],
+"3-14":[{y:966,e:"Baptism of Poland (Chrzest Polski) — Mieszko I accepts Christianity, founding the Polish state. The date is commemorated as Baptism of Poland Day."}],
+"3-16":[{y:1940,e:"NKVD begins the Katyń massacre — 22,000 Polish military officers executed in the Soviet forest."}],
+"3-19":[{y:1943,e:"Warsaw Ghetto Uprising begins — Jews make a heroic last stand against Nazi extermination."}],
+"3-21":[{y:1921,e:"Treaty of Riga signed — ending the Polish-Soviet War and fixing Poland's eastern border."}],
+"4-1":[{y:2004,e:"Poland joins the European Union — completing its return to the European family of nations."}],
+"4-2":[{y:2004,e:"Flag Day (Dzień Flagi) established — celebrating the iconic white-and-red Polish colours."}],
+"4-3":[{y:1791,e:"Constitution of 3 May signed — the first modern constitution in Europe and second in the world."}],
+"5-4":[{y:1989,e:"First semi-free elections — Solidarity wins 99 of 100 Senate seats, ending communist rule."}],
+"5-28":[{y:1364,e:"Jagiellonian University founded in Kraków by Casimir the Great — one of Europe's oldest universities."}],
+"6-10":[{y:1410,e:"Battle of Grunwald — Poland and Lithuania crush the Teutonic Knights in one of medieval Europe's greatest battles."}],
+"6-22":[{y:1944,e:"PKWN Manifesto — Soviet-backed communists attempt to seize control of post-war Poland."}],
+"7-1":[{y:1944,e:"Warsaw Uprising begins — 63 days of heroic resistance as 250,000 Poles die fighting Nazi occupation."}],
+"7-14":[{y:1385,e:"Union of Krewo — Poland and Lithuania begin their great partnership, forming one of Europe's largest states."}],
+"7-15":[{y:1920,e:"'Miracle on the Vistula' — Polish forces halt the Bolshevik army at Warsaw, saving Europe from communism."}],
+"7-31":[{y:1980,e:"Solidarity trade union founded at Gdańsk Shipyard under Lech Wałęsa — the beginning of the end for communism."}],
+"8-1":[{y:1939,e:"Germany invades Poland at dawn — World War II begins at Westerplatte, Gdańsk."}],
+"8-17":[{y:1939,e:"Soviet Union invades Poland from the east — Poland trapped between two totalitarian powers."}],
+"9-4":[{y:1989,e:"Tadeusz Mazowiecki becomes PM — Poland's first non-communist Prime Minister since WWII."}],
+"9-8":[{y:1795,e:"Third Partition — Poland disappears from the map of Europe for 123 years."}],
+"9-16":[{y:1978,e:"Karol Wojtyła elected Pope John Paul II — the first non-Italian pope in 455 years."}],
+"10-11":[{y:1918,e:"Poland regains independence — Józef Piłsudski takes command in Warsaw after 123 years of partition."}],
+"10-29":[{y:1830,e:"November Uprising begins — students and soldiers launch a rebellion against Russian rule in Warsaw."}],
+"11-6":[{y:1922,e:"Gabriel Narutowicz becomes Poland's first President — assassinated five days later by a nationalist."}],
+"11-13":[{y:1981,e:"General Jaruzelski declares martial law — crushing the Solidarity movement and arresting its leaders."}],
+"11-22":[{y:1970,e:"Workers shot in Gdańsk protests — 44 killed by communist militia. A turning point in Polish history."}],
 };
 
 const RANKS=[{l:0,n:"Nowicjusz"},{l:200,n:"Uczeń"},{l:1000,n:"Czeladnik"},{l:5000,n:"Ekspert"},{l:15000,n:"Mistrz"},{l:50000,n:"Guru"}];
@@ -1451,7 +1550,9 @@ function calRender(){
     if(hol){cell.classList.add(hol.type==='holiday'?'is-holiday':'is-tradition');}
     // dots
     const dots=document.createElement('div');dots.className='day-dots';
-    cell.innerText=d;cell.appendChild(dots);
+    // Use span for the number so .is-holiday .day-num CSS can colour it
+    const numSpan=document.createElement('span');numSpan.className='day-num';numSpan.innerText=d;
+    cell.appendChild(numSpan);cell.appendChild(dots);
     if(hol)dots.innerHTML+=`<div class="dot ${hol.type==='holiday'?'dot-holiday':'dot-tradition'}"></div>`;
     if(diary[dKey]&&diary[dKey].length)dots.innerHTML+=`<div class="dot dot-diary"></div>`;
     cell.dataset.date = +new Date(yr,mon,d);
@@ -1481,13 +1582,47 @@ function calSelect(date){
   document.getElementById('cal-phrase').innerText=plTxt;
   const panel=document.getElementById('cal-info-panel');
   panel.style.display='block';
-  // name days
+  // name days — show first 6, tap to see all
   const nds=getNDs(mon,d);
   const ndRow=document.getElementById('nameday-row');
+  const ndExp=document.getElementById('nameday-expand');
+  ndExp.classList.remove('show');
   if(nds&&nds.length){
     ndRow.style.display='block';
-    ndRow.innerText='👤 '+nds.slice(0,6).join(', ')+(nds.length>6?` +${nds.length-6} more`:'');
-  }else ndRow.style.display='none';
+    ndRow.dataset.full=JSON.stringify(nds);
+    const preview=nds.slice(0,6).join(', ');
+    const more=nds.length>6?` <span style="color:var(--blue);text-decoration:underline;">+${nds.length-6} more (tap)</span>`:'';
+    ndRow.innerHTML=`👤 ${preview}${more}`;
+    ndExp.innerHTML=nds.join(' · ');
+  }else{
+    ndRow.style.display='none';
+    ndExp.classList.remove('show');
+  }
+
+  // Cultural info — month etymology + day meaning
+  const mc=MONTH_CULTURE[mon], dc=DAY_CULTURE[dow];
+  const cCard=document.getElementById('culture-card');
+  if(mc&&dc){
+    cCard.style.display='block';
+    cCard.innerHTML=`
+      <div class="culture-label">${mc.season} · ${MONTHS_GEN[mon]}</div>
+      <div class="culture-text">${mc.derivation}</div>
+      <div class="culture-label" style="margin-top:6px;">${dc.pl}</div>
+      <div class="culture-text">${dc.meaning}</div>`;
+  } else cCard.style.display='none';
+
+  // Historical events for this day
+  const hSec=document.getElementById('history-section');
+  const events=HISTORY[`${mon}-${d}`];
+  if(events&&events.length){
+    hSec.style.display='block';
+    hSec.innerHTML=`<div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:8px 0 6px;">📜 On This Day in Polish History</div>`+
+      events.map(ev=>`
+        <div class="history-card">
+          <div class="history-year">${ev.y}</div>
+          <div class="history-event">${ev.e}</div>
+        </div>`).join('');
+  } else hSec.style.display='none';
   // holiday card
   const hKey=`${mon}-${d}`,hol=HOLIDAYS[hKey];
   const hCard=document.getElementById('holiday-card');
@@ -1499,7 +1634,10 @@ function calSelect(date){
   setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
 
-function setCase(c){
+function toggleAllNames(){
+  const exp=document.getElementById('nameday-expand');
+  exp.classList.toggle('show');
+}
   S.calCase=c;
   document.getElementById('case-nom').classList.toggle('active',c==='nom');
   document.getElementById('case-gen').classList.toggle('active',c==='gen');
