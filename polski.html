@@ -810,7 +810,10 @@ svg.clock-face:active { cursor:grabbing; }
 .modal-title { font-family:'DM Sans',sans-serif; font-size:1.25rem; color:var(--crimson); margin-bottom:14px; }
 
 /* Help modal wider to fit tables */
-#help-modal .modal-box { max-width:480px; }
+#help-modal .modal-box { max-width:480px; padding:16px; }
+/* 4-column tables need smaller font on narrow screens */
+.help-table-dense { font-size:0.7rem; }
+.help-table-dense th, .help-table-dense td { padding:4px 5px; }
 .help-nav { display:flex; border-bottom:1px solid var(--border); margin-bottom:14px; overflow-x:auto; scrollbar-width:none; }
 .help-nav::-webkit-scrollbar { display:none; }
 .help-nav-btn {
@@ -831,9 +834,9 @@ svg.clock-face:active { cursor:grabbing; }
 .help-sect ul { padding-left:16px; }
 .help-sect ul, .help-sect ol { padding-left:16px; }
 .help-li { font-size:0.82rem; line-height:1.55; color:var(--ink); margin-bottom:4px; opacity:0.9; }
-.help-table { width:100%; border-collapse:collapse; font-size:0.75rem; margin:8px 0; overflow-x:auto; display:block; }
-.help-table th { background:var(--parch); padding:6px 8px; text-align:left; font-weight:700; border-bottom:2px solid var(--border); white-space:nowrap; }
-.help-table td { padding:5px 8px; border-bottom:1px solid var(--border); vertical-align:top; }
+.help-table { width:100%; border-collapse:collapse; font-size:0.75rem; margin:8px 0; }
+.help-table th { background:var(--parch); padding:6px 6px; text-align:left; font-weight:700; border-bottom:2px solid var(--border); }
+.help-table td { padding:5px 6px; border-bottom:1px solid var(--border); vertical-align:top; }
 .help-table tr:last-child td { border-bottom:none; }
 .c-nom { color:#e67e22; font-weight:700; }   /* orange = nominative */
 .c-gen { color:#9b59b6; font-weight:700; }   /* purple = genitive */
@@ -1181,7 +1184,7 @@ svg.clock-face:active { cursor:grabbing; }
       <div class="help-sect">
         <h3>Gender: 1 &amp; 2</h3>
         <p>Only 1 and 2 change to match the noun's gender (masculine / feminine / neuter).</p>
-        <table class="help-table">
+        <table class="help-table help-table-dense">
           <thead><tr><th>Number</th><th>Masculine</th><th>Feminine</th><th>Neuter</th></tr></thead>
           <tbody>
             <tr><td>1</td><td>jeden</td><td>jedna</td><td>jedno</td></tr>
@@ -1254,10 +1257,10 @@ svg.clock-face:active { cursor:grabbing; }
         <h3>Two Modes: Naming vs Event</h3>
         <p>Polish dates use different case endings depending on whether you are <em>naming</em> a date or saying something <em>happens on</em> a date.</p>
         <table class="help-table">
-          <thead><tr><th>Context</th><th>Question</th><th>Case</th><th>Example (5 May)</th></tr></thead>
+          <thead><tr><th>Context</th><th>Case</th><th>Example (5 May)</th></tr></thead>
           <tbody>
-            <tr><td>📅 Today is…</td><td>Który dzień?</td><td><span class="c-nom">Nominative</span></td><td><span class="c-nom">Piąty maja</span></td></tr>
-            <tr><td>🎉 On the…</td><td>Którego?</td><td><span class="c-gen">Genitive</span></td><td><span class="c-gen">Piątego maja</span></td></tr>
+            <tr><td>📅 Today is…</td><td><span class="c-nom">Nominative</span></td><td><span class="c-nom">Piąty maja</span></td></tr>
+            <tr><td>🎉 On the…</td><td><span class="c-gen">Genitive</span></td><td><span class="c-gen">Piątego maja</span></td></tr>
           </tbody>
         </table>
         <div class="ex-box">📅 Dziś jest <span class="c-nom">piąty maja</span>. (Today is the 5th of May.)<br>🎉 Spotkanie jest <span class="c-gen">piątego maja</span>. (The meeting is on the 5th of May.)</div>
@@ -1267,7 +1270,7 @@ svg.clock-face:active { cursor:grabbing; }
         <h3>1. Ordinal Numbers (the Day)</h3>
         <p>The day is always an ordinal number (1st, 2nd…). In Polish these agree with the gender of <em>dzień</em> (day, masculine).</p>
         <p>Day numbers usually end in <b>-y</b> or <b>-i</b> (Nominative) or <b>-ego</b> (Genitive).</p>
-        <table class="help-table">
+        <table class="help-table help-table-dense">
           <thead><tr><th>#</th><th><span class="c-nom">Nominative</span></th><th><span class="c-gen">Genitive</span></th></tr></thead>
           <tbody>
             <tr><td>1</td><td class="c-nom">pierwszy</td><td class="c-gen">pierwszego</td></tr>
@@ -1352,12 +1355,12 @@ svg.clock-face:active { cursor:grabbing; }
         <h3>Casual Style (12h)</h3>
         <p>Used in everyday conversation. The preposition changes the case of the hour.</p>
         <table class="help-table">
-          <thead><tr><th>Pattern</th><th>Preposition</th><th>Hour case</th><th>Example</th></tr></thead>
+          <thead><tr><th>Pattern</th><th>Case</th><th>Example</th></tr></thead>
           <tbody>
-            <tr><td>On the hour</td><td>—</td><td><span class="c-nom">Nominative</span></td><td><span class="c-nom">Czwarta</span> (4:00)</td></tr>
-            <tr><td>X past</td><td><span class="c-gen">po</span></td><td><span class="c-gen">Genitive</span></td><td><span class="c-card">Pięć</span> <span class="c-gen">po czwartej</span> (4:05)</td></tr>
-            <tr><td>Half past</td><td><span class="c-gen">wpół do</span></td><td><span class="c-gen">Genitive of next hr</span></td><td><span class="c-gen">Wpół do piątej</span> (4:30)</td></tr>
-            <tr><td>X to</td><td><span class="c-nom">za</span></td><td><span class="c-nom">Nominative of next hr</span></td><td><span class="c-card">Za dziesięć</span> <span class="c-nom">piąta</span> (4:50)</td></tr>
+            <tr><td>On the hour</td><td><span class="c-nom">Nominative</span></td><td><span class="c-nom">Czwarta</span> (4:00)</td></tr>
+            <tr><td>X past (<em>po</em>)</td><td><span class="c-gen">Genitive</span></td><td><span class="c-card">Pięć</span> <span class="c-gen">po czwartej</span> (4:05)</td></tr>
+            <tr><td>Half past (<em>wpół do</em>)</td><td><span class="c-gen">Genitive +1hr</span></td><td><span class="c-gen">Wpół do piątej</span> (4:30)</td></tr>
+            <tr><td>X to (<em>za</em>)</td><td><span class="c-nom">Nominative +1hr</span></td><td><span class="c-card">Za dziesięć</span> <span class="c-nom">piąta</span> (4:50)</td></tr>
           </tbody>
         </table>
         <div class="ex-box">
@@ -1383,8 +1386,9 @@ svg.clock-face:active { cursor:grabbing; }
 
       <div class="help-sect">
         <h3>Hour Reference</h3>
-        <table class="help-table">
-          <thead><tr><th>Hr</th><th><span class="c-card">Minutes</span></th><th><span class="c-nom">Nom.</span></th><th><span class="c-gen">Gen.</span></th></tr></thead>
+        <p style="font-size:0.72rem;color:var(--muted);margin-bottom:6px;"><span class="c-card">■ Cardinal (minutes)</span> · <span class="c-nom">■ Nominative (on hour / za)</span> · <span class="c-gen">■ Genitive (po / wpół do)</span></p>
+        <table class="help-table help-table-dense">
+          <thead><tr><th>#</th><th><span class="c-card">Min.</span></th><th><span class="c-nom">Nom.</span></th><th><span class="c-gen">Gen.</span></th></tr></thead>
           <tbody>
             <tr><td>1</td><td class="c-card">jeden</td><td class="c-nom">pierwsza</td><td class="c-gen">pierwszej</td></tr>
             <tr><td>2</td><td class="c-card">dwa</td><td class="c-nom">druga</td><td class="c-gen">drugiej</td></tr>
