@@ -651,9 +651,17 @@ body.dark .history-card { background:rgba(247,244,238,0.04); }
    SCREEN 3: CLOCK
 ═══════════════════════════════════════════════════════ */
 .clock-pills {
-  display:flex; gap:6px; padding:10px 12px 6px;
-  flex-shrink:0; flex-wrap:wrap; background:var(--parch);
-  border-bottom:1px solid var(--border);
+  display:flex; gap:6px; padding:8px 12px 6px;
+  flex-shrink:0; flex-wrap:nowrap; align-items:center;
+  background:var(--parch); border-bottom:1px solid var(--border);
+  overflow-x:auto;
+}
+.clock-style-sel {
+  font-size:0.68rem; font-weight:700; padding:5px 10px;
+  border-radius:20px; border:1.5px solid var(--crimson);
+  background:var(--crimson); color:#fff;
+  font-family:'DM Sans',sans-serif; cursor:pointer;
+  flex-shrink:0; appearance:none; -webkit-appearance:none;
 }
 .clock-pill {
   font-size:0.68rem; font-weight:700; padding:5px 11px;
@@ -944,11 +952,13 @@ svg.clock-face:active { cursor:grabbing; }
 <div class="screen" id="screen-clock">
 
   <div class="clock-pills">
-    <button class="clock-pill active" id="pill-casual" onclick="setClockStyle('casual')">Casual</button>
-    <button class="clock-pill"        id="pill-formal" onclick="setClockStyle('formal')">Formal (24h)</button>
-    <button class="clock-pill"        id="pill-sec"    onclick="toggleSec()">Sec: OFF</button>
-    <button class="clock-pill"        id="pill-ph"     onclick="togglePh()">Phonetic: ON</button>
-    <button class="clock-pill"        id="pill-quiz"   onclick="toggleQuiz()">Quiz: OFF</button>
+    <select id="clock-style-sel" class="clock-style-sel" onchange="setClockStyle(this.value)">
+      <option value="casual">Casual (12h)</option>
+      <option value="formal">Formal (24h)</option>
+    </select>
+    <button class="clock-pill" id="pill-sec"  onclick="toggleSec()">Sec: OFF</button>
+    <button class="clock-pill" id="pill-ph"   onclick="togglePh()">Phonetic: ON</button>
+    <button class="clock-pill" id="pill-quiz" onclick="toggleQuiz()">Quiz: OFF</button>
   </div>
 
   <div class="clock-area">
@@ -2082,7 +2092,13 @@ function updClock(){
 
 function setRealTime(){S.clkLive=true;const n=new Date();S.clkH=n.getHours();S.clkM=n.getMinutes();S.clkS=n.getSeconds();S.clkQRev=true;updClock();}
 function rollTime(){S.clkLive=false;S.clkH=Math.floor(Math.random()*24);S.clkM=Math.floor(Math.random()*12)*5;S.clkS=0;S.clkQRev=!S.clkQuiz;updClock();if(S.clkQuiz)buildQuizOpts();}
-function setClockStyle(m){S.clkFormal=m==='formal';document.getElementById('pill-casual').classList.toggle('active',!S.clkFormal);document.getElementById('pill-formal').classList.toggle('active',S.clkFormal);updClock();if(S.clkQuiz)buildQuizOpts();}
+function setClockStyle(m){
+  S.clkFormal=m==='formal';
+  const sel=document.getElementById('clock-style-sel');
+  if(sel)sel.value=m;
+  updClock();
+  if(S.clkQuiz)buildQuizOpts();
+}
 function toggleSec(){S.clkSec=!S.clkSec;document.getElementById('pill-sec').classList.toggle('active',S.clkSec);document.getElementById('pill-sec').innerText=S.clkSec?'Sec: ON':'Sec: OFF';updClock();}
 function togglePh(){S.clkPh=!S.clkPh;document.getElementById('pill-ph').classList.toggle('active',S.clkPh);document.getElementById('pill-ph').innerText=S.clkPh?'Phonetic: ON':'Phonetic: OFF';updClock();}
 function toggleQuiz(){
@@ -2118,22 +2134,42 @@ function manualTime(v){
 
 // Drag clock — works with SVG, uses getBoundingClientRect for pointer offset
 function startDrag(e){
-  S.clkLive=false;e.preventDefault();
+  S.clkLive=false;
+  e.preventDefault();
   const svg=document.getElementById('clock-svg');
+  const rect=svg.getBoundingClientRect();
+  const svgCx=rect.left+rect.width/2, svgCy=rect.top+rect.height/2;
+  const r=rect.width/2;
+
+  // Determine which hand tip the pointer started closest to
+  const sx=(e.touches?e.touches[0].clientX:e.clientX)-svgCx;
+  const sy=(e.touches?e.touches[0].clientY:e.clientY)-svgCy;
+  const hAngRad=((S.clkH%12)*30+S.clkM*0.5-90)*Math.PI/180;
+  const mAngRad=(S.clkM*6-90)*Math.PI/180;
+  const hTipX=Math.cos(hAngRad)*r*52/90, hTipY=Math.sin(hAngRad)*r*52/90;
+  const mTipX=Math.cos(mAngRad)*r*72/90, mTipY=Math.sin(mAngRad)*r*72/90;
+  const draggingHour=Math.hypot(sx-hTipX,sy-hTipY)<Math.hypot(sx-mTipX,sy-mTipY);
+
   const move=ev=>{
-    const rect=svg.getBoundingClientRect();
-    const cx=ev.touches?ev.touches[0].clientX:ev.clientX;
-    const cy=ev.touches?ev.touches[0].clientY:ev.clientY;
-    const x=cx-rect.left-rect.width/2,y=cy-rect.top-rect.height/2;
-    let ang=(Math.atan2(y,x)*(180/Math.PI)+90+360)%360;
-    const dist=Math.sqrt(x*x+y*y)/Math.min(rect.width,rect.height)*2;
-    if(dist<0.4){S.clkH=((Math.round(ang/30)%12)+(S.clkH>=12?12:0));}
-    else{const nm=Math.round(ang/30)*5;if(S.clkM>45&&nm<15)S.clkH=(S.clkH+1)%24;else if(S.clkM<15&&nm>45)S.clkH=(S.clkH-1+24)%24;S.clkM=nm%60;}
+    const px=(ev.touches?ev.touches[0].clientX:ev.clientX)-svgCx;
+    const py=(ev.touches?ev.touches[0].clientY:ev.clientY)-svgCy;
+    const ang=(Math.atan2(py,px)*(180/Math.PI)+90+360)%360;
+    if(draggingHour){
+      const newH12=Math.round(ang/30)%12;
+      S.clkH=newH12+(S.clkH>=12?12:0);
+    } else {
+      const newM=Math.round(ang/6)%60;
+      if(S.clkM>50&&newM<10) S.clkH=(S.clkH+1)%24;
+      else if(S.clkM<10&&newM>50) S.clkH=(S.clkH-1+24)%24;
+      S.clkM=newM;
+    }
     updClock();
   };
   const stop=()=>{window.removeEventListener('mousemove',move);window.removeEventListener('touchmove',move);};
-  window.addEventListener('mousemove',move);window.addEventListener('touchmove',move,{passive:false});
-  window.addEventListener('mouseup',stop,{once:true});window.addEventListener('touchend',stop,{once:true});
+  window.addEventListener('mousemove',move);
+  window.addEventListener('touchmove',move,{passive:false});
+  window.addEventListener('mouseup',stop,{once:true});
+  window.addEventListener('touchend',stop,{once:true});
 }
 
 /* ═══════════════════════════════════════════════════════
