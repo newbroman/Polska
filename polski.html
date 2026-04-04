@@ -651,17 +651,9 @@ body.dark .history-card { background:rgba(247,244,238,0.04); }
    SCREEN 3: CLOCK
 ═══════════════════════════════════════════════════════ */
 .clock-pills {
-  display:flex; gap:6px; padding:8px 12px 6px;
-  flex-shrink:0; flex-wrap:nowrap; align-items:center;
-  background:var(--parch); border-bottom:1px solid var(--border);
-  overflow-x:auto;
-}
-.clock-style-sel {
-  font-size:0.68rem; font-weight:700; padding:5px 10px;
-  border-radius:20px; border:1.5px solid var(--crimson);
-  background:var(--crimson); color:#fff;
-  font-family:'DM Sans',sans-serif; cursor:pointer;
-  flex-shrink:0; appearance:none; -webkit-appearance:none;
+  display:flex; gap:6px; padding:10px 12px 6px;
+  flex-shrink:0; flex-wrap:wrap; background:var(--parch);
+  border-bottom:1px solid var(--border);
 }
 .clock-pill {
   font-size:0.68rem; font-weight:700; padding:5px 11px;
@@ -769,6 +761,44 @@ svg.clock-face:active { cursor:grabbing; }
   display:flex; align-items:center; justify-content:center;
 }
 .modal-title { font-family:'DM Sans',sans-serif; font-size:1.25rem; color:var(--crimson); margin-bottom:14px; }
+
+/* Help modal wider to fit tables */
+#help-modal .modal-box { max-width:480px; }
+.help-nav { display:flex; border-bottom:1px solid var(--border); margin-bottom:14px; overflow-x:auto; scrollbar-width:none; }
+.help-nav::-webkit-scrollbar { display:none; }
+.help-nav-btn {
+  flex-shrink:0; padding:8px 12px; font-size:0.72rem; font-weight:700;
+  letter-spacing:0.04em; text-transform:uppercase; color:var(--muted);
+  background:none; border:none; border-bottom:2px solid transparent;
+  margin-bottom:-1px; cursor:pointer; white-space:nowrap;
+  font-family:'DM Sans',sans-serif;
+}
+.help-nav-btn.active { color:var(--crimson); border-bottom-color:var(--crimson); }
+.help-panel { display:none; }
+.help-panel.active { display:block; }
+.help-sect { margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; }
+.help-sect:last-child { border-bottom:none; }
+.help-sect h3 { font-size:0.9rem; color:var(--crimson); margin-bottom:8px; }
+.help-sect h4 { font-size:0.82rem; color:var(--ink); margin-bottom:5px; font-weight:700; }
+.help-sect p, .help-sect li { font-size:0.82rem; line-height:1.55; color:var(--ink); margin-bottom:5px; opacity:0.9; }
+.help-sect ul { padding-left:16px; }
+.help-sect ul, .help-sect ol { padding-left:16px; }
+.help-li { font-size:0.82rem; line-height:1.55; color:var(--ink); margin-bottom:4px; opacity:0.9; }
+.help-table { width:100%; border-collapse:collapse; font-size:0.75rem; margin:8px 0; overflow-x:auto; display:block; }
+.help-table th { background:var(--parch); padding:6px 8px; text-align:left; font-weight:700; border-bottom:2px solid var(--border); white-space:nowrap; }
+.help-table td { padding:5px 8px; border-bottom:1px solid var(--border); vertical-align:top; }
+.help-table tr:last-child td { border-bottom:none; }
+.c-nom { color:#e67e22; font-weight:700; }   /* orange = nominative */
+.c-gen { color:#9b59b6; font-weight:700; }   /* purple = genitive */
+.c-card { color:var(--crimson); font-weight:700; } /* red = cardinal */
+.c-ord { color:var(--sage); font-weight:700; }     /* green = ordinal */
+.ex-box { background:var(--parch); border-left:3px solid var(--crimson); border-radius:0 8px 8px 0; padding:8px 12px; margin:8px 0; font-size:0.82rem; }
+.help-btn {
+  position:absolute; right:48px; top:14px;
+  background:var(--parch); border:1px solid var(--border);
+  width:28px; height:28px; border-radius:50%; font-size:0.85rem;
+  cursor:pointer; color:var(--ink); display:flex; align-items:center; justify-content:center;
+}
 .modal-sec { margin-bottom:14px; }
 .modal-sec h3 { font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
 .modal-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; font-size:0.85rem; }
@@ -811,6 +841,7 @@ svg.clock-face:active { cursor:grabbing; }
   <div class="top-bar-right">
     <span class="streak-badge" id="streak-badge">🔥 0</span>
     <span class="xp-badge" id="xp-badge">0 XP</span>
+    <button class="top-icon-btn" onclick="openHelp()">❓</button>
     <button class="top-icon-btn" onclick="showModal('stats-modal')">📊</button>
     <button class="top-icon-btn" onclick="showModal('settings-modal')">⚙️</button>
   </div>
@@ -952,13 +983,11 @@ svg.clock-face:active { cursor:grabbing; }
 <div class="screen" id="screen-clock">
 
   <div class="clock-pills">
-    <select id="clock-style-sel" class="clock-style-sel" onchange="setClockStyle(this.value)">
-      <option value="casual">Casual (12h)</option>
-      <option value="formal">Formal (24h)</option>
-    </select>
-    <button class="clock-pill" id="pill-sec"  onclick="toggleSec()">Sec: OFF</button>
-    <button class="clock-pill" id="pill-ph"   onclick="togglePh()">Phonetic: ON</button>
-    <button class="clock-pill" id="pill-quiz" onclick="toggleQuiz()">Quiz: OFF</button>
+    <button class="clock-pill active" id="pill-casual" onclick="setClockStyle('casual')">Casual</button>
+    <button class="clock-pill"        id="pill-formal" onclick="setClockStyle('formal')">Formal (24h)</button>
+    <button class="clock-pill"        id="pill-sec"    onclick="toggleSec()">Sec: OFF</button>
+    <button class="clock-pill"        id="pill-ph"     onclick="togglePh()">Phonetic: ON</button>
+    <button class="clock-pill"        id="pill-quiz"   onclick="toggleQuiz()">Quiz: OFF</button>
   </div>
 
   <div class="clock-area">
@@ -1023,6 +1052,311 @@ svg.clock-face:active { cursor:grabbing; }
   <div class="hf-pl" id="hf-pl">—</div>
   <div class="hf-en" id="hf-en">—</div>
   <button class="hf-stop" onclick="toggleHF()">⏹ Stop</button>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal-bg" id="help-modal">
+  <div class="modal-box" style="max-width:480px;">
+    <button class="modal-close" onclick="hideModal('help-modal')">×</button>
+    <div class="modal-title">Grammar Guide</div>
+
+    <div class="help-nav">
+      <button class="help-nav-btn active" onclick="setHelpPanel('numbers')">🔢 Numbers</button>
+      <button class="help-nav-btn"        onclick="setHelpPanel('dates')">📅 Dates</button>
+      <button class="help-nav-btn"        onclick="setHelpPanel('clock')">🕒 Clock</button>
+    </div>
+
+    <!-- NUMBERS PANEL -->
+    <div class="help-panel active" id="hp-numbers">
+      <div class="help-sect">
+        <h3>🎮 How to Play</h3>
+        <ol style="padding-left:16px;">
+          <li class="help-li">Tap <b>🔊</b> (bottom left) — listen to the Polish number spoken aloud.</li>
+          <li class="help-li">Select the matching answer from the grid, or type it in.</li>
+          <li class="help-li">Answer fast for a speed bonus. Too slow and XP is deducted.</li>
+        </ol>
+        <table class="help-table" style="margin-top:8px;">
+          <thead><tr><th>Button</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>🔊 ×1</td><td>Normal speed</td></tr>
+            <tr><td>🔊 ×2</td><td>Half speed (0.5×)</td></tr>
+            <tr><td>🔊 ×3</td><td>Quarter speed (0.25×)</td></tr>
+            <tr><td>🎙️</td><td>Speak the answer — mic dictation</td></tr>
+            <tr><td>🚗</td><td>Handsfree loop — great for driving</td></tr>
+            <tr><td>SKIP ➡</td><td>Reveal answer, no XP</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="help-sect">
+        <h3>📚 Modes</h3>
+        <table class="help-table">
+          <thead><tr><th>Mode</th><th>What you practise</th></tr></thead>
+          <tbody>
+            <tr><td><b>Numbers</b></td><td>Core counting — integers, decimals, fractions, negatives</td></tr>
+            <tr><td><b>🛒 Shopping</b></td><td>Counting nouns in real scenes — cafés, pharmacies, shops</td></tr>
+            <tr><td><b>Prices</b></td><td>Natural price spoken Polish: <em>pięć pięćdziesiąt</em> not formal złotych</td></tr>
+            <tr><td><b>Sentences</b></td><td>Full phrases with correct case endings — the hardest mode</td></tr>
+            <tr><td><b>Ordinals</b></td><td>First, second, third… pierwszy, drugi, trzeci…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="help-sect">
+        <h3>🏆 XP &amp; Scoring</h3>
+        <table class="help-table">
+          <thead><tr><th>Event</th><th>XP</th></tr></thead>
+          <tbody>
+            <tr><td>Correct answer</td><td>+10</td></tr>
+            <tr><td>Speed bonus (under 3s)</td><td>+5</td></tr>
+            <tr><td>Sentences mode bonus</td><td>+5</td></tr>
+            <tr><td>Shopping mode bonus</td><td>+3</td></tr>
+            <tr><td>Wrong answer</td><td>streak reset</td></tr>
+            <tr><td>Slow (7–13s)</td><td>−2</td></tr>
+            <tr><td>Very slow (13–20s)</td><td>−4</td></tr>
+            <tr><td>Over 20s</td><td>ignored (distracted!)</td></tr>
+          </tbody>
+        </table>
+        <p class="help-note">Answers over 20s don't count — the app assumes you got distracted.</p>
+      </div>
+        <p>Polish nouns change their ending depending on the number before them. This affects hours, years, people — almost everything countable.</p>
+        <table class="help-table">
+          <thead><tr><th>Number</th><th>Rule</th><th>Example (hour)</th></tr></thead>
+          <tbody>
+            <tr><td><span class="c-nom">1</span></td><td>Singular</td><td><span class="c-nom">1 godzina</span></td></tr>
+            <tr><td><span class="c-ord">2, 3, 4</span></td><td>Nominative Plural</td><td><span class="c-ord">3 godziny</span></td></tr>
+            <tr><td><span class="c-gen">5, 6, 7…</span></td><td>Genitive Plural</td><td><span class="c-gen">5 godzin</span></td></tr>
+          </tbody>
+        </table>
+        <p class="help-note">⚠️ Numbers ending in 2, 3, 4 (like 22, 23, 24) follow the 2–4 rule — except the teens 12, 13, 14 which always use the 5+ Genitive.</p>
+      </div>
+
+      <div class="help-sect">
+        <h3>Gender: 1 &amp; 2</h3>
+        <p>Only 1 and 2 change to match the noun's gender (masculine / feminine / neuter).</p>
+        <table class="help-table">
+          <thead><tr><th>Number</th><th>Masculine</th><th>Feminine</th><th>Neuter</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>jeden</td><td>jedna</td><td>jedno</td></tr>
+            <tr><td>2</td><td>dwa</td><td>dwie</td><td>dwa</td></tr>
+          </tbody>
+        </table>
+        <div class="ex-box">2 tickets (bilety, m): <b>dwa bilety</b><br>2 coffees (kawy, f): <b>dwie kawy</b></div>
+      </div>
+
+      <div class="help-sect">
+        <h3>Prices (Prices Mode)</h3>
+        <p>Prices are spoken naturally, not formally. <em>5,50 zł</em> is said as <b>pięć pięćdziesiąt</b>, not "five złotych and fifty groszy".</p>
+        <table class="help-table">
+          <thead><tr><th>Price</th><th>Spoken Polish</th></tr></thead>
+          <tbody>
+            <tr><td>1,00 zł</td><td>jeden złoty</td></tr>
+            <tr><td>3,00 zł</td><td>trzy złote</td></tr>
+            <tr><td>5,00 zł</td><td>pięć złotych</td></tr>
+            <tr><td>2,50 zł</td><td>dwa pięćdziesiąt</td></tr>
+            <tr><td>0,50 zł</td><td>pięćdziesiąt groszy</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="help-sect">
+        <h3>Sentences (Cases)</h3>
+        <p>When a number counts something (a noun), the noun ending changes to match the number:</p>
+        <div class="ex-box">
+          Mam <span class="c-nom">1 rok</span> — I am 1 year old<br>
+          Mam <span class="c-ord">3 lata</span> — I am 3 years old<br>
+          Mam <span class="c-gen">5 lat</span> — I am 5 years old
+        </div>
+      </div>
+
+      <div class="help-sect">
+        <h3>Scoring &amp; XP</h3>
+        <p>+10 XP base · +5 speed bonus (under 3s) · −2 slow (7–13s) · −4 very slow (13–20s)</p>
+        <p>Use the 🎙️ mic to speak the answer for bonus points. 🚗 handsfree plays audio loops — great for passive learning.</p>
+      </div>
+    </div>
+
+    <!-- DATES PANEL -->
+    <div class="help-panel" id="hp-dates">
+      <div class="help-sect">
+        <h3>📅 How to Use the Calendar</h3>
+        <table class="help-table">
+          <thead><tr><th>Action</th><th>What happens</th></tr></thead>
+          <tbody>
+            <tr><td>‹ › arrows</td><td>Navigate months</td></tr>
+            <tr><td>Year dropdown</td><td>Jump to any year</td></tr>
+            <tr><td>Tap a day</td><td>See the date in Polish (Nominative &amp; Genitive), name days, month etymology, day-name meaning, historic events, holiday info</td></tr>
+            <tr><td>🔊 Listen</td><td>Hear the date spoken aloud</td></tr>
+            <tr><td>📅 Day View</td><td>Open the timed appointment planner for that day</td></tr>
+            <tr><td>Name search</td><td>Type a Polish name to find its name day</td></tr>
+          </tbody>
+        </table>
+        <table class="help-table" style="margin-top:6px;">
+          <thead><tr><th>Border colour</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td style="border-left:3px solid var(--holiday);padding-left:6px;">Red top</td><td>Public holiday (dzień wolny)</td></tr>
+            <tr><td style="border-left:3px solid var(--tradition);padding-left:6px;">Gold top</td><td>Polish tradition or celebration</td></tr>
+            <tr><td style="border-left:3px solid var(--blue);padding-left:6px;">Blue top</td><td>Historic Polish anniversary</td></tr>
+            <tr><td style="border-left:3px solid var(--sage);padding-left:6px;">Green dot</td><td>You have an appointment</td></tr>
+          </tbody>
+        </table>
+        <p class="help-note">Holiday takes priority over tradition; both can show simultaneously (red top, gold bottom).</p>
+      </div>
+
+      <div class="help-sect">
+        <h3>Two Modes: Naming vs Event</h3>
+        <p>Polish dates use different case endings depending on whether you are <em>naming</em> a date or saying something <em>happens on</em> a date.</p>
+        <table class="help-table">
+          <thead><tr><th>Context</th><th>Question</th><th>Case</th><th>Example (5 May)</th></tr></thead>
+          <tbody>
+            <tr><td>📅 Today is…</td><td>Który dzień?</td><td><span class="c-nom">Nominative</span></td><td><span class="c-nom">Piąty maja</span></td></tr>
+            <tr><td>🎉 On the…</td><td>Którego?</td><td><span class="c-gen">Genitive</span></td><td><span class="c-gen">Piątego maja</span></td></tr>
+          </tbody>
+        </table>
+        <div class="ex-box">📅 Dziś jest <span class="c-nom">piąty maja</span>. (Today is the 5th of May.)<br>🎉 Spotkanie jest <span class="c-gen">piątego maja</span>. (The meeting is on the 5th of May.)</div>
+      </div>
+
+      <div class="help-sect">
+        <h3>1. Ordinal Numbers (the Day)</h3>
+        <p>The day is always an ordinal number (1st, 2nd…). In Polish these agree with the gender of <em>dzień</em> (day, masculine).</p>
+        <p>Day numbers usually end in <b>-y</b> or <b>-i</b> (Nominative) or <b>-ego</b> (Genitive).</p>
+        <table class="help-table">
+          <thead><tr><th>#</th><th><span class="c-nom">Nominative</span></th><th><span class="c-gen">Genitive</span></th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="c-nom">pierwszy</td><td class="c-gen">pierwszego</td></tr>
+            <tr><td>2</td><td class="c-nom">drugi</td><td class="c-gen">drugiego</td></tr>
+            <tr><td>3</td><td class="c-nom">trzeci</td><td class="c-gen">trzeciego</td></tr>
+            <tr><td>5</td><td class="c-nom">piąty</td><td class="c-gen">piątego</td></tr>
+            <tr><td>10</td><td class="c-nom">dziesiąty</td><td class="c-gen">dziesiątego</td></tr>
+            <tr><td>20</td><td class="c-nom">dwudziesty</td><td class="c-gen">dwudziestego</td></tr>
+            <tr><td>31</td><td class="c-nom">trzydziesty pierwszy</td><td class="c-gen">trzydziestego pierwszego</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="help-sect">
+        <h3>2. Month Names (Genitive)</h3>
+        <p>The month always appears in its Genitive ("of") form — as if saying "the 5th <em>of</em> May".</p>
+        <table class="help-table">
+          <thead><tr><th>Month</th><th>Nominative</th><th><span class="c-gen">Genitive (always used)</span></th></tr></thead>
+          <tbody>
+            <tr><td>January</td><td>Styczeń</td><td class="c-gen">stycznia</td></tr>
+            <tr><td>February</td><td>Luty</td><td class="c-gen">lutego</td></tr>
+            <tr><td>March</td><td>Marzec</td><td class="c-gen">marca</td></tr>
+            <tr><td>April</td><td>Kwiecień</td><td class="c-gen">kwietnia</td></tr>
+            <tr><td>May</td><td>Maj</td><td class="c-gen">maja</td></tr>
+            <tr><td>June</td><td>Czerwiec</td><td class="c-gen">czerwca</td></tr>
+            <tr><td>July</td><td>Lipiec</td><td class="c-gen">lipca</td></tr>
+            <tr><td>August</td><td>Sierpień</td><td class="c-gen">sierpnia</td></tr>
+            <tr><td>September</td><td>Wrzesień</td><td class="c-gen">września</td></tr>
+            <tr><td>October</td><td>Październik</td><td class="c-gen">października</td></tr>
+            <tr><td>November</td><td>Listopad</td><td class="c-gen">listopada</td></tr>
+            <tr><td>December</td><td>Grudzień</td><td class="c-gen">grudnia</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="help-sect">
+        <h3>3. Years</h3>
+        <p>Years are also in Genitive and end with the word <b>roku</b> (of the year).</p>
+        <p>Only the last two digits change their endings — the "two thousand" part stays the same.</p>
+        <div class="ex-box">2026 = dwa tysiące dwudziestego szóstego <b>roku</b></div>
+        <p class="help-note">💡 Think of the year like a building's address — everything inside it happens <em>of</em> that year.</p>
+      </div>
+    </div>
+
+    <!-- CLOCK PANEL -->
+    <div class="help-panel" id="hp-clock">
+      <div class="help-sect">
+        <h3>🕒 How to Use the Clock</h3>
+        <table class="help-table">
+          <thead><tr><th>Action</th><th>What happens</th></tr></thead>
+          <tbody>
+            <tr><td>Drag a hand</td><td>Touch near the hour or minute hand tip and drag — the app locks to whichever hand you grabbed</td></tr>
+            <tr><td>Type in box</td><td>Enter any time (e.g. 14:20) to jump directly</td></tr>
+            <tr><td>⏱ Now</td><td>Sync to your device's current time</td></tr>
+            <tr><td>🎲 Random</td><td>Pick a random time for practice</td></tr>
+            <tr><td>🔊 Listen</td><td>Hear the time spoken at normal speed</td></tr>
+            <tr><td>🐢 Slow</td><td>Hear the time at half speed</td></tr>
+            <tr><td>Casual / Formal</td><td>Switch between everyday 12h and official 24h Polish</td></tr>
+            <tr><td>Sec: ON</td><td>Show the seconds hand</td></tr>
+            <tr><td>Phonetic: ON</td><td>Show approximate pronunciation below the Polish</td></tr>
+            <tr><td>Quiz: ON</td><td>Random clock, four choices — earn XP for correct answers</td></tr>
+          </tbody>
+        </table>
+        <p class="help-note">The colour coding below the clock shows the grammar rule in action — <span class="c-nom">orange = Nominative</span>, <span class="c-gen">purple = Genitive</span>, <span class="c-card">red = Cardinal number</span>.</p>
+      </div>
+
+      <div class="help-sect">
+        <h3>Formal Style (24h)</h3>
+        <p>Used for official schedules, transport, broadcasts. The hour is an <span class="c-nom">ordinal feminine</span> number, the minutes are plain <span class="c-card">cardinal</span> numbers.</p>
+        <div class="ex-box">17:10 → <span class="c-nom">Siedemnasta</span> <span class="c-card">dziesięć</span></div>
+        <table class="help-table">
+          <thead><tr><th>Time</th><th>Structure</th><th>Polish</th></tr></thead>
+          <tbody>
+            <tr><td>13:00</td><td><span class="c-nom">Hour ordinal</span> only</td><td><span class="c-nom">Trzynasta</span></td></tr>
+            <tr><td>13:05</td><td><span class="c-nom">Hour</span> + <span class="c-card">zero minute</span></td><td><span class="c-nom">Trzynasta</span> <span class="c-card">zero pięć</span></td></tr>
+            <tr><td>13:30</td><td><span class="c-nom">Hour</span> + <span class="c-card">minutes</span></td><td><span class="c-nom">Trzynasta</span> <span class="c-card">trzydzieści</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="help-sect">
+        <h3>Casual Style (12h)</h3>
+        <p>Used in everyday conversation. The preposition changes the case of the hour.</p>
+        <table class="help-table">
+          <thead><tr><th>Pattern</th><th>Preposition</th><th>Hour case</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>On the hour</td><td>—</td><td><span class="c-nom">Nominative</span></td><td><span class="c-nom">Czwarta</span> (4:00)</td></tr>
+            <tr><td>X past</td><td><span class="c-gen">po</span></td><td><span class="c-gen">Genitive</span></td><td><span class="c-card">Pięć</span> <span class="c-gen">po czwartej</span> (4:05)</td></tr>
+            <tr><td>Half past</td><td><span class="c-gen">wpół do</span></td><td><span class="c-gen">Genitive of next hr</span></td><td><span class="c-gen">Wpół do piątej</span> (4:30)</td></tr>
+            <tr><td>X to</td><td><span class="c-nom">za</span></td><td><span class="c-nom">Nominative of next hr</span></td><td><span class="c-card">Za dziesięć</span> <span class="c-nom">piąta</span> (4:50)</td></tr>
+          </tbody>
+        </table>
+        <div class="ex-box">
+          <span class="c-nom">Nominative</span> (orange) = naming the hour<br>
+          <span class="c-gen">Genitive</span> (purple) = after <em>po</em> &amp; <em>wpół do</em>
+        </div>
+      </div>
+
+      <div class="help-sect">
+        <h3>Time of Day</h3>
+        <table class="help-table">
+          <thead><tr><th>Hours</th><th>Polish</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>04–09</td><td><b>rano</b></td><td>in the morning</td></tr>
+            <tr><td>10–12</td><td><b>przed południem</b></td><td>before noon</td></tr>
+            <tr><td>13–18</td><td><b>po południu</b></td><td>in the afternoon</td></tr>
+            <tr><td>19–23</td><td><b>wieczorem</b></td><td>in the evening</td></tr>
+            <tr><td>00–03</td><td><b>w nocy</b></td><td>at night</td></tr>
+          </tbody>
+        </table>
+        <p class="help-note">Special: 12:00 = <b>południe</b> (noon) · 00:00 = <b>północ</b> (midnight)</p>
+      </div>
+
+      <div class="help-sect">
+        <h3>Hour Reference</h3>
+        <table class="help-table">
+          <thead><tr><th>Hr</th><th><span class="c-card">Minutes</span></th><th><span class="c-nom">Nom.</span></th><th><span class="c-gen">Gen.</span></th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="c-card">jeden</td><td class="c-nom">pierwsza</td><td class="c-gen">pierwszej</td></tr>
+            <tr><td>2</td><td class="c-card">dwa</td><td class="c-nom">druga</td><td class="c-gen">drugiej</td></tr>
+            <tr><td>3</td><td class="c-card">trzy</td><td class="c-nom">trzecia</td><td class="c-gen">trzeciej</td></tr>
+            <tr><td>4</td><td class="c-card">cztery</td><td class="c-nom">czwarta</td><td class="c-gen">czwartej</td></tr>
+            <tr><td>5</td><td class="c-card">pięć</td><td class="c-nom">piąta</td><td class="c-gen">piątej</td></tr>
+            <tr><td>6</td><td class="c-card">sześć</td><td class="c-nom">szósta</td><td class="c-gen">szóstej</td></tr>
+            <tr><td>7</td><td class="c-card">siedem</td><td class="c-nom">siódma</td><td class="c-gen">siódmej</td></tr>
+            <tr><td>8</td><td class="c-card">osiem</td><td class="c-nom">ósma</td><td class="c-gen">ósmej</td></tr>
+            <tr><td>9</td><td class="c-card">dziewięć</td><td class="c-nom">dziewiąta</td><td class="c-gen">dziewiątej</td></tr>
+            <tr><td>10</td><td class="c-card">dziesięć</td><td class="c-nom">dziesiąta</td><td class="c-gen">dziesiątej</td></tr>
+            <tr><td>11</td><td class="c-card">jedenaście</td><td class="c-nom">jedenasta</td><td class="c-gen">jedenastej</td></tr>
+            <tr><td>12</td><td class="c-card">dwanaście</td><td class="c-nom">dwunasta</td><td class="c-gen">dwunastej</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- SETTINGS MODAL -->
@@ -2092,13 +2426,7 @@ function updClock(){
 
 function setRealTime(){S.clkLive=true;const n=new Date();S.clkH=n.getHours();S.clkM=n.getMinutes();S.clkS=n.getSeconds();S.clkQRev=true;updClock();}
 function rollTime(){S.clkLive=false;S.clkH=Math.floor(Math.random()*24);S.clkM=Math.floor(Math.random()*12)*5;S.clkS=0;S.clkQRev=!S.clkQuiz;updClock();if(S.clkQuiz)buildQuizOpts();}
-function setClockStyle(m){
-  S.clkFormal=m==='formal';
-  const sel=document.getElementById('clock-style-sel');
-  if(sel)sel.value=m;
-  updClock();
-  if(S.clkQuiz)buildQuizOpts();
-}
+function setClockStyle(m){S.clkFormal=m==='formal';document.getElementById('pill-casual').classList.toggle('active',!S.clkFormal);document.getElementById('pill-formal').classList.toggle('active',S.clkFormal);updClock();if(S.clkQuiz)buildQuizOpts();}
 function toggleSec(){S.clkSec=!S.clkSec;document.getElementById('pill-sec').classList.toggle('active',S.clkSec);document.getElementById('pill-sec').innerText=S.clkSec?'Sec: ON':'Sec: OFF';updClock();}
 function togglePh(){S.clkPh=!S.clkPh;document.getElementById('pill-ph').classList.toggle('active',S.clkPh);document.getElementById('pill-ph').innerText=S.clkPh?'Phonetic: ON':'Phonetic: OFF';updClock();}
 function toggleQuiz(){
@@ -2134,42 +2462,22 @@ function manualTime(v){
 
 // Drag clock — works with SVG, uses getBoundingClientRect for pointer offset
 function startDrag(e){
-  S.clkLive=false;
-  e.preventDefault();
+  S.clkLive=false;e.preventDefault();
   const svg=document.getElementById('clock-svg');
-  const rect=svg.getBoundingClientRect();
-  const svgCx=rect.left+rect.width/2, svgCy=rect.top+rect.height/2;
-  const r=rect.width/2;
-
-  // Determine which hand tip the pointer started closest to
-  const sx=(e.touches?e.touches[0].clientX:e.clientX)-svgCx;
-  const sy=(e.touches?e.touches[0].clientY:e.clientY)-svgCy;
-  const hAngRad=((S.clkH%12)*30+S.clkM*0.5-90)*Math.PI/180;
-  const mAngRad=(S.clkM*6-90)*Math.PI/180;
-  const hTipX=Math.cos(hAngRad)*r*52/90, hTipY=Math.sin(hAngRad)*r*52/90;
-  const mTipX=Math.cos(mAngRad)*r*72/90, mTipY=Math.sin(mAngRad)*r*72/90;
-  const draggingHour=Math.hypot(sx-hTipX,sy-hTipY)<Math.hypot(sx-mTipX,sy-mTipY);
-
   const move=ev=>{
-    const px=(ev.touches?ev.touches[0].clientX:ev.clientX)-svgCx;
-    const py=(ev.touches?ev.touches[0].clientY:ev.clientY)-svgCy;
-    const ang=(Math.atan2(py,px)*(180/Math.PI)+90+360)%360;
-    if(draggingHour){
-      const newH12=Math.round(ang/30)%12;
-      S.clkH=newH12+(S.clkH>=12?12:0);
-    } else {
-      const newM=Math.round(ang/6)%60;
-      if(S.clkM>50&&newM<10) S.clkH=(S.clkH+1)%24;
-      else if(S.clkM<10&&newM>50) S.clkH=(S.clkH-1+24)%24;
-      S.clkM=newM;
-    }
+    const rect=svg.getBoundingClientRect();
+    const cx=ev.touches?ev.touches[0].clientX:ev.clientX;
+    const cy=ev.touches?ev.touches[0].clientY:ev.clientY;
+    const x=cx-rect.left-rect.width/2,y=cy-rect.top-rect.height/2;
+    let ang=(Math.atan2(y,x)*(180/Math.PI)+90+360)%360;
+    const dist=Math.sqrt(x*x+y*y)/Math.min(rect.width,rect.height)*2;
+    if(dist<0.4){S.clkH=((Math.round(ang/30)%12)+(S.clkH>=12?12:0));}
+    else{const nm=Math.round(ang/30)*5;if(S.clkM>45&&nm<15)S.clkH=(S.clkH+1)%24;else if(S.clkM<15&&nm>45)S.clkH=(S.clkH-1+24)%24;S.clkM=nm%60;}
     updClock();
   };
   const stop=()=>{window.removeEventListener('mousemove',move);window.removeEventListener('touchmove',move);};
-  window.addEventListener('mousemove',move);
-  window.addEventListener('touchmove',move,{passive:false});
-  window.addEventListener('mouseup',stop,{once:true});
-  window.addEventListener('touchend',stop,{once:true});
+  window.addEventListener('mousemove',move);window.addEventListener('touchmove',move,{passive:false});
+  window.addEventListener('mouseup',stop,{once:true});window.addEventListener('touchend',stop,{once:true});
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -2286,6 +2594,26 @@ function updCampDesc(){const ds=["Novice (1–20)","Apprentice (1–100)","Journ
 function applyTheme(){const t=document.getElementById('theme-sel').value;document.body.className=t==='auto'?'':(t==='dark'?'dark':'light');}
 function showModal(id){document.getElementById(id).classList.add('show');if(id==='stats-modal')buildStats();}
 function hideModal(id){document.getElementById(id).classList.remove('show');}
+
+// Context-sensitive help — open to the panel matching the active screen
+function openHelp(){
+  const active=document.querySelector('.screen.active');
+  const id=active?active.id:'';
+  let panel='numbers';
+  if(id==='screen-calendar')panel='dates';
+  else if(id==='screen-clock')panel='clock';
+  setHelpPanel(panel);
+  showModal('help-modal');
+}
+function setHelpPanel(name){
+  document.querySelectorAll('.help-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.help-nav-btn').forEach(b=>b.classList.remove('active'));
+  const panel=document.getElementById('hp-'+name);
+  if(panel)panel.classList.add('active');
+  document.querySelectorAll('.help-nav-btn').forEach(b=>{
+    if(b.getAttribute('onclick').includes("'"+name+"'"))b.classList.add('active');
+  });
+}
 function buildStats(){
   const rank=RANKS.reduce((r,rk)=>S.xp>=rk.l?rk:r,RANKS[0]);
   const nxt=RANKS[RANKS.indexOf(rank)+1];
