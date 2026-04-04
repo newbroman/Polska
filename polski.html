@@ -317,6 +317,53 @@ body {
 }
 @keyframes fadeUp { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
 @keyframes confettiFall { to{transform:translateY(110vh) rotate(720deg);opacity:0} }
+@keyframes cardFlashGood { 0%{box-shadow:0 0 0 0 rgba(45,106,79,0)} 30%{box-shadow:0 0 0 6px rgba(45,106,79,0.35)} 100%{box-shadow:0 1px 6px rgba(0,0,0,0.06)} }
+@keyframes cardFlashBad  { 0%{box-shadow:0 0 0 0 rgba(200,16,46,0)} 30%{box-shadow:0 0 0 6px rgba(200,16,46,0.35)} 100%{box-shadow:0 1px 6px rgba(0,0,0,0.06)} }
+@keyframes streakPop { 0%{transform:scale(1)} 40%{transform:scale(1.5)} 100%{transform:scale(1)} }
+
+/* Review badge dot on Numbers tab */
+.review-dot {
+  display:inline-block; width:7px; height:7px; border-radius:50%;
+  background:var(--crimson); margin-left:4px; vertical-align:middle;
+  animation:streakPop 1.5s ease infinite;
+}
+
+/* Audio setup wizard */
+.aud-device-btn {
+  padding:14px 6px; border-radius:12px; border:1.5px solid var(--border);
+  background:var(--parch); color:var(--ink); cursor:pointer;
+  font-family:'DM Sans',sans-serif; font-size:0.78rem; line-height:1.6;
+  transition:all 0.15s; text-align:center;
+}
+.aud-device-btn:hover { background:var(--crimson); color:#fff; border-color:var(--crimson); }
+.aud-rec {
+  background:rgba(26,79,160,0.08); border-left:3px solid var(--blue);
+  border-radius:0 8px 8px 0; padding:8px 12px; font-size:0.78rem;
+  color:var(--ink); margin-bottom:12px;
+}
+.aud-warn {
+  background:rgba(196,154,26,0.1); border-left:3px solid var(--gold);
+  border-radius:0 8px 8px 0; padding:8px 12px; font-size:0.75rem;
+  color:var(--ink); margin-bottom:12px;
+}
+.aud-steps { padding-left:18px; margin-bottom:14px; }
+.aud-steps li { font-size:0.8rem; line-height:1.6; color:var(--ink); margin-bottom:4px; }
+.aud-note { font-size:0.72rem; color:var(--muted); }
+.aud-test-btn {
+  width:100%; padding:11px; border-radius:10px; border:none;
+  background:var(--sage); color:#fff; font-weight:700; font-size:0.88rem;
+  font-family:'DM Sans',sans-serif; cursor:pointer; margin-bottom:8px;
+}
+.aud-result { font-size:0.8rem; text-align:center; min-height:1.2rem; margin-bottom:10px; color:var(--muted); }
+.aud-back { background:none; border:none; color:var(--muted); font-size:0.8rem; cursor:pointer; font-family:'DM Sans',sans-serif; padding:4px; }
+
+/* Onboarding card content */
+.ob-icon { font-size:2.8rem; margin-bottom:12px; display:block; text-align:center; }
+.ob-title { font-size:1.15rem; font-weight:800; color:var(--ink); margin-bottom:8px; text-align:center; }
+.ob-body { font-size:0.85rem; color:var(--muted); line-height:1.6; text-align:center; }
+.ob-body b { color:var(--ink); }
+.ob-dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.25); transition:background 0.2s; }
+.ob-dot.active { background:var(--crimson); }
 
 /* ═══════════════════════════════════════════════════════
    SCREEN 2: CALENDAR
@@ -1359,6 +1406,86 @@ svg.clock-face:active { cursor:grabbing; }
   </div>
 </div>
 
+<!-- AUDIO SETUP WIZARD -->
+<div class="modal-bg" id="audio-modal">
+  <div class="modal-box" style="max-width:400px;">
+    <button class="modal-close" onclick="hideModal('audio-modal')">×</button>
+    <div class="modal-title">🔊 Audio Setup</div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;">Polski uses your device's built-in Polish voice. Pick your device to get set up.</p>
+
+    <!-- Step 0: device picker -->
+    <div id="aud-s0">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+        <button class="aud-device-btn" onclick="audStep('android')">🤖<br><b>Android</b></button>
+        <button class="aud-device-btn" onclick="audStep('ios')">🍎<br><b>iPhone / iPad</b></button>
+        <button class="aud-device-btn" onclick="audStep('desktop')">💻<br><b>Desktop</b></button>
+      </div>
+    </div>
+
+    <!-- Android steps -->
+    <div id="aud-android" style="display:none;">
+      <div class="aud-rec">📌 <b>Recommended browser: Chrome</b> (free on Google Play)</div>
+      <ol class="aud-steps">
+        <li>Open your phone <b>Settings</b></li>
+        <li>Go to <b>General Management → Language &amp; Input</b><br><span class="aud-note">(or System → Languages on some phones)</span></li>
+        <li>Tap <b>Text-to-speech output</b></li>
+        <li>Make sure <b>Speech Services by Google</b> is selected</li>
+        <li>Tap the <b>⚙️ cog</b> next to it</li>
+        <li>Tap <b>Install voice data</b></li>
+        <li>Find <b>Polski (Polska)</b> and tap ⬇️ to download</li>
+        <li>Fully <b>close and reopen Chrome</b></li>
+      </ol>
+      <button class="aud-test-btn" onclick="audTest()">▶ Test Polish Audio</button>
+      <div class="aud-result" id="aud-result-android"></div>
+      <button class="aud-back" onclick="audStep('s0')">← Back</button>
+    </div>
+
+    <!-- iOS steps -->
+    <div id="aud-ios" style="display:none;">
+      <div class="aud-rec">📌 <b>Recommended browser: Safari</b> (built-in)</div>
+      <ol class="aud-steps">
+        <li>Open <b>Settings</b> on your iPhone / iPad</li>
+        <li>Go to <b>Accessibility → Spoken Content</b></li>
+        <li>Tap <b>Voices</b></li>
+        <li>Scroll down and tap <b>Polish</b></li>
+        <li>Tap the ☁️ cloud icon next to <b>Zosia</b> or <b>Krzysztof</b> to download</li>
+        <li>Fully <b>close Safari and reopen</b> the app</li>
+      </ol>
+      <div class="aud-warn">⚠️ Check that the <b>physical silent switch</b> on the side of your iPhone is OFF — Apple blocks web audio in silent mode even if your volume is up.</div>
+      <button class="aud-test-btn" onclick="audTest()">▶ Test Polish Audio</button>
+      <div class="aud-result" id="aud-result-ios"></div>
+      <button class="aud-back" onclick="audStep('s0')">← Back</button>
+    </div>
+
+    <!-- Desktop steps -->
+    <div id="aud-desktop" style="display:none;">
+      <div class="aud-rec">📌 <b>Recommended browser: Chrome or Edge</b></div>
+      <p style="font-size:0.82rem;color:var(--ink);margin-bottom:10px;">Desktop usually works automatically. If you hear no sound, try these:</p>
+      <ul class="aud-steps" style="list-style:disc;">
+        <li><b>Click anywhere on the page first</b> — browsers block audio until you interact</li>
+        <li>Check your <b>system volume</b> is not muted</li>
+        <li><b>Firefox:</b> Settings → Privacy → Autoplay → Allow Audio</li>
+        <li><b>Brave:</b> Disable Shields for this site</li>
+        <li><b>Linux:</b> Install <code>espeak-ng</code> and the Polish language pack</li>
+      </ul>
+      <button class="aud-test-btn" onclick="audTest()">▶ Test Polish Audio</button>
+      <div class="aud-result" id="aud-result-desktop"></div>
+      <button class="aud-back" onclick="audStep('s0')">← Back</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ONBOARDING OVERLAY -->
+<div id="onboard-overlay" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(15,15,20,0.92);backdrop-filter:blur(6px);flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:40px;">
+  <div id="onboard-card" style="background:var(--card);border-radius:22px;width:92%;max-width:360px;padding:24px;box-shadow:0 16px 50px rgba(0,0,0,0.4);margin-bottom:20px;"></div>
+  <div style="display:flex;gap:8px;margin-bottom:16px;" id="onboard-dots"></div>
+  <div style="display:flex;gap:10px;width:92%;max-width:360px;">
+    <button id="onboard-skip" onclick="onboardEnd()" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.2);background:none;color:rgba(255,255,255,0.6);font-family:inherit;font-size:0.85rem;cursor:pointer;">Skip</button>
+    <button id="onboard-next" onclick="onboardNext()" style="flex:2;padding:12px;border-radius:12px;border:none;background:var(--crimson);color:#fff;font-family:inherit;font-weight:700;font-size:0.95rem;cursor:pointer;">Next →</button>
+  </div>
+</div>
+
 <!-- SETTINGS MODAL -->
 <div class="modal-bg" id="settings-modal">
   <div class="modal-box">
@@ -1403,6 +1530,9 @@ svg.clock-face:active { cursor:grabbing; }
       <div class="modal-row"><span style="font-size:0.82rem;">Test audio output</span>
         <button onclick="speakPL('Dzień dobry! Ile to kosztuje?')" style="padding:5px 12px;border-radius:7px;background:var(--crimson);color:#fff;border:none;cursor:pointer;font-size:0.78rem;font-family:inherit;">Test 🔊</button>
       </div>
+      <div class="modal-row"><span style="font-size:0.82rem;">No sound? Get help</span>
+        <button onclick="hideModal('settings-modal');openAudioSetup();" style="padding:5px 12px;border-radius:7px;background:var(--blue);color:#fff;border:none;cursor:pointer;font-size:0.78rem;font-family:inherit;">Setup Guide</button>
+      </div>
     </div>
     <button onclick="hideModal('settings-modal');genNumbers();" class="check-btn" style="margin-top:6px;">Save & Play</button>
   </div>
@@ -1414,7 +1544,7 @@ svg.clock-face:active { cursor:grabbing; }
     <button class="modal-close" onclick="hideModal('stats-modal')">×</button>
     <div class="modal-title">My Progress</div>
     <div id="stats-body"></div>
-    <button onclick="startReview()" class="check-btn" style="margin-top:10px;background:var(--gold);">⚠️ Review Mistakes</button>
+    <button onclick="startReview()" class="check-btn" style="margin-top:10px;background:var(--gold);" id="review-btn">⚠️ Review Mistakes</button>
     <button onclick="if(confirm('Reset all progress?'))localStorage.clear(),location.reload()" style="width:100%;margin-top:7px;padding:10px;border-radius:9px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-family:inherit;">Reset Progress</button>
   </div>
 </div>
@@ -1746,6 +1876,9 @@ function init(){
   genNumbers();
   updTopBar();
   updCampDesc();
+  updReviewBadge();
+  // Show onboarding on first ever launch
+  if(!localStorage.getItem('pl_onboarded'))setTimeout(onboardShow,600);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1974,20 +2107,28 @@ function winNum(btn){
   let sc=10;
   if(t<3)sc+=5;if(t>13)sc-=4;else if(t>7)sc-=2;
   if(S.subMode==='context')sc+=5;if(S.subMode==='shopping')sc+=3;
-  if(S.isReview){sc=5;S.mistakes.shift();}
+  if(S.isReview){
+    sc=5;
+    // SR correct: advance this item's interval
+    const item=S.mistakes[0];
+    if(item)srCorrect(item.key||item.pl);
+    S.mistakes.shift();
+  }
   else if(t>7&&t<=20)recMistake('Slow');
   sc=Math.max(1,sc);
   S.xp+=sc;S.streak++;S.dailyXP+=sc;
   if(!S.cats[S.subMode])S.cats[S.subMode]=0;S.cats[S.subMode]+=sc;
   if(!S.goalMet&&S.dailyXP>=S.dailyGoal){S.goalMet=true;setTimeout(()=>{confetti();showModal('goal-modal');},400);}
   if([5,10,25,50,100].includes(S.streak))confetti(S.streak>=50?120:50);
-  save();updTopBar();
-  // score pop
+  save();updTopBar();updReviewBadge();
   const card=document.getElementById('display-card');
   const pop=document.createElement('div');pop.className='score-pop';pop.innerText='+'+sc;
   card.appendChild(pop);setTimeout(()=>pop.remove(),950);
   if(btn)btn.classList.add('correct');
   else if(document.getElementById('type-input'))document.getElementById('type-input').style.borderColor='var(--correct)';
+  // Card flash green
+  const dc=document.getElementById('display-card');
+  if(dc){dc.style.animation='none';requestAnimationFrame(()=>{dc.style.animation='cardFlashGood 0.6s ease forwards';});}
   // reveal
   const pl=document.getElementById('pl-text');
   if(S.subMode==='context')pl.innerHTML=S.plText;else pl.innerText=S.plText;
@@ -2002,9 +2143,75 @@ function loseNum(btn){
   recMistake('Wrong');
   if(btn)btn.classList.add('wrong');
   else if(document.getElementById('type-input'))document.getElementById('type-input').style.borderColor='var(--wrong)';
-  updTopBar();save();speak(1);
+  // Card flash red
+  const dc2=document.getElementById('display-card');
+  if(dc2){dc2.style.animation='none';requestAnimationFrame(()=>{dc2.style.animation='cardFlashBad 0.6s ease forwards';});}
+  updTopBar();save();updReviewBadge();speak(1);
 }
-function recMistake(r){S.mistakes.push({mode:S.subMode,pl:S.plText.replace(/<[^>]*>/g,''),en:S.enText,r});if(S.mistakes.length>80)S.mistakes.shift();}
+function recMistake(r){
+  // SR-aware mistake recording
+  const key=S.plText.replace(/<[^>]*>/g,'').trim().toLowerCase();
+  if(!key||key==='—')return;
+  const now=Date.now();
+  // Check if this item already exists in SR queue
+  let sr=getSR();
+  const existing=sr.find(i=>i.key===key);
+  if(existing){
+    existing.errors=(existing.errors||0)+1;
+    existing.interval=1; // reset interval on new error
+    existing.nextReview=now+DAY_MS;
+    existing.r=r;
+  } else {
+    sr.push({key,pl:key,en:S.enText,mode:S.subMode,r,errors:1,interval:1,nextReview:now+DAY_MS,ts:now});
+  }
+  if(sr.length>200)sr=sr.slice(-200);
+  saveSR(sr);
+  // Also push to flat mistakes list for stats display
+  S.mistakes.push({mode:S.subMode,pl:key,en:S.enText,r});
+  if(S.mistakes.length>80)S.mistakes.shift();
+}
+
+// ── SPACED REPETITION ─────────────────────────────────────
+const DAY_MS=86400000;
+function getSR(){try{return JSON.parse(localStorage.getItem('pl_sr')||'[]');}catch(e){return[];}}
+function saveSR(q){localStorage.setItem('pl_sr',JSON.stringify(q));}
+
+function getDueItems(){
+  const now=Date.now();
+  return getSR().filter(i=>i.nextReview<=now);
+}
+
+function srCorrect(key){
+  // Called when a review item is answered correctly
+  const sr=getSR();
+  const item=sr.find(i=>i.key===key);
+  if(!item)return;
+  item.interval=Math.min((item.interval||1)*2,30); // cap at 30 days
+  item.nextReview=Date.now()+item.interval*DAY_MS;
+  item.errors=Math.max(0,(item.errors||1)-1);
+  // Remove if no more errors and long interval
+  if(item.errors<=0&&item.interval>=14){
+    const idx=sr.indexOf(item);sr.splice(idx,1);
+  }
+  saveSR(sr);
+}
+
+function updReviewBadge(){
+  const due=getDueItems().length;
+  const btn=document.getElementById('tab-numbers');
+  if(!btn)return;
+  const existing=btn.querySelector('.review-dot');
+  if(due>0){
+    if(!existing){
+      const dot=document.createElement('span');
+      dot.className='review-dot';
+      dot.title=`${due} item${due>1?'s':''} due for review`;
+      btn.appendChild(dot);
+    }
+  } else {
+    if(existing)existing.remove();
+  }
+}
 function checkTyped(){
   if(S.solved)return;
   const v=(document.getElementById('type-input').value||'').trim().toLowerCase();
@@ -2014,7 +2221,13 @@ function checkTyped(){
 }
 function startReview(){
   hideModal('stats-modal');
-  if(!S.mistakes.length){alert("No mistakes! Świetnie!");return;}
+  const due=getDueItems();
+  if(due.length>0){
+    // Load SR due items into mistakes queue for review session
+    S.mistakes=due.map(i=>({mode:i.mode||'numbers',pl:i.pl,en:i.en,r:'SR',key:i.key||i.pl}));
+  } else if(!S.mistakes.length){
+    alert('No mistakes to review. Świetnie! 🎉');return;
+  }
   S.isReview=true;switchScreen('numbers');genNumbers();
 }
 
@@ -2576,7 +2789,15 @@ function doHF(){
 function updTopBar(){
   const rank=RANKS.reduce((r,rk)=>S.xp>=rk.l?rk:r,RANKS[0]);
   document.getElementById('xp-badge').innerText=`${S.xp.toLocaleString()} XP · ${rank.n}`;
-  document.getElementById('streak-badge').innerText=`🔥 ${S.streak}`;
+  const sb=document.getElementById('streak-badge');
+  if(sb){
+    const flame=S.streak>=50?'🔥🔥🔥':S.streak>=25?'🔥🔥':S.streak>=10?'🔥':S.streak>=5?'🔥':'🔥';
+    const size=S.streak>=50?'1.1rem':S.streak>=25?'1rem':S.streak>=10?'0.9rem':'0.75rem';
+    sb.style.fontSize=size;
+    if([5,10,25,50,100].includes(S.streak))sb.style.animation='streakPop 0.4s ease';
+    else sb.style.animation='';
+    sb.innerText=`${flame} ${S.streak}`;
+  }
 }
 function save(){
   localStorage.setItem('pl_xp',S.xp);localStorage.setItem('pl_streak',S.streak);
@@ -2620,6 +2841,10 @@ function buildStats(){
   const pct=nxt?Math.min(100,Math.round((S.xp-rank.l)/(nxt.l-rank.l)*100)):100;
   const gPct=Math.min(100,Math.round(S.dailyXP/S.dailyGoal*100));
   const lvl=Math.floor(S.xp/500)+1;
+  // Update review button text
+  const due=getDueItems().length;
+  const rb=document.getElementById('review-btn');
+  if(rb)rb.innerText=due>0?`⚠️ Review Now (${due} due)`:'⚠️ Review Mistakes';
   const cats=Object.entries(S.cats).filter(([,v])=>v>0);
   document.getElementById('stats-body').innerHTML=`
     <div class="stat-card">
@@ -2642,8 +2867,61 @@ function buildStats(){
         <div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:2px;"><span>${k}</span><span>${v}</span></div>
         <div class="prog-bar"><div class="prog-fill" style="width:${Math.min(100,v/30)}%;background:var(--gold)"></div></div>
       </div>`).join('')}</div>`:''}
-    ${S.mistakes.length?`<div class="stat-card"><div class="stat-label">RECENT MISTAKES</div>${S.mistakes.slice(-5).reverse().map(m=>`
-      <div style="padding:5px 0;border-bottom:1px solid var(--border);"><div style="font-weight:600;font-size:0.85rem;">${m.pl||'—'}</div><div style="font-size:0.72rem;color:var(--muted);">${m.en||''} · ${m.r||''}</div></div>`).join('')}</div>`:''}
+    ${(()=>{
+      const sr=getSR();
+      const due=getDueItems();
+      const allMistakes=sr.length?sr:[...S.mistakes.map(m=>({...m,errors:1}))];
+      if(!allMistakes.length)return'';
+
+      // Group by pattern
+      function categorise(item){
+        const en=(item.en||'').replace(/[^0-9.,\-\/]/g,'').trim();
+        const n=parseFloat(en.replace(',','.'));
+        if(item.mode==='context')return'Sentences (Cases)';
+        if(item.mode==='shopping')return'Shopping';
+        if(item.mode==='prices')return'Prices';
+        if(item.mode==='ordinal')return'Ordinals';
+        if(item.mode==='time'||/:\d\d/.test(item.en))return'Time';
+        if(item.mode==='dates'||/Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/.test(item.en))return'Dates';
+        if(isNaN(n))return'Other';
+        if(n<0)return'Negatives';
+        if(en.includes('/')||en.includes(','))return'Fractions / Decimals';
+        if(n>=11&&n<=19)return'Teens (11–19)';
+        if(n>=20&&n<=99)return'Tens (20–99)';
+        if(n>=100&&n<=999)return'Hundreds';
+        if(n>=1000&&n<=9999)return'Thousands';
+        if(n>=10000)return'Large Numbers';
+        return'Units (1–10)';
+      }
+
+      const groups={};
+      allMistakes.forEach(m=>{
+        const cat=categorise(m);
+        if(!groups[cat])groups[cat]={count:0,errors:0,examples:[]};
+        groups[cat].count++;
+        groups[cat].errors+=(m.errors||1);
+        if(groups[cat].examples.length<2)groups[cat].examples.push(m.en||m.pl||'');
+      });
+
+      const sorted=Object.entries(groups).sort(([,a],[,b])=>b.errors-a.errors);
+      const maxErr=sorted[0]?.[1].errors||1;
+
+      let html=`<div class="stat-card"><div class="stat-label">WEAKNESS ANALYSIS`;
+      if(due.length)html+=` · <span style="color:var(--crimson);font-weight:700;">${due.length} DUE FOR REVIEW</span>`;
+      html+=`</div>`;
+      sorted.forEach(([cat,g])=>{
+        const pct=Math.round((g.errors/maxErr)*100);
+        html+=`<div style="margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:2px;">
+            <span>${cat} <span style="color:var(--muted);font-size:0.68rem;">${g.examples.join(', ')}</span></span>
+            <span style="font-weight:700;color:${pct>66?'var(--wrong)':pct>33?'var(--gold)':'var(--correct)'};">${g.errors}</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${pct>66?'var(--wrong)':pct>33?'var(--gold)':'var(--correct)'};"></div></div>
+        </div>`;
+      });
+      html+=`</div>`;
+      return html;
+    })()}
   `;
 }
 function handleKey(e){
@@ -2661,6 +2939,83 @@ function confetti(n=50){
       pointerEvents:'none',zIndex:'9999'});
     document.body.appendChild(c);setTimeout(()=>c.remove(),5500);
   }
+}
+
+// ── AUDIO SETUP WIZARD ────────────────────────────────────
+function audStep(step){
+  ['s0','android','ios','desktop'].forEach(s=>{
+    const el=document.getElementById('aud-'+s);
+    if(el)el.style.display=s===step?'block':'none';
+  });
+}
+function audTest(){
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance('Cześć! To działa dobrze. Jeden, dwa, trzy.');
+  u.lang='pl-PL';u.rate=0.9;
+  const voices=window.speechSynthesis.getVoices();
+  const plv=voices.find(v=>v.lang.startsWith('pl'));
+  if(plv)u.voice=plv;
+  // Find active result div
+  const active=['android','ios','desktop'].find(s=>{
+    const el=document.getElementById('aud-'+s);
+    return el&&el.style.display!=='none';
+  });
+  const res=active?document.getElementById('aud-result-'+active):null;
+  u.onstart=()=>{if(res)res.innerText='✅ Polish voice is working!';if(res)res.style.color='var(--correct)';};
+  u.onerror=()=>{if(res)res.innerText='❌ No Polish voice found — follow the steps above.';if(res)res.style.color='var(--wrong)';};
+  if(res)res.innerText='Testing…';
+  window.speechSynthesis.speak(u);
+}
+
+// Add audio button to settings modal top bar area
+function openAudioSetup(){audStep('s0');showModal('audio-modal');}
+
+// ── ONBOARDING ────────────────────────────────────────────
+const ONBOARD_SLIDES=[
+  {icon:'🇵🇱',title:'Welcome to Polski!',
+   body:'A complete Polish numbers, dates &amp; time trainer in one app. <b>Swipe through</b> to see what each section does.'},
+  {icon:'🔢',title:'Numbers',
+   body:'Listen to Polish numbers spoken aloud, then pick the right answer. Tap <b>🔊</b> to hear it again — double-tap for slow speed. Use <b>🎙️</b> to speak your answer. Earn XP and build your streak 🔥'},
+  {icon:'📅',title:'Calendar',
+   body:'Tap any date to see it in Polish — in both <b>Nominative</b> (today is…) and <b>Genitive</b> (on the…) cases. Colour borders show <span style="color:var(--holiday);">■</span> holidays, <span style="color:var(--tradition);">■</span> traditions, <span style="color:var(--blue);">■</span> historic dates.'},
+  {icon:'🕒',title:'Clock',
+   body:'Drag the hands or type a time. Polish clock grammar changes with the preposition — <b>za</b> (to), <b>po</b> (past), <b>wpół do</b> (half past). Switch Casual/Formal to see both styles.'},
+  {icon:'🔊',title:'Set Up Polish Audio',
+   body:'The app speaks Polish using your device\'s built-in voice. Tap below if you hear no sound — it takes 2 minutes to set up.'},
+];
+
+let _obStep=0;
+function onboardShow(){
+  const ov=document.getElementById('onboard-overlay');
+  ov.style.display='flex';
+  _obStep=0;
+  onboardRender();
+}
+function onboardRender(){
+  const slide=ONBOARD_SLIDES[_obStep];
+  const card=document.getElementById('onboard-card');
+  const isLast=_obStep===ONBOARD_SLIDES.length-1;
+  card.innerHTML=`
+    <span class="ob-icon">${slide.icon}</span>
+    <div class="ob-title">${slide.title}</div>
+    <div class="ob-body" style="margin-bottom:${isLast?16:0}px;">${slide.body}</div>
+    ${isLast?`<button onclick="openAudioSetup()" style="width:100%;padding:11px;border-radius:10px;border:none;background:var(--sage);color:#fff;font-weight:700;font-size:0.85rem;font-family:inherit;cursor:pointer;margin-top:10px;">🔊 Set Up Audio</button>`:''}
+  `;
+  // Dots
+  const dots=document.getElementById('onboard-dots');
+  dots.innerHTML=ONBOARD_SLIDES.map((_,i)=>`<div class="ob-dot${i===_obStep?' active':''}"></div>`).join('');
+  // Next button
+  const nb=document.getElementById('onboard-next');
+  nb.innerText=isLast?'Start Playing 🎮':'Next →';
+  document.getElementById('onboard-skip').style.display=isLast?'none':'block';
+}
+function onboardNext(){
+  if(_obStep<ONBOARD_SLIDES.length-1){_obStep++;onboardRender();}
+  else onboardEnd();
+}
+function onboardEnd(){
+  document.getElementById('onboard-overlay').style.display='none';
+  localStorage.setItem('pl_onboarded','1');
 }
 
 window.addEventListener('load',init);
