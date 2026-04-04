@@ -194,42 +194,55 @@ body {
 }
 .tog { accent-color:var(--crimson); cursor:pointer; }
 
-/* Display card */
+/* Display card — fixed height, scrollable text content */
 .display-card {
   margin:10px 12px 6px; flex-shrink:0;
   background:var(--card); border:1px solid var(--border);
-  border-radius:14px; padding:14px 14px 10px;
+  border-radius:14px; padding:0;
   box-shadow:0 1px 6px rgba(0,0,0,0.06);
-  position:relative;
+  position:relative; height:130px;
+  display:flex; flex-direction:column;
+}
+/* Top bar: chips + voice feedback — fixed, never scrolls */
+.display-top {
+  display:flex; align-items:center; gap:6px;
+  padding:8px 12px 4px; flex-shrink:0;
+  min-height:28px;
+}
+/* Scrollable text area */
+.display-scroll {
+  flex:1; overflow-y:auto; padding:0 14px 8px;
+  -webkit-overflow-scrolling:touch; scroll-behavior:smooth;
 }
 .mode-chip {
-  font-size:0.6rem; font-weight:700; letter-spacing:0.12em;
-  text-transform:uppercase; color:var(--muted); margin-bottom:6px; display:block;
+  font-size:0.58rem; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--muted); flex-shrink:0;
 }
 .grammar-chip {
-  display:none; position:absolute; top:12px; right:12px;
+  display:none; flex-shrink:0;
   background:var(--crimson); color:#fff;
-  font-size:0.58rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
-  padding:3px 8px; border-radius:4px;
+  font-size:0.55rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+  padding:2px 7px; border-radius:4px;
 }
 .grammar-chip.show { display:block; }
 .scenario-tag {
-  display:none; margin-bottom:6px;
+  display:none;
   background:rgba(196,154,26,0.12); border:1px solid var(--gold);
-  color:var(--gold); font-size:0.7rem; font-weight:600;
-  padding:3px 10px; border-radius:6px; width:fit-content;
+  color:var(--gold); font-size:0.65rem; font-weight:600;
+  padding:2px 8px; border-radius:6px; flex-shrink:0;
 }
-.voice-fb { font-size:0.78rem; min-height:1rem; margin-bottom:4px; font-weight:600; }
-
+.voice-fb {
+  margin-left:auto; font-size:0.72rem; font-weight:600;
+  color:var(--muted); text-align:right; flex-shrink:0;
+}
 .pl-text {
-  font-family:'DM Sans',sans-serif;
-  font-size:clamp(1.3rem,6vw,2rem); color:var(--crimson);
-  line-height:1.2; margin-bottom:4px; min-height:2rem; visibility:hidden;
+  font-size:clamp(1.1rem,5.5vw,1.7rem); color:var(--crimson);
+  line-height:1.25; margin-bottom:3px; visibility:hidden;
 }
 .pl-text.show { visibility:visible; animation:fadeUp 0.2s ease; }
-.ph-text { font-style:italic; font-size:0.8rem; color:var(--phonetic); min-height:1rem; visibility:hidden; }
+.ph-text { font-style:italic; font-size:0.75rem; color:var(--phonetic); visibility:hidden; margin-bottom:2px; }
 .ph-text.show { visibility:visible; }
-.en-text { font-size:0.85rem; color:var(--muted); visibility:hidden; }
+.en-text { font-size:0.78rem; color:var(--muted); visibility:hidden; }
 .en-text.show { visibility:visible; }
 
 /* Answer grid */
@@ -776,7 +789,7 @@ svg.clock-face:active { cursor:grabbing; }
 
 @media (max-height:640px) {
   .ans-btn { min-height:46px; font-size:0.82rem; }
-  .display-card { margin:6px 10px 4px; padding:10px; }
+  .display-card { margin:4px 10px 4px; height:110px; }
   .clock-area { padding:6px 10px 2px; }
 }
 </style>
@@ -815,7 +828,7 @@ svg.clock-face:active { cursor:grabbing; }
         <option value="type">Type</option>
       </select>
     </label>
-    <label>Show:
+    <label>
       <select id="btn-style" onchange="genNumbers()">
         <option value="digits">Digits</option>
         <option value="words">Polish</option>
@@ -827,13 +840,17 @@ svg.clock-face:active { cursor:grabbing; }
   </div>
 
   <div class="display-card" id="display-card">
-    <span class="mode-chip" id="mode-chip">Numbers</span>
-    <span class="grammar-chip" id="grammar-chip"></span>
-    <div class="scenario-tag" id="scenario-tag"></div>
-    <div class="voice-fb" id="voice-fb"></div>
-    <div class="pl-text" id="pl-text">—</div>
-    <div class="ph-text" id="ph-text"></div>
-    <div class="en-text" id="en-text">—</div>
+    <div class="display-top">
+      <span class="mode-chip" id="mode-chip">Numbers</span>
+      <span class="grammar-chip" id="grammar-chip"></span>
+      <span class="scenario-tag" id="scenario-tag"></span>
+      <span class="voice-fb" id="voice-fb"></span>
+    </div>
+    <div class="display-scroll">
+      <div class="pl-text" id="pl-text">—</div>
+      <div class="ph-text" id="ph-text"></div>
+      <div class="en-text" id="en-text">—</div>
+    </div>
   </div>
 
   <div class="answer-scroll" id="answer-scroll">
