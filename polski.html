@@ -16,40 +16,71 @@
    DESIGN TOKENS
 ═══════════════════════════════════════════════════════════ */
 :root {
+  /* Navigation — always dark regardless of mode */
+  --nav-bg:   #1a1a24;
+  --nav-text: #f0ece4;
+  --nav-dim:  #5a5468;
+  --nav-gold: #c49a1a;
+
+  /* Content — light mode defaults */
   --ink:      #0f0f14;
-  --ink2:     #1e1e28;
   --cream:    #f7f4ee;
   --parch:    #ede8dc;
   --card:     #ffffff;
+  --border:   #ddd8cc;
+  --muted:    #7a7068;
+
+  /* Accent — light mode */
   --crimson:  #c8102e;
   --gold:     #c49a1a;
   --sage:     #2d6a4f;
   --blue:     #1a4fa0;
-  --muted:    #7a7068;
-  --border:   #ddd8cc;
   --correct:  #2d6a4f;
   --wrong:    #c8102e;
   --phonetic: #8b6000;
   --holiday:  #c8102e;
   --tradition:#c49a1a;
   --nameday:  #1a4fa0;
+
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
 }
+
+/* Dark mode — content area only, nav stays dark */
 @media (prefers-color-scheme: dark) {
   :root {
-    --ink:     #f7f4ee; --ink2:    #e8e2d4;
-    --cream:   #0f0f14; --parch:   #1a1820;
-    --card:    #1e1e28; --crimson: #e8384f;
-    --gold:    #d4a820; --sage:    #4a9a6f;
-    --blue:    #4a7fd4; --muted:   #9a9090;
-    --border:  #2e2c38; --correct: #4a9a6f;
-    --wrong:   #e8384f; --phonetic:#c4940a;
-    --holiday: #e8384f; --tradition:#d4a820; --nameday:#4a7fd4;
+    --ink:      #f0ece4;
+    --cream:    #111118;
+    --parch:    #1a1820;
+    --card:     #1e1e2a;
+    --border:   #2e2c3a;
+    --muted:    #9a9090;
+    --crimson:  #e8384f;
+    --gold:     #d4a820;
+    --sage:     #4a9a6f;
+    --blue:     #4a7fd4;
+    --correct:  #4a9a6f;
+    --wrong:    #e8384f;
+    --phonetic: #c4940a;
+    --holiday:  #e8384f;
+    --tradition:#d4a820;
+    --nameday:  #4a7fd4;
   }
 }
-body.dark  { --ink:#f7f4ee;--ink2:#e8e2d4;--cream:#0f0f14;--parch:#1a1820;--card:#1e1e28;--crimson:#e8384f;--gold:#d4a820;--sage:#4a9a6f;--blue:#4a7fd4;--muted:#9a9090;--border:#2e2c38;--correct:#4a9a6f;--wrong:#e8384f;--phonetic:#c4940a;--holiday:#e8384f;--tradition:#d4a820;--nameday:#4a7fd4; }
-body.light { --ink:#0f0f14;--ink2:#1e1e28;--cream:#f7f4ee;--parch:#ede8dc;--card:#ffffff;--crimson:#c8102e;--gold:#c49a1a;--sage:#2d6a4f;--blue:#1a4fa0;--muted:#7a7068;--border:#ddd8cc;--correct:#2d6a4f;--wrong:#c8102e;--phonetic:#8b6000;--holiday:#c8102e;--tradition:#c49a1a;--nameday:#1a4fa0; }
+
+/* Manual overrides respect the same separation */
+body.dark {
+  --ink:#f0ece4; --cream:#111118; --parch:#1a1820; --card:#1e1e2a;
+  --border:#2e2c3a; --muted:#9a9090; --crimson:#e8384f; --gold:#d4a820;
+  --sage:#4a9a6f; --blue:#4a7fd4; --correct:#4a9a6f; --wrong:#e8384f;
+  --phonetic:#c4940a; --holiday:#e8384f; --tradition:#d4a820; --nameday:#4a7fd4;
+}
+body.light {
+  --ink:#0f0f14; --cream:#f7f4ee; --parch:#ede8dc; --card:#ffffff;
+  --border:#ddd8cc; --muted:#7a7068; --crimson:#c8102e; --gold:#c49a1a;
+  --sage:#2d6a4f; --blue:#1a4fa0; --correct:#2d6a4f; --wrong:#c8102e;
+  --phonetic:#8b6000; --holiday:#c8102e; --tradition:#c49a1a; --nameday:#1a4fa0;
+}
 
 /* ── FONT RULES — strict separation ──────────────────
    DM Sans used throughout for consistent UI
@@ -82,7 +113,7 @@ body {
 
 /* ── TOP BAR ──────────────────────────────────────────── */
 .top-bar {
-  background:var(--ink2); color:var(--cream);
+  background:var(--nav-bg); color:var(--nav-text);
   display:flex; align-items:center; gap:0;
   height:calc(48px + var(--safe-t));
   padding-top:var(--safe-t);
@@ -90,22 +121,22 @@ body {
 }
 .wordmark {
   font-family:'DM Sans',sans-serif;
-  font-size:1.2rem; color:var(--gold);
+  font-size:1.2rem; color:var(--nav-gold);
   padding:0 14px; flex-shrink:0; letter-spacing:0.02em;
 }
 .top-bar-right { margin-left:auto; display:flex; align-items:center; gap:0; }
-.top-icon-btn { background:none; border:none; color:var(--cream); opacity:0.7;
+.top-icon-btn { background:none; border:none; color:var(--nav-text); opacity:0.7;
   font-size:1rem; padding:0 10px; height:100%; cursor:pointer; }
 .top-icon-btn:hover { opacity:1; }
 .xp-badge {
-  font-size:0.7rem; font-weight:700; color:var(--gold);
+  font-size:0.7rem; font-weight:700; color:var(--nav-gold);
   padding:0 10px; letter-spacing:0.04em;
 }
 .streak-badge { font-size:0.75rem; color:#ff9d4d; padding:0 4px; }
 
 /* ── BOTTOM NAV ───────────────────────────────────────── */
 .bottom-nav {
-  background:var(--ink2);
+  background:var(--nav-bg);
   display:grid; grid-template-columns:1fr 1fr 1fr;
   flex-shrink:0;
   padding-bottom:var(--safe-b);
@@ -114,13 +145,13 @@ body {
 .nav-tab {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:2px; padding:8px 4px;
-  border:none; background:none; color:#5a5070;
+  border:none; background:none; color:var(--nav-dim);
   font-family:'DM Sans',sans-serif; font-size:0.58rem;
   font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
   cursor:pointer; transition:color 0.15s;
 }
 .nav-icon { font-size:1.25rem; line-height:1; }
-.nav-tab.active { color:var(--gold); }
+.nav-tab.active { color:var(--nav-gold); }
 
 /* ── SCREENS ──────────────────────────────────────────── */
 .screen {
@@ -278,24 +309,24 @@ body {
    SCREEN 2: CALENDAR
 ═══════════════════════════════════════════════════════ */
 .cal-header {
-  background:var(--ink2); color:var(--cream);
+  background:var(--nav-bg); color:var(--nav-text);
   padding:12px 14px 8px; flex-shrink:0;
 }
 .cal-nav-row {
   display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;
 }
-.cal-month-name { font-family:'DM Sans',sans-serif; font-size:1.3rem; color:var(--gold); }
+.cal-month-name { font-family:'DM Sans',sans-serif; font-size:1.3rem; color:var(--nav-gold); }
 .cal-nav-btn {
-  background:rgba(255,255,255,0.1); border:none; color:var(--cream);
+  background:rgba(255,255,255,0.1); border:none; color:var(--nav-text);
   width:34px; height:34px; border-radius:50%; font-size:1.2rem;
   cursor:pointer; display:flex; align-items:center; justify-content:center;
 }
-.cal-phrase { font-size:0.78rem; color:rgba(247,244,238,0.6); font-style:italic; min-height:1rem; }
+.cal-phrase { font-size:0.78rem; color:rgba(240,236,228,0.6); font-style:italic; min-height:1rem; }
 .cal-wd-row {
   display:grid; grid-template-columns:repeat(7,1fr);
   text-align:center; font-size:0.6rem; font-weight:700;
   letter-spacing:0.06em; text-transform:uppercase;
-  color:rgba(247,244,238,0.4); padding:0 2px; margin-bottom:4px;
+  color:rgba(240,236,228,0.4); padding:0 2px; margin-bottom:4px;
 }
 
 /* Name search bar */
@@ -383,7 +414,7 @@ body {
 
 .history-card {
   background:rgba(15,15,20,0.04); border:1px solid var(--border);
-  border-left:3px solid var(--ink2);
+  border-left:3px solid var(--nav-bg);
   border-radius:0 10px 10px 0; padding:10px 12px; margin-bottom:6px;
   font-size:0.8rem;
 }
@@ -622,7 +653,7 @@ svg.clock-face:active { cursor:grabbing; }
   font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.7rem;
   cursor:pointer; display:flex; align-items:center; justify-content:center; gap:4px;
 }
-.btn-now    { background:var(--ink2); }
+.btn-now    { background:var(--nav-bg); }
 .btn-rnd    { background:var(--muted); }
 .btn-speak  { background:var(--sage); }
 .btn-slow   { background:var(--gold); }
@@ -667,13 +698,13 @@ svg.clock-face:active { cursor:grabbing; }
 /* handsfree overlay */
 #hf-overlay {
   display:none; position:fixed; inset:0; z-index:2000;
-  background:var(--ink2); flex-direction:column;
+  background:var(--nav-bg); flex-direction:column;
   align-items:center; justify-content:center; text-align:center; padding:30px;
 }
 #hf-overlay.show { display:flex; }
-.hf-label { font-size:0.65rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:24px; }
-.hf-pl { font-family:'DM Sans',sans-serif; font-size:clamp(1.8rem,8vw,2.8rem); color:var(--gold); margin-bottom:14px; line-height:1.2; }
-.hf-en { font-size:1rem; color:rgba(247,244,238,0.55); margin-bottom:40px; }
+.hf-label { font-size:0.65rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--nav-gold); margin-bottom:24px; }
+.hf-pl { font-family:'DM Sans',sans-serif; font-size:clamp(1.8rem,8vw,2.8rem); color:var(--nav-gold); margin-bottom:14px; line-height:1.2; }
+.hf-en { font-size:1rem; color:rgba(240,236,228,0.55); margin-bottom:40px; }
 .hf-stop { background:var(--crimson); color:#fff; border:none; padding:14px 36px; border-radius:26px; font-family:'DM Sans',sans-serif; font-size:1rem; cursor:pointer; }
 
 @media (max-height:640px) {
