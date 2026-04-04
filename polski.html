@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Polski">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
    DESIGN TOKENS
@@ -52,7 +52,7 @@ body.dark  { --ink:#f7f4ee;--ink2:#e8e2d4;--cream:#0f0f14;--parch:#1a1820;--card
 body.light { --ink:#0f0f14;--ink2:#1e1e28;--cream:#f7f4ee;--parch:#ede8dc;--card:#ffffff;--crimson:#c8102e;--gold:#c49a1a;--sage:#2d6a4f;--blue:#1a4fa0;--muted:#7a7068;--border:#ddd8cc;--correct:#2d6a4f;--wrong:#c8102e;--phonetic:#8b6000;--holiday:#c8102e;--tradition:#c49a1a;--nameday:#1a4fa0; }
 
 /* ── FONT RULES — strict separation ──────────────────
-   DM Serif Display: Polish text, numbers, display values
+   DM Sans used throughout for consistent UI
    DM Sans: ALL UI — buttons, labels, inputs, nav, chips
 ─────────────────────────────────────────────────── */
 body, button, input, select, textarea, .mode-tab, .clock-pill,
@@ -66,7 +66,7 @@ body, button, input, select, textarea, .mode-tab, .clock-pill,
 /* Polish text & numbers get the serif display font */
 .pl-text, .date-pl, .time-pl, .time-input, .ans-btn,
 .hf-pl, .stat-value, .cal-month-name, .score-pop, .range-val,
-.modal-title { font-family: 'DM Serif Display', serif; }
+.modal-title { font-family: 'DM Sans', sans-serif; }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 html { height:100%; height:100dvh; }
 body {
@@ -89,7 +89,7 @@ body {
   flex-shrink:0; position:relative; z-index:100;
 }
 .wordmark {
-  font-family:'DM Serif Display',serif;
+  font-family:'DM Sans',sans-serif;
   font-size:1.2rem; color:var(--gold);
   padding:0 14px; flex-shrink:0; letter-spacing:0.02em;
 }
@@ -191,7 +191,7 @@ body {
 .voice-fb { font-size:0.78rem; min-height:1rem; margin-bottom:4px; font-weight:600; }
 
 .pl-text {
-  font-family:'DM Serif Display',serif;
+  font-family:'DM Sans',sans-serif;
   font-size:clamp(1.3rem,6vw,2rem); color:var(--crimson);
   line-height:1.2; margin-bottom:4px; min-height:2rem; visibility:hidden;
 }
@@ -211,7 +211,7 @@ body {
   background:var(--card); border:1.5px solid var(--border);
   border-bottom:3px solid var(--border);
   border-radius:11px; min-height:58px;
-  font-family:'DM Serif Display',serif;
+  font-family:'DM Sans',sans-serif;
   font-size:clamp(0.85rem,3.5vw,1.1rem); font-weight:400;
   color:var(--ink); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
@@ -226,7 +226,7 @@ body {
 .type-area { display:none; flex-direction:column; gap:8px; padding:0 12px 8px; }
 .type-input {
   width:100%; padding:12px 14px; text-align:center;
-  font-family:'DM Serif Display',serif; font-size:1.3rem;
+  font-family:'DM Sans',sans-serif; font-size:1.3rem;
   background:var(--card); color:var(--ink);
   border:2px solid var(--border); border-radius:11px; outline:none;
 }
@@ -261,7 +261,7 @@ body {
 /* Score pop */
 .score-pop {
   position:absolute; left:50%; pointer-events:none; z-index:50;
-  font-family:'DM Serif Display',serif; font-size:2rem; font-style:italic;
+  font-family:'DM Sans',sans-serif; font-size:2rem; font-style:italic;
   color:var(--sage); white-space:nowrap;
   animation:scoreFloat 0.9s ease forwards;
 }
@@ -284,7 +284,7 @@ body {
 .cal-nav-row {
   display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;
 }
-.cal-month-name { font-family:'DM Serif Display',serif; font-size:1.3rem; color:var(--gold); }
+.cal-month-name { font-family:'DM Sans',sans-serif; font-size:1.3rem; color:var(--gold); }
 .cal-nav-btn {
   background:rgba(255,255,255,0.1); border:none; color:var(--cream);
   width:34px; height:34px; border-radius:50%; font-size:1.2rem;
@@ -337,8 +337,8 @@ body {
 .cal-day.selected { background:var(--crimson) !important; color:#fff !important; border-color:transparent !important; }
 
 /* Holiday/tradition markers — coloured top border */
-.cal-day.is-holiday   { border-top-color:var(--holiday);    border-top-width:3px; }
-.cal-day.is-tradition { border-top-color:var(--tradition);  border-top-width:3px; }
+.cal-day.is-holiday   { border-top:3px solid var(--holiday) !important; }
+.cal-day.is-tradition { border-top:3px solid var(--tradition) !important; }
 .cal-day.is-nameday   { border-bottom-color:var(--nameday); border-bottom-width:2px; }
 
 /* Small dots below the number */
@@ -364,7 +364,7 @@ body {
 }
 .case-pill.active { background:var(--crimson); color:#fff; border-color:var(--crimson); }
 
-.date-pl   { font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--crimson); margin-bottom:2px; }
+.date-pl   { font-family:'DM Sans',sans-serif; font-size:1.25rem; color:var(--crimson); margin-bottom:2px; }
 .date-ph   { font-style:italic; font-size:0.76rem; color:var(--phonetic); margin-bottom:3px; }
 .date-en   { font-size:0.8rem; color:var(--muted); margin-bottom:10px; }
 .nameday-row { font-size:0.78rem; color:var(--blue); margin-bottom:10px; font-weight:600; }
@@ -544,7 +544,7 @@ svg.clock-face:active { cursor:grabbing; }
 
 .clock-digital { text-align:center; padding:2px 14px 6px; flex-shrink:0; }
 .time-input {
-  font-family:'DM Serif Display',serif; font-size:2rem;
+  font-family:'DM Sans',sans-serif; font-size:2rem;
   background:none; border:none; color:var(--ink);
   text-align:center; width:140px; outline:none; cursor:pointer;
   border-bottom:2px solid var(--border); letter-spacing:0.05em;
@@ -557,7 +557,7 @@ svg.clock-face:active { cursor:grabbing; }
   text-align:center; flex-shrink:0;
 }
 .time-pl {
-  font-family:'DM Serif Display',serif;
+  font-family:'DM Sans',sans-serif;
   font-size:clamp(1.1rem,5vw,1.55rem);
   color:var(--crimson); margin-bottom:4px; line-height:1.25;
 }
@@ -583,7 +583,7 @@ svg.clock-face:active { cursor:grabbing; }
 .quiz-opt {
   background:var(--card); border:1.5px solid var(--border);
   border-radius:9px; padding:9px 6px;
-  font-family:'DM Serif Display',serif; font-size:0.82rem;
+  font-family:'DM Sans',sans-serif; font-size:0.82rem;
   color:var(--ink); cursor:pointer; text-align:center; line-height:1.3;
   transition:all 0.14s;
 }
@@ -627,18 +627,18 @@ svg.clock-face:active { cursor:grabbing; }
   cursor:pointer; color:var(--ink);
   display:flex; align-items:center; justify-content:center;
 }
-.modal-title { font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--crimson); margin-bottom:14px; }
+.modal-title { font-family:'DM Sans',sans-serif; font-size:1.25rem; color:var(--crimson); margin-bottom:14px; }
 .modal-sec { margin-bottom:14px; }
 .modal-sec h3 { font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
 .modal-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; font-size:0.85rem; }
 .modal-row select { font-size:0.78rem; padding:4px 8px; border-radius:7px; background:var(--parch); color:var(--ink); border:1px solid var(--border); font-family:inherit; }
 .range-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:0.82rem; }
 .range-row input[type=range] { flex:1; accent-color:var(--crimson); }
-.range-val { font-family:'DM Serif Display',serif; font-weight:400; min-width:55px; text-align:right; }
+.range-val { font-family:'DM Sans',sans-serif; font-weight:400; min-width:55px; text-align:right; }
 
 .stat-card { background:var(--parch); border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin-bottom:7px; }
 .stat-label { font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
-.stat-value { font-family:'DM Serif Display',serif; font-size:1.4rem; color:var(--crimson); }
+.stat-value { font-family:'DM Sans',sans-serif; font-size:1.4rem; color:var(--crimson); }
 .prog-bar { background:var(--border); height:5px; border-radius:3px; overflow:hidden; margin-top:5px; }
 .prog-fill { height:100%; background:var(--crimson); border-radius:3px; transition:width 0.5s; }
 
@@ -650,9 +650,9 @@ svg.clock-face:active { cursor:grabbing; }
 }
 #hf-overlay.show { display:flex; }
 .hf-label { font-size:0.65rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:24px; }
-.hf-pl { font-family:'DM Serif Display',serif; font-size:clamp(1.8rem,8vw,2.8rem); color:var(--gold); margin-bottom:14px; line-height:1.2; }
+.hf-pl { font-family:'DM Sans',sans-serif; font-size:clamp(1.8rem,8vw,2.8rem); color:var(--gold); margin-bottom:14px; line-height:1.2; }
 .hf-en { font-size:1rem; color:rgba(247,244,238,0.55); margin-bottom:40px; }
-.hf-stop { background:var(--crimson); color:#fff; border:none; padding:14px 36px; border-radius:26px; font-family:'DM Serif Display',serif; font-size:1rem; cursor:pointer; }
+.hf-stop { background:var(--crimson); color:#fff; border:none; padding:14px 36px; border-radius:26px; font-family:'DM Sans',sans-serif; font-size:1rem; cursor:pointer; }
 
 @media (max-height:640px) {
   .ans-btn { min-height:46px; font-size:0.82rem; }
@@ -1454,6 +1454,7 @@ function calRender(){
     cell.innerText=d;cell.appendChild(dots);
     if(hol)dots.innerHTML+=`<div class="dot ${hol.type==='holiday'?'dot-holiday':'dot-tradition'}"></div>`;
     if(diary[dKey]&&diary[dKey].length)dots.innerHTML+=`<div class="dot dot-diary"></div>`;
+    cell.dataset.date = +new Date(yr,mon,d);
     cell.addEventListener('click',()=>calSelect(new Date(yr,mon,d)));
     grid.appendChild(cell);
   }
@@ -1463,7 +1464,12 @@ function calRender(){
 function calNav(d){S.calView.setMonth(S.calView.getMonth()+d);calRender();}
 
 function calSelect(date){
-  S.calSel=date;calRender();
+  S.calSel=date;
+  // Update selected highlight in-place (avoid full grid rebuild which resets scroll)
+  document.querySelectorAll('.cal-day').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('.cal-day').forEach(c=>{
+    if(+c.dataset.date===+date) c.classList.add('selected');
+  });
   const d=date.getDate(),mon=date.getMonth(),yr=date.getFullYear(),dow=date.getDay();
   const gen=S.calCase==='gen';
   const plTxt=dateFormatPl(d,mon,yr,gen,S.calYear);
@@ -1473,7 +1479,8 @@ function calSelect(date){
   document.getElementById('date-ph').innerText=phTxt;
   document.getElementById('date-en').innerText=enTxt;
   document.getElementById('cal-phrase').innerText=plTxt;
-  document.getElementById('cal-info-panel').style.display='block';
+  const panel=document.getElementById('cal-info-panel');
+  panel.style.display='block';
   // name days
   const nds=getNDs(mon,d);
   const ndRow=document.getElementById('nameday-row');
@@ -1488,7 +1495,8 @@ function calSelect(date){
     hCard.className=`holiday-info-card show type-${hol.type}`;
     hCard.innerHTML=`<h4>${hol.name}</h4><p>${hol.info}</p>`;
   }else hCard.className='holiday-info-card';
-  renderDiaryEntries();
+  // Scroll info panel into view
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
 
 function setCase(c){
@@ -1652,6 +1660,43 @@ function delAppt(k,idx,e){
   savDiary(d);renderDayView();calRender();renderUpcoming();
 }
 
+function renderDiaryEntries(){} // no-op — day view handles diary
+
+function renderUpcoming(){
+  const c=document.getElementById('upcoming-entries');
+  if(!c)return;
+  const d=getDiary();
+  const now=new Date();now.setHours(0,0,0,0);
+  const rows=Object.entries(d)
+    .filter(([k])=>d[k]&&d[k].length>0&&new Date(k)>=now)
+    .sort(([a],[b])=>a.localeCompare(b))
+    .slice(0,8);
+  if(!rows.length){
+    c.innerHTML='<p style="font-size:0.78rem;color:var(--muted);">No upcoming appointments.</p>';
+    return;
+  }
+  c.innerHTML=rows.map(([k,entries])=>{
+    const dt=new Date(k);
+    const enDate=dateEn(dt.getDate(),dt.getMonth(),dt.getFullYear(),false,dt.getDay());
+    const plDate=dateFormatPl(dt.getDate(),dt.getMonth(),dt.getFullYear(),true,false);
+    return entries.map((e,i)=>`
+      <div class="diary-entry">
+        <div class="diary-entry-text">
+          <div class="diary-entry-meta">${e.time?'<b>'+e.time+'</b> · ':''}<span style="color:var(--crimson);font-weight:600;">${enDate}</span></div>
+          <div style="font-size:0.75rem;color:var(--muted);font-style:italic;margin-bottom:2px;">${plDate}</div>
+          ${e.text}
+        </div>
+        <button class="diary-del" onclick="upcomingDel('${k}',${i})">🗑</button>
+      </div>`).join('');
+  }).join('');
+}
+
+function upcomingDel(k,i){
+  const d=getDiary();if(!d[k])return;
+  d[k].splice(i,1);if(!d[k].length)delete d[k];
+  savDiary(d);calRender();renderUpcoming();
+}
+
 /* ═══════════════════════════════════════════════════════
    CLOCK — SVG-based, exact geometry
 ═══════════════════════════════════════════════════════ */
@@ -1677,7 +1722,7 @@ function buildSVGTicks(){
     const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
     txt.setAttribute('x',x);txt.setAttribute('y',y);
     txt.setAttribute('text-anchor','middle');txt.setAttribute('dominant-baseline','middle');
-    txt.setAttribute('font-size','12');txt.setAttribute('font-family','DM Serif Display,serif');
+    txt.setAttribute('font-size','12');txt.setAttribute('font-family','DM Sans,sans-serif');
     txt.setAttribute('fill','var(--ink)');txt.setAttribute('font-weight','700');
     txt.textContent=t;g.appendChild(txt);
   });
