@@ -367,34 +367,74 @@ body {
 .cal-day.today { background:var(--gold); color:var(--ink) !important; font-weight:800; border-color:transparent; }
 .cal-day.selected { background:var(--crimson) !important; color:#fff !important; border-color:var(--crimson) !important; }
 
-/* Public holiday — red full border */
+/* ── BASE: every cell has a subtle visible border ─────── */
+/* Override individual sides using border-top/bottom/left/right */
+
+/* Number colour by priority */
+.cal-day.is-holiday   .day-num { color:var(--holiday);   font-weight:800; }
+.cal-day.is-tradition .day-num { color:var(--tradition);  font-weight:800; }
+.cal-day.is-history   .day-num { color:var(--blue);       font-weight:800; }
+/* Holiday overrides tradition/history number colour */
+.cal-day.is-holiday.is-tradition .day-num { color:var(--holiday); }
+.cal-day.is-holiday.is-history   .day-num { color:var(--holiday); }
+.cal-day.is-tradition.is-history .day-num { color:var(--tradition); }
+
+/* ── SINGLE MARKERS ─────────────────────────────────── */
+
+/* Holiday only → red top border, light red bg */
 .cal-day.is-holiday {
-  border:2px solid var(--holiday) !important;
-  background:rgba(200,16,46,0.06);
+  border-top:2.5px solid var(--holiday);
+  background:rgba(200,16,46,0.05);
 }
-.cal-day.is-holiday .day-num { color:var(--holiday); font-weight:800; }
 
-/* Tradition — gold full border */
+/* Tradition only → gold top border, light gold bg */
 .cal-day.is-tradition {
-  border:2px solid var(--tradition) !important;
-  background:rgba(196,154,26,0.06);
+  border-top:2.5px solid var(--tradition);
+  background:rgba(196,154,26,0.05);
 }
-.cal-day.is-tradition .day-num { color:var(--tradition); font-weight:800; }
 
-/* Historic anniversary — blue full border */
+/* History only → blue top border, light blue bg */
 .cal-day.is-history {
-  border:2px solid var(--blue) !important;
-  background:rgba(26,79,160,0.05);
+  border-top:2.5px solid var(--blue);
+  background:rgba(26,79,160,0.04);
 }
-.cal-day.is-history .day-num { color:var(--blue); font-weight:800; }
 
-/* Holiday + history on same day — crimson wins */
-.cal-day.is-holiday.is-history { border-color:var(--holiday) !important; }
+/* ── TWO MARKERS ────────────────────────────────────── */
 
-/* Diary dot — small, bottom centre */
+/* Holiday + Tradition → red top, gold bottom */
+.cal-day.is-holiday.is-tradition {
+  border-top:2.5px solid var(--holiday);
+  border-bottom:2.5px solid var(--tradition);
+  background:rgba(200,16,46,0.05);
+}
+
+/* Holiday + History → red top, blue bottom */
+.cal-day.is-holiday.is-history:not(.is-tradition) {
+  border-top:2.5px solid var(--holiday);
+  border-bottom:2.5px solid var(--blue);
+  background:rgba(200,16,46,0.05);
+}
+
+/* Tradition + History → gold top, blue bottom */
+.cal-day.is-tradition.is-history:not(.is-holiday) {
+  border-top:2.5px solid var(--tradition);
+  border-bottom:2.5px solid var(--blue);
+  background:rgba(196,154,26,0.05);
+}
+
+/* ── THREE MARKERS ──────────────────────────────────── */
+
+/* Holiday + Tradition + History → red top, gold bottom, blue left */
+.cal-day.is-holiday.is-tradition.is-history {
+  border-top:2.5px solid var(--holiday);
+  border-bottom:2.5px solid var(--tradition);
+  border-left:2.5px solid var(--blue);
+  background:rgba(200,16,46,0.05);
+}
+
+/* Diary dot */
 .cal-day .day-dots { display:flex; gap:2px; justify-content:center; }
 .cal-day .dot { width:4px; height:4px; border-radius:50%; flex-shrink:0; background:var(--sage); }
-.dot-nameday  { background:var(--nameday); }
 
 /* Calendar info panel */
 .cal-info-panel {
