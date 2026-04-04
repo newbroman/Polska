@@ -805,7 +805,8 @@ svg.clock-face:active { cursor:grabbing; }
 .modal-box {
   background:var(--card); border-radius:18px;
   width:94%; max-width:400px; max-height:90dvh;
-  overflow-y:auto; padding:22px;
+  overflow-y:auto; overflow-x:hidden; padding:22px;
+  box-sizing:border-box;
   box-shadow:0 12px 40px rgba(0,0,0,0.3); position:relative;
 }
 .modal-close {
@@ -817,8 +818,9 @@ svg.clock-face:active { cursor:grabbing; }
 }
 .modal-title { font-family:'DM Sans',sans-serif; font-size:1.25rem; color:var(--crimson); margin-bottom:14px; }
 
-/* Help modal wider to fit tables */
-#help-modal .modal-box { max-width:480px; padding:16px; }
+/* Help modal — constrain width, prevent table overflow */
+#help-modal .modal-box { max-width:460px; padding:14px; overflow-x:hidden; }
+#help-modal .modal-box * { max-width:100%; box-sizing:border-box; }
 /* 4-column tables need smaller font on narrow screens */
 .help-table-dense { font-size:0.7rem; }
 .help-table-dense th, .help-table-dense td { padding:4px 5px; }
@@ -842,9 +844,9 @@ svg.clock-face:active { cursor:grabbing; }
 .help-sect ul { padding-left:16px; }
 .help-sect ul, .help-sect ol { padding-left:16px; }
 .help-li { font-size:0.82rem; line-height:1.55; color:var(--ink); margin-bottom:4px; opacity:0.9; }
-.help-table { width:100%; border-collapse:collapse; font-size:0.75rem; margin:8px 0; }
-.help-table th { background:var(--parch); padding:6px 6px; text-align:left; font-weight:700; border-bottom:2px solid var(--border); }
-.help-table td { padding:5px 6px; border-bottom:1px solid var(--border); vertical-align:top; }
+.help-table { width:100%; border-collapse:collapse; font-size:0.74rem; margin:8px 0; table-layout:fixed; }
+.help-table th { background:var(--parch); padding:5px 5px; text-align:left; font-weight:700; border-bottom:2px solid var(--border); word-break:break-word; }
+.help-table td { padding:5px 5px; border-bottom:1px solid var(--border); vertical-align:top; word-break:break-word; }
 .help-table tr:last-child td { border-bottom:none; }
 .c-nom { color:#e67e22; font-weight:700; }   /* orange = nominative */
 .c-gen { color:#9b59b6; font-weight:700; }   /* purple = genitive */
@@ -1116,7 +1118,7 @@ svg.clock-face:active { cursor:grabbing; }
 
 <!-- HELP MODAL -->
 <div class="modal-bg" id="help-modal">
-  <div class="modal-box" style="max-width:480px;">
+  <div class="modal-box">
     <button class="modal-close" onclick="hideModal('help-modal')">×</button>
     <div class="modal-title">Grammar Guide</div>
 
