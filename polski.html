@@ -698,10 +698,11 @@ body.dark .history-card { background:rgba(247,244,238,0.04); }
    SCREEN 3: CLOCK
 ═══════════════════════════════════════════════════════ */
 .clock-pills {
-  display:flex; gap:6px; padding:10px 12px 6px;
-  flex-shrink:0; flex-wrap:wrap; background:var(--parch);
-  border-bottom:1px solid var(--border);
+  display:flex; gap:6px; padding:8px 12px 6px; align-items:center;
+  flex-shrink:0; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none;
+  background:var(--parch); border-bottom:1px solid var(--border);
 }
+.clock-pills::-webkit-scrollbar { display:none; }
 .clock-pill {
   font-size:0.68rem; font-weight:700; padding:5px 11px;
   border-radius:20px; border:1.5px solid var(--border);
@@ -710,6 +711,13 @@ body.dark .history-card { background:rgba(247,244,238,0.04); }
   transition:all 0.14s;
 }
 .clock-pill.active { background:var(--crimson); color:#fff; border-color:var(--crimson); }
+.clock-style-sel {
+  font-size:0.68rem; font-weight:700; padding:5px 10px;
+  border-radius:20px; border:1.5px solid var(--crimson);
+  background:var(--crimson); color:#fff;
+  font-family:'DM Sans',sans-serif; cursor:pointer;
+  flex-shrink:0; -webkit-appearance:none; appearance:none;
+}
 
 /* Clock face area */
 .clock-area {
@@ -1033,11 +1041,13 @@ svg.clock-face:active { cursor:grabbing; }
 <div class="screen" id="screen-clock">
 
   <div class="clock-pills">
-    <button class="clock-pill active" id="pill-casual" onclick="setClockStyle('casual')">Casual</button>
-    <button class="clock-pill"        id="pill-formal" onclick="setClockStyle('formal')">Formal (24h)</button>
-    <button class="clock-pill"        id="pill-sec"    onclick="toggleSec()">Sec: OFF</button>
-    <button class="clock-pill"        id="pill-ph"     onclick="togglePh()">Phonetic: ON</button>
-    <button class="clock-pill"        id="pill-quiz"   onclick="toggleQuiz()">Quiz: OFF</button>
+    <select id="clock-style-sel" class="clock-style-sel" onchange="setClockStyle(this.value)">
+      <option value="casual">Casual (12h)</option>
+      <option value="formal">Formal (24h)</option>
+    </select>
+    <button class="clock-pill" id="pill-sec"  onclick="toggleSec()">Sec: OFF</button>
+    <button class="clock-pill" id="pill-ph"   onclick="togglePh()">Phonetic: ON</button>
+    <button class="clock-pill" id="pill-quiz" onclick="toggleQuiz()">Quiz: OFF</button>
   </div>
 
   <div class="clock-area">
@@ -2643,7 +2653,13 @@ function updClock(){
 
 function setRealTime(){S.clkLive=true;const n=new Date();S.clkH=n.getHours();S.clkM=n.getMinutes();S.clkS=n.getSeconds();S.clkQRev=true;updClock();}
 function rollTime(){S.clkLive=false;S.clkH=Math.floor(Math.random()*24);S.clkM=Math.floor(Math.random()*12)*5;S.clkS=0;S.clkQRev=!S.clkQuiz;updClock();if(S.clkQuiz)buildQuizOpts();}
-function setClockStyle(m){S.clkFormal=m==='formal';document.getElementById('pill-casual').classList.toggle('active',!S.clkFormal);document.getElementById('pill-formal').classList.toggle('active',S.clkFormal);updClock();if(S.clkQuiz)buildQuizOpts();}
+function setClockStyle(m){
+  S.clkFormal=m==='formal';
+  const sel=document.getElementById('clock-style-sel');
+  if(sel)sel.value=m;
+  updClock();
+  if(S.clkQuiz)buildQuizOpts();
+}
 function toggleSec(){S.clkSec=!S.clkSec;document.getElementById('pill-sec').classList.toggle('active',S.clkSec);document.getElementById('pill-sec').innerText=S.clkSec?'Sec: ON':'Sec: OFF';updClock();}
 function togglePh(){S.clkPh=!S.clkPh;document.getElementById('pill-ph').classList.toggle('active',S.clkPh);document.getElementById('pill-ph').innerText=S.clkPh?'Phonetic: ON':'Phonetic: OFF';updClock();}
 function toggleQuiz(){
