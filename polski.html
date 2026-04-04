@@ -1669,6 +1669,7 @@ function toggleAllNames(){
   const exp=document.getElementById('nameday-expand');
   exp.classList.toggle('show');
 }
+function setCase(c){
   S.calCase=c;
   document.getElementById('case-nom').classList.toggle('active',c==='nom');
   document.getElementById('case-gen').classList.toggle('active',c==='gen');
