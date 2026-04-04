@@ -321,7 +321,19 @@ body {
   width:34px; height:34px; border-radius:50%; font-size:1.2rem;
   cursor:pointer; display:flex; align-items:center; justify-content:center;
 }
-.cal-phrase { font-size:0.78rem; color:rgba(240,236,228,0.6); font-style:italic; min-height:1rem; }
+.cal-year-sel {
+  background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+  color:var(--nav-text); border-radius:6px; padding:2px 6px;
+  font-size:0.85rem; font-weight:700; font-family:'DM Sans',sans-serif;
+  cursor:pointer; text-align:center;
+}
+.cal-year-sel option { background:#1a1a24; color:#f0ece4; }
+
+.cal-month-culture {
+  font-size:0.68rem; color:rgba(240,236,228,0.65);
+  text-align:center; padding:4px 12px 2px;
+  font-style:italic; line-height:1.4; min-height:1.2rem;
+}
 .cal-wd-row {
   display:grid; grid-template-columns:repeat(7,1fr);
   text-align:center; font-size:0.6rem; font-weight:700;
@@ -852,14 +864,15 @@ svg.clock-face:active { cursor:grabbing; }
   <div class="cal-header">
     <div class="cal-nav-row">
       <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
-      <div>
+      <div style="text-align:center;">
         <div class="cal-month-name" id="cal-month-name">—</div>
-        <div class="cal-phrase" id="cal-phrase">Select a date</div>
+        <select id="cal-year-sel" class="cal-year-sel" onchange="calJumpYear(this.value)"></select>
       </div>
       <button class="cal-nav-btn" onclick="calNav(1)">›</button>
     </div>
+    <div class="cal-month-culture" id="cal-month-culture"></div>
     <div class="cal-wd-row" id="cal-wd-row">
-      <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+      <span>Nd</span><span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>Sb</span>
     </div>
   </div>
 
@@ -1065,6 +1078,7 @@ const TENS    = ["","","dwadzieścia","trzydzieści","czterdzieści","pięćdzie
 const HUNDS   = ["","sto","dwieście","trzysta","czterysta","pięćset","sześćset","siedemset","osiemset","dziewięćset"];
 
 const MONTHS_GEN=["stycznia","lutego","marca","kwietnia","maja","czerwca","lipca","sierpnia","września","października","listopada","grudnia"];
+const MONTHS_NOM=["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"];
 const MONTHS_EN =["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS_EN   =["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const MONTHS_PH =["stich-nyah","loo-teh-go","mahr-tsah","kyev-tnyah","mah-yah","cherv-tsah","leep-tsah","syerp-nyah","vzhyeh-shnyah","paz-jyeh-nee-kah","lees-toh-pah-dah","grood-nyah"];
@@ -1648,8 +1662,27 @@ function startReview(){
 ═══════════════════════════════════════════════════════ */
 function calRender(){
   const v=S.calView,yr=v.getFullYear(),mon=v.getMonth();
-  const mNames=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  document.getElementById('cal-month-name').innerText=`${mNames[mon]} ${yr}`;
+  // Polish month name in header
+  document.getElementById('cal-month-name').innerText=MONTHS_NOM[mon];
+  // Year selector — show range of ±10 years from today
+  const yrSel=document.getElementById('cal-year-sel');
+  const curYr=new Date().getFullYear();
+  if(!yrSel.dataset.built||parseInt(yrSel.dataset.built)!==yr){
+    yrSel.innerHTML='';
+    for(let y=curYr-5;y<=curYr+10;y++){
+      const opt=document.createElement('option');
+      opt.value=y; opt.innerText=y;
+      if(y===yr) opt.selected=true;
+      yrSel.appendChild(opt);
+    }
+    yrSel.dataset.built=yr;
+  } else {
+    yrSel.value=yr;
+  }
+  // Month etymology in header
+  const mc=MONTH_CULTURE[mon];
+  const cultureEl=document.getElementById('cal-month-culture');
+  if(mc&&cultureEl) cultureEl.innerText=`${mc.season} · ${mc.derivation}`;
   const grid=document.getElementById('cal-grid');grid.innerHTML='';
   const diary=getDiary(),first=new Date(yr,mon,1).getDay(),last=new Date(yr,mon+1,0).getDate();
   const today=new Date();
@@ -1683,6 +1716,7 @@ function calRender(){
 }
 
 function calNav(d){S.calView.setMonth(S.calView.getMonth()+d);calRender();}
+function calJumpYear(y){S.calView.setFullYear(parseInt(y));calRender();}
 
 function calSelect(date){
   S.calSel=date;
@@ -1699,7 +1733,6 @@ function calSelect(date){
   document.getElementById('date-pl').innerText=plTxt;
   document.getElementById('date-ph').innerText=phTxt;
   document.getElementById('date-en').innerText=enTxt;
-  document.getElementById('cal-phrase').innerText=plTxt;
   const panel=document.getElementById('cal-info-panel');
   panel.style.display='block';
   // name days — show first 6, tap to see all
@@ -1725,9 +1758,9 @@ function calSelect(date){
   if(mc&&dc){
     cCard.style.display='block';
     cCard.innerHTML=`
-      <div class="culture-label">${mc.season} · ${MONTHS_GEN[mon]}</div>
+      <div class="culture-label">${mc.season} · ${MONTHS_NOM[mon]}</div>
       <div class="culture-text">${mc.derivation}</div>
-      <div class="culture-label" style="margin-top:6px;">${dc.pl}</div>
+      <div class="culture-label" style="margin-top:6px;">${dc.pl} — why this name?</div>
       <div class="culture-text">${dc.meaning}</div>`;
   } else cCard.style.display='none';
 
