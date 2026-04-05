@@ -2652,7 +2652,13 @@ function buildQuizOpts(){
   opts.forEach(o=>{
     const btn=document.createElement('button');btn.className='quiz-opt';btn.innerText=o;
     btn.onclick=()=>{
-      if(o===correct){btn.classList.add('correct');S.xp+=10;S.streak++;save();updTopBar();setTimeout(()=>{S.clkQRev=true;updClock();setTimeout(rollTime,500);},500);}
+      if(o===correct){
+        btn.classList.add('correct');
+        S.xp+=10;S.streak++;save();updTopBar();
+        // Speak the correct time then move to next question
+        clockSpeak(1);
+        setTimeout(()=>{S.clkQRev=true;updClock();setTimeout(rollTime,2000);},500);
+      }
       else{btn.classList.add('wrong');btn.disabled=true;S.streak=0;save();updTopBar();}
     };
     qg.appendChild(btn);
