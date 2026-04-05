@@ -438,7 +438,12 @@ body {
 .cal-day:hover:not(.spacer) { background:var(--parch); }
 .cal-day.spacer { cursor:default; border-color:transparent; }
 .cal-day.today { background:var(--gold); color:var(--ink) !important; font-weight:800; border-color:transparent; }
-.cal-day.selected { background:var(--crimson) !important; color:#fff !important; border-color:var(--crimson) !important; }
+/* Selected: inset green outline — all marker borders and backgrounds stay visible */
+.cal-day.selected { box-shadow:0 0 0 2.5px var(--sage) inset !important; }
+.cal-day.selected .day-num { color:var(--sage) !important; font-weight:800; }
+.cal-day.selected:not(.is-holiday):not(.is-tradition):not(.is-history) {
+  background:rgba(45,106,79,0.15) !important;
+}
 
 /* ── BASE: every cell has a subtle visible border ─────── */
 /* Override individual sides using border-top/bottom/left/right */
