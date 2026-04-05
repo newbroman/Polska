@@ -2342,7 +2342,11 @@ function toggleCalYear(){
 function speakDate(){
   if(!S.calSel)return;
   const d=S.calSel.getDate(),m=S.calSel.getMonth(),y=S.calSel.getFullYear();
-  speakPL(dateFormatPl(d,m,y,S.calCase==='gen',S.calYear));
+  const dow=S.calSel.getDay();
+  const DAYS_PL=['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+  const dayName=DAYS_PL[dow];
+  const dateTxt=dateFormatPl(d,m,y,S.calCase==='gen',S.calYear);
+  speakPL(`${dayName}, ${dateTxt}`);
 }
 // Name search
 function searchName(){
