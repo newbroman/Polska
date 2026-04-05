@@ -979,40 +979,27 @@ svg.clock-face:active { cursor:grabbing; }
   <div class="cal-header">
     <div class="cal-nav-row">
       <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
-      <!-- Month view (default) -->
-      <div id="cal-hdr-month" style="text-align:center;">
+      <div style="text-align:center;flex:1;">
         <div class="cal-month-name" id="cal-month-name">—</div>
-        <select id="cal-year-sel" class="cal-year-sel" onchange="calJumpYear(this.value)"></select>
-      </div>
-      <!-- Selected day view (shown when date tapped) -->
-      <div id="cal-hdr-day" style="display:none;text-align:center;flex:1;">
-        <div id="cal-day-line1" class="cal-month-name" style="font-size:1.5rem;line-height:1.1;"></div>
-        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2px;">
-          <span id="cal-day-line2" class="cal-month-name" style="font-size:1.1rem;opacity:0.85;"></span>
-          <select id="cal-year-sel-day" class="cal-year-sel" onchange="calJumpYear(this.value)" style="font-size:1rem;"></select>
+        <div id="cal-hdr-sub" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2px;">
+          <select id="cal-year-sel" class="cal-year-sel" onchange="calJumpYear(this.value)"></select>
         </div>
       </div>
       <button class="cal-nav-btn" onclick="calNav(1)">›</button>
     </div>
-    <div class="cal-month-culture" id="cal-month-culture"></div>
     <div class="cal-wd-row" id="cal-wd-row">
       <span>Nd</span><span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>Sb</span>
     </div>
   </div>
 
   <div class="cal-body" id="cal-body">
-    <!-- Legend -->
-    <div class="cal-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div>Public Holiday</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--tradition)"></div>Tradition</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Historic Date</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div>Appointment</div>
-    </div>
-
     <div class="cal-grid" id="cal-grid"></div>
 
+    <!-- Season/culture strip — below grid -->
+    <div class="cal-month-culture" id="cal-month-culture" style="font-style:italic;font-size:0.72rem;color:var(--muted);padding:4px 0 6px;text-align:center;"></div>
+
     <!-- Name day search — below grid -->
-    <div class="name-search-row" style="padding:6px 0 4px;">
+    <div class="name-search-row" style="padding:4px 0;">
       <input type="text" class="name-search-input" id="name-search" placeholder="Search a name (e.g. Anna)…">
       <button class="name-search-btn" onclick="searchName()">Find Day</button>
     </div>
@@ -1042,6 +1029,14 @@ svg.clock-face:active { cursor:grabbing; }
     </div>
 
     <div class="holiday-info-card" id="holiday-card"></div>
+
+    <!-- Colour key legend — at the bottom -->
+    <div class="cal-legend" style="margin-top:6px;">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div>Public Holiday</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--tradition)"></div>Tradition</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Historic Date</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div>Appointment</div>
+    </div>
 
     <div class="diary-section" id="upcoming-wrap" style="margin-top:8px;">
       <h3>📌 Upcoming Appointments</h3>
@@ -1971,39 +1966,26 @@ function startReview(){
 ═══════════════════════════════════════════════════════ */
 function calRender(){
   const v=S.calView,yr=v.getFullYear(),mon=v.getMonth();
-  // Polish month name in header
+  // Always show Polish month name in header
   document.getElementById('cal-month-name').innerText=MONTHS_NOM[mon];
-  // If no date selected, ensure month header is showing
-  if(!S.calSel){
-    const hdrMonth=document.getElementById('cal-hdr-month');
-    const hdrDay=document.getElementById('cal-hdr-day');
-    const culture=document.getElementById('cal-month-culture');
-    if(hdrMonth)hdrMonth.style.display='block';
-    if(hdrDay)hdrDay.style.display='none';
-    if(culture)culture.style.display='block';
-  }
-  // Year selector — show range of ±10 years from today
+  // Year selector
   const yrSel=document.getElementById('cal-year-sel');
   const curYr=new Date().getFullYear();
-  if(!yrSel.dataset.built||parseInt(yrSel.dataset.built)!==yr){
-    yrSel.innerHTML='';
+  if(!yrSel.dataset.built){
     for(let y=curYr-5;y<=curYr+10;y++){
       const opt=document.createElement('option');
-      opt.value=y; opt.innerText=y;
-      if(y===yr) opt.selected=true;
+      opt.value=y;opt.innerText=y;
+      if(y===yr)opt.selected=true;
       yrSel.appendChild(opt);
     }
-    yrSel.dataset.built=yr;
+    yrSel.dataset.built='1';
   } else {
     yrSel.value=yr;
   }
-  // Keep the day-header year select in sync
-  const yrSelDay=document.getElementById('cal-year-sel-day');
-  if(yrSelDay){ yrSelDay.innerHTML=yrSel.innerHTML; yrSelDay.value=yr; }
-  // Month etymology in header
+  // Month/season culture strip (now inside cal-body below grid)
   const mc=MONTH_CULTURE[mon];
   const cultureEl=document.getElementById('cal-month-culture');
-  if(mc&&cultureEl) cultureEl.innerText=`${mc.season} · ${mc.derivation}`;
+  if(mc&&cultureEl)cultureEl.innerText=`${mc.season} · ${mc.derivation}`;
   const grid=document.getElementById('cal-grid');grid.innerHTML='';
   const diary=getDiary(),first=new Date(yr,mon,1).getDay(),last=new Date(yr,mon+1,0).getDate();
   const today=new Date();
@@ -2043,11 +2025,19 @@ function closeCalInfo(){
   S.calSel=null;
   document.getElementById('cal-info-panel').style.display='none';
   document.getElementById('holiday-card').className='holiday-info-card';
-  // Restore month header
-  document.getElementById('cal-hdr-month').style.display='block';
-  document.getElementById('cal-hdr-day').style.display='none';
-  document.getElementById('cal-month-culture').style.display='block';
-  // Remove selected highlight
+  // Restore month name and year select in header
+  const v=S.calView,mon=v.getMonth(),yr=v.getFullYear();
+  document.getElementById('cal-month-name').innerText=MONTHS_NOM[mon];
+  const sub=document.getElementById('cal-hdr-sub');
+  if(sub)sub.innerHTML=`<select id="cal-year-sel" class="cal-year-sel" onchange="calJumpYear(this.value)"></select>`;
+  // Rebuild year select options
+  const yrSel=document.getElementById('cal-year-sel');
+  const curYr=new Date().getFullYear();
+  for(let y=curYr-5;y<=curYr+10;y++){
+    const opt=document.createElement('option');
+    opt.value=y;opt.innerText=y;if(y===yr)opt.selected=true;
+    yrSel.appendChild(opt);
+  }
   document.querySelectorAll('.cal-day.selected').forEach(c=>c.classList.remove('selected'));
 }
 
@@ -2066,21 +2056,22 @@ function calSelect(date){
   document.getElementById('date-pl').innerText=plTxt;
   document.getElementById('date-ph').innerText=phTxt;
   document.getElementById('date-en').innerText=enTxt;
-  // Swap header to show selected day
+  // Update header to show selected day — single header, updated in place
   const DAYS_PL_FULL=['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
-  const line1El=document.getElementById('cal-day-line1');
-  const line2El=document.getElementById('cal-day-line2');
-  const yrSelDay=document.getElementById('cal-year-sel-day');
-  if(line1El) line1El.innerText=`${d} ${DAYS_PL_FULL[dow]}`;
-  if(line2El) line2El.innerText=MONTHS_NOM[mon];
-  // Sync the year select in the day header
-  if(yrSelDay){
-    yrSelDay.innerHTML=document.getElementById('cal-year-sel').innerHTML;
-    yrSelDay.value=yr;
+  document.getElementById('cal-month-name').innerText=`${d} ${DAYS_PL_FULL[dow]}`;
+  // Replace year select with month + year select
+  const sub=document.getElementById('cal-hdr-sub');
+  if(sub){
+    sub.innerHTML=`<span class="cal-month-name" style="font-size:1.05rem;opacity:0.9;">${MONTHS_NOM[mon]}</span>
+      <select class="cal-year-sel" id="cal-year-sel" onchange="calJumpYear(this.value)"></select>`;
+    const yrSel=document.getElementById('cal-year-sel');
+    const curYr=new Date().getFullYear();
+    for(let y=curYr-5;y<=curYr+10;y++){
+      const opt=document.createElement('option');
+      opt.value=y;opt.innerText=y;if(y===yr)opt.selected=true;
+      yrSel.appendChild(opt);
+    }
   }
-  document.getElementById('cal-hdr-month').style.display='none';
-  document.getElementById('cal-hdr-day').style.display='block';
-  document.getElementById('cal-month-culture').style.display='none';
   const panel=document.getElementById('cal-info-panel');
   panel.style.display='block';
   // name days — show first 6, tap to see all
