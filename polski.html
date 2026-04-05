@@ -2131,8 +2131,8 @@ function calSelect(date){
     hCard.className=`holiday-info-card show type-${hol.type}`;
     hCard.innerHTML=`<h4>${hol.name}</h4><p>${hol.info}</p>`;
   }else hCard.className='holiday-info-card';
-  // Scroll info panel into view
-  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+  // Scroll cal-body to top so the header day display is visible
+  setTimeout(()=>{const cb=document.getElementById('cal-body');if(cb)cb.scrollTop=0;},50);
 }
 
 function toggleAllNames(){
