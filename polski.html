@@ -995,9 +995,6 @@ svg.clock-face:active { cursor:grabbing; }
   <div class="cal-body" id="cal-body">
     <div class="cal-grid" id="cal-grid"></div>
 
-    <!-- Season/culture strip — below grid -->
-    <div class="cal-month-culture" id="cal-month-culture" style="font-style:italic;font-size:0.72rem;color:var(--muted);padding:4px 0 6px;text-align:center;"></div>
-
     <!-- Name day search — below grid -->
     <div class="name-search-row" style="padding:4px 0;">
       <input type="text" class="name-search-input" id="name-search" placeholder="Search a name (e.g. Anna)…">
@@ -1967,7 +1964,8 @@ function startReview(){
 function calRender(){
   const v=S.calView,yr=v.getFullYear(),mon=v.getMonth();
   // Always show Polish month name in header
-  document.getElementById('cal-month-name').innerText=MONTHS_NOM[mon];
+  // Only update header if no date is currently selected
+  if(!S.calSel)document.getElementById('cal-month-name').innerText=MONTHS_NOM[mon];
   // Year selector
   const yrSel=document.getElementById('cal-year-sel');
   const curYr=new Date().getFullYear();
@@ -2016,6 +2014,19 @@ function calRender(){
     grid.appendChild(cell);
   }
   renderUpcoming();
+  // Re-apply selected day header if a date is still selected
+  if(S.calSel){
+    const sd=S.calSel,sd_d=sd.getDate(),sd_mon=sd.getMonth(),sd_yr=sd.getFullYear(),sd_dow=sd.getDay();
+    const DAYS_PL=['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+    document.getElementById('cal-month-name').innerText=`${sd_d} ${DAYS_PL[sd_dow]}`;
+    const sub=document.getElementById('cal-hdr-sub');
+    if(sub){
+      sub.innerHTML=`<span class="cal-month-name" style="font-size:1.05rem;opacity:0.9;">${MONTHS_NOM[sd_mon]}</span><select class="cal-year-sel" id="cal-year-sel" onchange="calJumpYear(this.value)"></select>`;
+      const yrS=document.getElementById('cal-year-sel');
+      const cY=new Date().getFullYear();
+      for(let y=cY-5;y<=cY+10;y++){const o=document.createElement('option');o.value=y;o.innerText=y;if(y===sd_yr)o.selected=true;yrS.appendChild(o);}
+    }
+  }
 }
 
 function calNav(d){S.calView.setMonth(S.calView.getMonth()+d);calRender();}
@@ -2834,7 +2845,9 @@ fetch('https://raw.githubusercontent.com/newbroman/Polishdate2/main/namedays.jso
   .then(r=>r.json())
   .then(data=>{
     Object.assign(NAMEDAYS, data);
-    if(document.getElementById('screen-calendar').classList.contains('active'))calRender();
+    if(document.getElementById('screen-calendar').classList.contains('active')){
+      if(S.calSel)calSelect(S.calSel); else calRender();
+    }
   })
   .catch(()=>{});
 </script>
