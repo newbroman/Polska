@@ -1001,13 +1001,6 @@ svg.clock-face:active { cursor:grabbing; }
   <div class="cal-body" id="cal-body">
     <div class="cal-grid" id="cal-grid"></div>
 
-    <!-- Name day search — below grid -->
-    <div class="name-search-row" style="padding:4px 0;">
-      <input type="text" class="name-search-input" id="name-search" placeholder="Search a name (e.g. Anna)…">
-      <button class="name-search-btn" onclick="searchName()">Find Day</button>
-    </div>
-    <div class="name-result" id="name-result"></div>
-
     <!-- Selected date info -->
     <div class="cal-info-panel" id="cal-info-panel">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -1020,35 +1013,39 @@ svg.clock-face:active { cursor:grabbing; }
       <div class="date-pl"       id="date-pl">—</div>
       <div class="date-ph"       id="date-ph">—</div>
       <div class="date-en"       id="date-en">—</div>
-      <div class="nameday-row" id="nameday-row" style="display:none;" onclick="toggleAllNames()"></div>
-      <div class="nameday-expand" id="nameday-expand"></div>
-      <div class="culture-card" id="culture-card" style="display:none;"></div>
-      <div id="history-section" style="display:none;"></div>
-      <div class="cal-btn-row">
+      <div class="cal-btn-row" style="margin-bottom:10px;">
         <button class="cal-pill primary" onclick="speakDate()">🔊 Listen</button>
         <button class="cal-pill" onclick="toggleCalYear()">Year: <span id="yr-lbl">ON</span></button>
         <button class="cal-pill gold" onclick="openDayView()">📅 Day View</button>
       </div>
+      <div class="cal-legend" style="margin-top:6px;margin-bottom:6px;">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div>Public Holiday</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--tradition)"></div>Tradition</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Historic Date</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div>Appointment</div>
+      </div>
+      <div class="culture-card" id="culture-card" style="display:none;"></div>
+      <div id="history-section" style="display:none;"></div>
     </div>
 
     <div class="holiday-info-card" id="holiday-card"></div>
-
-    <!-- Colour key legend — at the bottom -->
-    <div class="cal-legend" style="margin-top:6px;">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div>Public Holiday</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--tradition)"></div>Tradition</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Historic Date</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div>Appointment</div>
-    </div>
 
     <div class="diary-section" id="upcoming-wrap" style="margin-top:8px;">
       <h3>📌 Upcoming Appointments</h3>
       <div id="upcoming-entries"></div>
     </div>
+
+    <!-- Name day search — below upcoming appointments -->
+    <div class="nameday-row" id="nameday-row" style="display:none;" onclick="toggleAllNames()"></div>
+    <div class="nameday-expand" id="nameday-expand"></div>
+    <div class="name-search-row" style="padding:8px 0 4px;">
+      <input type="text" class="name-search-input" id="name-search" placeholder="Search a name (e.g. Anna)…">
+      <button class="name-search-btn" onclick="searchName()">Find Day</button>
+    </div>
+    <div class="name-result" id="name-result"></div>
+
   </div>
 </div>
-
-<!-- ═══ CLOCK SCREEN ═════════════════════════════════════ -->
 <div class="screen" id="screen-clock">
 
   <div class="clock-pills">
