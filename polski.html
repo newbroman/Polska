@@ -819,7 +819,7 @@ svg.clock-face:active { cursor:grabbing; }
 .modal-title { font-family:'DM Sans',sans-serif; font-size:1.25rem; color:var(--crimson); margin-bottom:14px; }
 
 /* Help modal — constrain width, prevent table overflow */
-#help-modal .modal-box { max-width:460px; padding:14px; overflow-x:hidden; }
+/* help-modal sizing handled via inline style */
 #help-modal .modal-box * { max-width:100%; box-sizing:border-box; }
 /* 4-column tables need smaller font on narrow screens */
 .help-table-dense { font-size:0.7rem; }
@@ -834,8 +834,7 @@ svg.clock-face:active { cursor:grabbing; }
   font-family:'DM Sans',sans-serif;
 }
 .help-nav-btn.active { color:var(--crimson); border-bottom-color:var(--crimson); }
-.help-panel { display:none; }
-.help-panel.active { display:block; }
+/* help panels rendered dynamically — no static show/hide needed */
 .help-sect { margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; }
 .help-sect:last-child { border-bottom:none; }
 .help-sect h3 { font-size:0.9rem; color:var(--crimson); margin-bottom:8px; }
@@ -844,7 +843,7 @@ svg.clock-face:active { cursor:grabbing; }
 .help-sect ul { padding-left:16px; }
 .help-sect ul, .help-sect ol { padding-left:16px; }
 .help-li { font-size:0.82rem; line-height:1.55; color:var(--ink); margin-bottom:4px; opacity:0.9; }
-.help-table { width:100%; border-collapse:collapse; font-size:0.74rem; margin:8px 0; table-layout:fixed; }
+.help-table { width:100%; border-collapse:collapse; font-size:0.74rem; margin:8px 0; table-layout:fixed; overflow:hidden; }
 .help-table th { background:var(--parch); padding:5px 5px; text-align:left; font-weight:700; border-bottom:2px solid var(--border); word-break:break-word; }
 .help-table td { padding:5px 5px; border-bottom:1px solid var(--border); vertical-align:top; word-break:break-word; }
 .help-table tr:last-child td { border-bottom:none; }
@@ -1118,307 +1117,15 @@ svg.clock-face:active { cursor:grabbing; }
 
 <!-- HELP MODAL -->
 <div class="modal-bg" id="help-modal">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width:460px;box-sizing:border-box;overflow-x:hidden;">
     <button class="modal-close" onclick="hideModal('help-modal')">×</button>
-    <div class="modal-title">Grammar Guide</div>
-
-    <div class="help-nav">
-      <button class="help-nav-btn active" onclick="setHelpPanel('numbers')">🔢 Numbers</button>
-      <button class="help-nav-btn"        onclick="setHelpPanel('dates')">📅 Dates</button>
-      <button class="help-nav-btn"        onclick="setHelpPanel('clock')">🕒 Clock</button>
+    <div class="modal-title" style="margin-bottom:10px;">Grammar Guide</div>
+    <div class="help-nav" id="help-nav">
+      <button class="help-nav-btn active" data-panel="numbers" onclick="setHelpPanel('numbers')">🔢 Numbers</button>
+      <button class="help-nav-btn"        data-panel="dates"   onclick="setHelpPanel('dates')">📅 Dates</button>
+      <button class="help-nav-btn"        data-panel="clock"   onclick="setHelpPanel('clock')">🕒 Clock</button>
     </div>
-
-    <!-- NUMBERS PANEL -->
-    <div class="help-panel active" id="hp-numbers">
-      <div class="help-sect">
-        <h3>🎮 How to Play</h3>
-        <ol style="padding-left:16px;">
-          <li class="help-li">Tap <b>🔊</b> (bottom left) — listen to the Polish number spoken aloud.</li>
-          <li class="help-li">Select the matching answer from the grid, or type it in.</li>
-          <li class="help-li">Answer fast for a speed bonus. Too slow and XP is deducted.</li>
-        </ol>
-        <table class="help-table" style="margin-top:8px;">
-          <thead><tr><th>Button</th><th>What it does</th></tr></thead>
-          <tbody>
-            <tr><td>🔊 ×1</td><td>Normal speed</td></tr>
-            <tr><td>🔊 ×2</td><td>Half speed (0.5×)</td></tr>
-            <tr><td>🔊 ×3</td><td>Quarter speed (0.25×)</td></tr>
-            <tr><td>🎙️</td><td>Speak the answer — mic dictation</td></tr>
-            <tr><td>🚗</td><td>Handsfree loop — great for driving</td></tr>
-            <tr><td>SKIP ➡</td><td>Reveal answer, no XP</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="help-sect">
-        <h3>📚 Modes</h3>
-        <table class="help-table">
-          <thead><tr><th>Mode</th><th>What you practise</th></tr></thead>
-          <tbody>
-            <tr><td><b>Numbers</b></td><td>Core counting — integers, decimals, fractions, negatives</td></tr>
-            <tr><td><b>🛒 Shopping</b></td><td>Counting nouns in real scenes — cafés, pharmacies, shops</td></tr>
-            <tr><td><b>Prices</b></td><td>Natural price spoken Polish: <em>pięć pięćdziesiąt</em> not formal złotych</td></tr>
-            <tr><td><b>Sentences</b></td><td>Full phrases with correct case endings — the hardest mode</td></tr>
-            <tr><td><b>Ordinals</b></td><td>First, second, third… pierwszy, drugi, trzeci…</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="help-sect">
-        <h3>🏆 XP &amp; Scoring</h3>
-        <table class="help-table">
-          <thead><tr><th>Event</th><th>XP</th></tr></thead>
-          <tbody>
-            <tr><td>Correct answer</td><td>+10</td></tr>
-            <tr><td>Speed bonus (under 3s)</td><td>+5</td></tr>
-            <tr><td>Sentences mode bonus</td><td>+5</td></tr>
-            <tr><td>Shopping mode bonus</td><td>+3</td></tr>
-            <tr><td>Wrong answer</td><td>streak reset</td></tr>
-            <tr><td>Slow (7–13s)</td><td>−2</td></tr>
-            <tr><td>Very slow (13–20s)</td><td>−4</td></tr>
-            <tr><td>Over 20s</td><td>ignored (distracted!)</td></tr>
-          </tbody>
-        </table>
-        <p class="help-note">Answers over 20s don't count — the app assumes you got distracted.</p>
-      </div>
-        <p>Polish nouns change their ending depending on the number before them. This affects hours, years, people — almost everything countable.</p>
-        <table class="help-table">
-          <thead><tr><th>Number</th><th>Rule</th><th>Example (hour)</th></tr></thead>
-          <tbody>
-            <tr><td><span class="c-nom">1</span></td><td>Singular</td><td><span class="c-nom">1 godzina</span></td></tr>
-            <tr><td><span class="c-ord">2, 3, 4</span></td><td>Nominative Plural</td><td><span class="c-ord">3 godziny</span></td></tr>
-            <tr><td><span class="c-gen">5, 6, 7…</span></td><td>Genitive Plural</td><td><span class="c-gen">5 godzin</span></td></tr>
-          </tbody>
-        </table>
-        <p class="help-note">⚠️ Numbers ending in 2, 3, 4 (like 22, 23, 24) follow the 2–4 rule — except the teens 12, 13, 14 which always use the 5+ Genitive.</p>
-      </div>
-
-      <div class="help-sect">
-        <h3>Gender: 1 &amp; 2</h3>
-        <p>Only 1 and 2 change to match the noun's gender (masculine / feminine / neuter).</p>
-        <table class="help-table help-table-dense">
-          <thead><tr><th>Number</th><th>Masculine</th><th>Feminine</th><th>Neuter</th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td>jeden</td><td>jedna</td><td>jedno</td></tr>
-            <tr><td>2</td><td>dwa</td><td>dwie</td><td>dwa</td></tr>
-          </tbody>
-        </table>
-        <div class="ex-box">2 tickets (bilety, m): <b>dwa bilety</b><br>2 coffees (kawy, f): <b>dwie kawy</b></div>
-      </div>
-
-      <div class="help-sect">
-        <h3>Prices (Prices Mode)</h3>
-        <p>Prices are spoken naturally, not formally. <em>5,50 zł</em> is said as <b>pięć pięćdziesiąt</b>, not "five złotych and fifty groszy".</p>
-        <table class="help-table">
-          <thead><tr><th>Price</th><th>Spoken Polish</th></tr></thead>
-          <tbody>
-            <tr><td>1,00 zł</td><td>jeden złoty</td></tr>
-            <tr><td>3,00 zł</td><td>trzy złote</td></tr>
-            <tr><td>5,00 zł</td><td>pięć złotych</td></tr>
-            <tr><td>2,50 zł</td><td>dwa pięćdziesiąt</td></tr>
-            <tr><td>0,50 zł</td><td>pięćdziesiąt groszy</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="help-sect">
-        <h3>Sentences (Cases)</h3>
-        <p>When a number counts something (a noun), the noun ending changes to match the number:</p>
-        <div class="ex-box">
-          Mam <span class="c-nom">1 rok</span> — I am 1 year old<br>
-          Mam <span class="c-ord">3 lata</span> — I am 3 years old<br>
-          Mam <span class="c-gen">5 lat</span> — I am 5 years old
-        </div>
-      </div>
-
-      <div class="help-sect">
-        <h3>Scoring &amp; XP</h3>
-        <p>+10 XP base · +5 speed bonus (under 3s) · −2 slow (7–13s) · −4 very slow (13–20s)</p>
-        <p>Use the 🎙️ mic to speak the answer for bonus points. 🚗 handsfree plays audio loops — great for passive learning.</p>
-      </div>
-    </div>
-
-    <!-- DATES PANEL -->
-    <div class="help-panel" id="hp-dates">
-      <div class="help-sect">
-        <h3>📅 How to Use the Calendar</h3>
-        <table class="help-table">
-          <thead><tr><th>Action</th><th>What happens</th></tr></thead>
-          <tbody>
-            <tr><td>‹ › arrows</td><td>Navigate months</td></tr>
-            <tr><td>Year dropdown</td><td>Jump to any year</td></tr>
-            <tr><td>Tap a day</td><td>See the date in Polish (Nominative &amp; Genitive), name days, month etymology, day-name meaning, historic events, holiday info</td></tr>
-            <tr><td>🔊 Listen</td><td>Hear the date spoken aloud</td></tr>
-            <tr><td>📅 Day View</td><td>Open the timed appointment planner for that day</td></tr>
-            <tr><td>Name search</td><td>Type a Polish name to find its name day</td></tr>
-          </tbody>
-        </table>
-        <table class="help-table" style="margin-top:6px;">
-          <thead><tr><th>Border colour</th><th>Meaning</th></tr></thead>
-          <tbody>
-            <tr><td style="border-left:3px solid var(--holiday);padding-left:6px;">Red top</td><td>Public holiday (dzień wolny)</td></tr>
-            <tr><td style="border-left:3px solid var(--tradition);padding-left:6px;">Gold top</td><td>Polish tradition or celebration</td></tr>
-            <tr><td style="border-left:3px solid var(--blue);padding-left:6px;">Blue top</td><td>Historic Polish anniversary</td></tr>
-            <tr><td style="border-left:3px solid var(--sage);padding-left:6px;">Green dot</td><td>You have an appointment</td></tr>
-          </tbody>
-        </table>
-        <p class="help-note">Holiday takes priority over tradition; both can show simultaneously (red top, gold bottom).</p>
-      </div>
-
-      <div class="help-sect">
-        <h3>Two Modes: Naming vs Event</h3>
-        <p>Polish dates use different case endings depending on whether you are <em>naming</em> a date or saying something <em>happens on</em> a date.</p>
-        <table class="help-table">
-          <thead><tr><th>Context</th><th>Case</th><th>Example (5 May)</th></tr></thead>
-          <tbody>
-            <tr><td>📅 Today is…</td><td><span class="c-nom">Nominative</span></td><td><span class="c-nom">Piąty maja</span></td></tr>
-            <tr><td>🎉 On the…</td><td><span class="c-gen">Genitive</span></td><td><span class="c-gen">Piątego maja</span></td></tr>
-          </tbody>
-        </table>
-        <div class="ex-box">📅 Dziś jest <span class="c-nom">piąty maja</span>. (Today is the 5th of May.)<br>🎉 Spotkanie jest <span class="c-gen">piątego maja</span>. (The meeting is on the 5th of May.)</div>
-      </div>
-
-      <div class="help-sect">
-        <h3>1. Ordinal Numbers (the Day)</h3>
-        <p>The day is always an ordinal number (1st, 2nd…). In Polish these agree with the gender of <em>dzień</em> (day, masculine).</p>
-        <p>Day numbers usually end in <b>-y</b> or <b>-i</b> (Nominative) or <b>-ego</b> (Genitive).</p>
-        <table class="help-table help-table-dense">
-          <thead><tr><th>#</th><th><span class="c-nom">Nominative</span></th><th><span class="c-gen">Genitive</span></th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td class="c-nom">pierwszy</td><td class="c-gen">pierwszego</td></tr>
-            <tr><td>2</td><td class="c-nom">drugi</td><td class="c-gen">drugiego</td></tr>
-            <tr><td>3</td><td class="c-nom">trzeci</td><td class="c-gen">trzeciego</td></tr>
-            <tr><td>5</td><td class="c-nom">piąty</td><td class="c-gen">piątego</td></tr>
-            <tr><td>10</td><td class="c-nom">dziesiąty</td><td class="c-gen">dziesiątego</td></tr>
-            <tr><td>20</td><td class="c-nom">dwudziesty</td><td class="c-gen">dwudziestego</td></tr>
-            <tr><td>31</td><td class="c-nom">trzydziesty pierwszy</td><td class="c-gen">trzydziestego pierwszego</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="help-sect">
-        <h3>2. Month Names (Genitive)</h3>
-        <p>The month always appears in its Genitive ("of") form — as if saying "the 5th <em>of</em> May".</p>
-        <table class="help-table">
-          <thead><tr><th>Month</th><th>Nominative</th><th><span class="c-gen">Genitive (always used)</span></th></tr></thead>
-          <tbody>
-            <tr><td>January</td><td>Styczeń</td><td class="c-gen">stycznia</td></tr>
-            <tr><td>February</td><td>Luty</td><td class="c-gen">lutego</td></tr>
-            <tr><td>March</td><td>Marzec</td><td class="c-gen">marca</td></tr>
-            <tr><td>April</td><td>Kwiecień</td><td class="c-gen">kwietnia</td></tr>
-            <tr><td>May</td><td>Maj</td><td class="c-gen">maja</td></tr>
-            <tr><td>June</td><td>Czerwiec</td><td class="c-gen">czerwca</td></tr>
-            <tr><td>July</td><td>Lipiec</td><td class="c-gen">lipca</td></tr>
-            <tr><td>August</td><td>Sierpień</td><td class="c-gen">sierpnia</td></tr>
-            <tr><td>September</td><td>Wrzesień</td><td class="c-gen">września</td></tr>
-            <tr><td>October</td><td>Październik</td><td class="c-gen">października</td></tr>
-            <tr><td>November</td><td>Listopad</td><td class="c-gen">listopada</td></tr>
-            <tr><td>December</td><td>Grudzień</td><td class="c-gen">grudnia</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="help-sect">
-        <h3>3. Years</h3>
-        <p>Years are also in Genitive and end with the word <b>roku</b> (of the year).</p>
-        <p>Only the last two digits change their endings — the "two thousand" part stays the same.</p>
-        <div class="ex-box">2026 = dwa tysiące dwudziestego szóstego <b>roku</b></div>
-        <p class="help-note">💡 Think of the year like a building's address — everything inside it happens <em>of</em> that year.</p>
-      </div>
-    </div>
-
-    <!-- CLOCK PANEL -->
-    <div class="help-panel" id="hp-clock">
-      <div class="help-sect">
-        <h3>🕒 How to Use the Clock</h3>
-        <table class="help-table">
-          <thead><tr><th>Action</th><th>What happens</th></tr></thead>
-          <tbody>
-            <tr><td>Drag a hand</td><td>Touch near the hour or minute hand tip and drag — the app locks to whichever hand you grabbed</td></tr>
-            <tr><td>Type in box</td><td>Enter any time (e.g. 14:20) to jump directly</td></tr>
-            <tr><td>⏱ Now</td><td>Sync to your device's current time</td></tr>
-            <tr><td>🎲 Random</td><td>Pick a random time for practice</td></tr>
-            <tr><td>🔊 Listen</td><td>Hear the time spoken at normal speed</td></tr>
-            <tr><td>🐢 Slow</td><td>Hear the time at half speed</td></tr>
-            <tr><td>Casual / Formal</td><td>Switch between everyday 12h and official 24h Polish</td></tr>
-            <tr><td>Sec: ON</td><td>Show the seconds hand</td></tr>
-            <tr><td>Phonetic: ON</td><td>Show approximate pronunciation below the Polish</td></tr>
-            <tr><td>Quiz: ON</td><td>Random clock, four choices — earn XP for correct answers</td></tr>
-          </tbody>
-        </table>
-        <p class="help-note">The colour coding below the clock shows the grammar rule in action — <span class="c-nom">orange = Nominative</span>, <span class="c-gen">purple = Genitive</span>, <span class="c-card">red = Cardinal number</span>.</p>
-      </div>
-
-      <div class="help-sect">
-        <h3>Formal Style (24h)</h3>
-        <p>Used for official schedules, transport, broadcasts. The hour is an <span class="c-nom">ordinal feminine</span> number, the minutes are plain <span class="c-card">cardinal</span> numbers.</p>
-        <div class="ex-box">17:10 → <span class="c-nom">Siedemnasta</span> <span class="c-card">dziesięć</span></div>
-        <table class="help-table">
-          <thead><tr><th>Time</th><th>Structure</th><th>Polish</th></tr></thead>
-          <tbody>
-            <tr><td>13:00</td><td><span class="c-nom">Hour ordinal</span> only</td><td><span class="c-nom">Trzynasta</span></td></tr>
-            <tr><td>13:05</td><td><span class="c-nom">Hour</span> + <span class="c-card">zero minute</span></td><td><span class="c-nom">Trzynasta</span> <span class="c-card">zero pięć</span></td></tr>
-            <tr><td>13:30</td><td><span class="c-nom">Hour</span> + <span class="c-card">minutes</span></td><td><span class="c-nom">Trzynasta</span> <span class="c-card">trzydzieści</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="help-sect">
-        <h3>Casual Style (12h)</h3>
-        <p>Used in everyday conversation. The preposition changes the case of the hour.</p>
-        <table class="help-table">
-          <thead><tr><th>Pattern</th><th>Case</th><th>Example</th></tr></thead>
-          <tbody>
-            <tr><td>On the hour</td><td><span class="c-nom">Nominative</span></td><td><span class="c-nom">Czwarta</span> (4:00)</td></tr>
-            <tr><td>X past (<em>po</em>)</td><td><span class="c-gen">Genitive</span></td><td><span class="c-card">Pięć</span> <span class="c-gen">po czwartej</span> (4:05)</td></tr>
-            <tr><td>Half past (<em>wpół do</em>)</td><td><span class="c-gen">Genitive +1hr</span></td><td><span class="c-gen">Wpół do piątej</span> (4:30)</td></tr>
-            <tr><td>X to (<em>za</em>)</td><td><span class="c-nom">Nominative +1hr</span></td><td><span class="c-card">Za dziesięć</span> <span class="c-nom">piąta</span> (4:50)</td></tr>
-          </tbody>
-        </table>
-        <div class="ex-box">
-          <span class="c-nom">Nominative</span> (orange) = naming the hour<br>
-          <span class="c-gen">Genitive</span> (purple) = after <em>po</em> &amp; <em>wpół do</em>
-        </div>
-      </div>
-
-      <div class="help-sect">
-        <h3>Time of Day</h3>
-        <table class="help-table">
-          <thead><tr><th>Hours</th><th>Polish</th><th>Meaning</th></tr></thead>
-          <tbody>
-            <tr><td>04–09</td><td><b>rano</b></td><td>in the morning</td></tr>
-            <tr><td>10–12</td><td><b>przed południem</b></td><td>before noon</td></tr>
-            <tr><td>13–18</td><td><b>po południu</b></td><td>in the afternoon</td></tr>
-            <tr><td>19–23</td><td><b>wieczorem</b></td><td>in the evening</td></tr>
-            <tr><td>00–03</td><td><b>w nocy</b></td><td>at night</td></tr>
-          </tbody>
-        </table>
-        <p class="help-note">Special: 12:00 = <b>południe</b> (noon) · 00:00 = <b>północ</b> (midnight)</p>
-      </div>
-
-      <div class="help-sect">
-        <h3>Hour Reference</h3>
-        <p style="font-size:0.72rem;color:var(--muted);margin-bottom:6px;"><span class="c-card">■ Cardinal (minutes)</span> · <span class="c-nom">■ Nominative (on hour / za)</span> · <span class="c-gen">■ Genitive (po / wpół do)</span></p>
-        <table class="help-table help-table-dense">
-          <thead><tr><th>#</th><th><span class="c-card">Min.</span></th><th><span class="c-nom">Nom.</span></th><th><span class="c-gen">Gen.</span></th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td class="c-card">jeden</td><td class="c-nom">pierwsza</td><td class="c-gen">pierwszej</td></tr>
-            <tr><td>2</td><td class="c-card">dwa</td><td class="c-nom">druga</td><td class="c-gen">drugiej</td></tr>
-            <tr><td>3</td><td class="c-card">trzy</td><td class="c-nom">trzecia</td><td class="c-gen">trzeciej</td></tr>
-            <tr><td>4</td><td class="c-card">cztery</td><td class="c-nom">czwarta</td><td class="c-gen">czwartej</td></tr>
-            <tr><td>5</td><td class="c-card">pięć</td><td class="c-nom">piąta</td><td class="c-gen">piątej</td></tr>
-            <tr><td>6</td><td class="c-card">sześć</td><td class="c-nom">szósta</td><td class="c-gen">szóstej</td></tr>
-            <tr><td>7</td><td class="c-card">siedem</td><td class="c-nom">siódma</td><td class="c-gen">siódmej</td></tr>
-            <tr><td>8</td><td class="c-card">osiem</td><td class="c-nom">ósma</td><td class="c-gen">ósmej</td></tr>
-            <tr><td>9</td><td class="c-card">dziewięć</td><td class="c-nom">dziewiąta</td><td class="c-gen">dziewiątej</td></tr>
-            <tr><td>10</td><td class="c-card">dziesięć</td><td class="c-nom">dziesiąta</td><td class="c-gen">dziesiątej</td></tr>
-            <tr><td>11</td><td class="c-card">jedenaście</td><td class="c-nom">jedenasta</td><td class="c-gen">jedenastej</td></tr>
-            <tr><td>12</td><td class="c-card">dwanaście</td><td class="c-nom">dwunasta</td><td class="c-gen">dwunastej</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
+    <div id="help-content-area" style="overflow-x:hidden;"></div>
   </div>
 </div>
 
@@ -2848,13 +2555,19 @@ function openHelp(){
   setHelpPanel(panel);
   showModal('help-modal');
 }
+const HELP_PANELS={
+  numbers:"<div class=\"help-sect\">\n        <h3>\ud83c\udfae How to Play</h3>\n        <ol style=\"padding-left:16px;\">\n          <li class=\"help-li\">Tap <b>\ud83d\udd0a</b> (bottom left) \u2014 listen to the Polish number spoken aloud.</li>\n          <li class=\"help-li\">Select the matching answer from the grid, or type it in.</li>\n          <li class=\"help-li\">Answer fast for a speed bonus. Too slow and XP is deducted.</li>\n        </ol>\n        <table class=\"help-table\" style=\"margin-top:8px;\">\n          <thead><tr><th>Button</th><th>What it does</th></tr></thead>\n          <tbody>\n            <tr><td>\ud83d\udd0a \u00d71</td><td>Normal speed</td></tr>\n            <tr><td>\ud83d\udd0a \u00d72</td><td>Half speed (0.5\u00d7)</td></tr>\n            <tr><td>\ud83d\udd0a \u00d73</td><td>Quarter speed (0.25\u00d7)</td></tr>\n            <tr><td>\ud83c\udf99\ufe0f</td><td>Speak the answer \u2014 mic dictation</td></tr>\n            <tr><td>\ud83d\ude97</td><td>Handsfree loop \u2014 great for driving</td></tr>\n            <tr><td>SKIP \u27a1</td><td>Reveal answer, no XP</td></tr>\n          </tbody>\n        </table>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>\ud83d\udcda Modes</h3>\n        <table class=\"help-table\">\n          <thead><tr><th>Mode</th><th>What you practise</th></tr></thead>\n          <tbody>\n            <tr><td><b>Numbers</b></td><td>Core counting \u2014 integers, decimals, fractions, negatives</td></tr>\n            <tr><td><b>\ud83d\uded2 Shopping</b></td><td>Counting nouns in real scenes \u2014 caf\u00e9s, pharmacies, shops</td></tr>\n            <tr><td><b>Prices</b></td><td>Natural price spoken Polish: <em>pi\u0119\u0107 pi\u0119\u0107dziesi\u0105t</em> not formal z\u0142otych</td></tr>\n            <tr><td><b>Sentences</b></td><td>Full phrases with correct case endings \u2014 the hardest mode</td></tr>\n            <tr><td><b>Ordinals</b></td><td>First, second, third\u2026 pierwszy, drugi, trzeci\u2026</td></tr>\n          </tbody>\n        </table>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>\ud83c\udfc6 XP &amp; Scoring</h3>\n        <table class=\"help-table\">\n          <thead><tr><th>Event</th><th>XP</th></tr></thead>\n          <tbody>\n            <tr><td>Correct answer</td><td>+10</td></tr>\n            <tr><td>Speed bonus (under 3s)</td><td>+5</td></tr>\n            <tr><td>Sentences mode bonus</td><td>+5</td></tr>\n            <tr><td>Shopping mode bonus</td><td>+3</td></tr>\n            <tr><td>Wrong answer</td><td>streak reset</td></tr>\n            <tr><td>Slow (7\u201313s)</td><td>\u22122</td></tr>\n            <tr><td>Very slow (13\u201320s)</td><td>\u22124</td></tr>\n            <tr><td>Over 20s</td><td>ignored (distracted!)</td></tr>\n          </tbody>\n        </table>\n        <p class=\"help-note\">Answers over 20s don't count \u2014 the app assumes you got distracted.</p>\n      </div>\n        <p>Polish nouns change their ending depending on the number before them. This affects hours, years, people \u2014 almost everything countable.</p>\n        <table class=\"help-table\">\n          <thead><tr><th>Number</th><th>Rule</th><th>Example (hour)</th></tr></thead>\n          <tbody>\n            <tr><td><span class=\"c-nom\">1</span></td><td>Singular</td><td><span class=\"c-nom\">1 godzina</span></td></tr>\n            <tr><td><span class=\"c-ord\">2, 3, 4</span></td><td>Nominative Plural</td><td><span class=\"c-ord\">3 godziny</span></td></tr>\n            <tr><td><span class=\"c-gen\">5, 6, 7\u2026</span></td><td>Genitive Plural</td><td><span class=\"c-gen\">5 godzin</span></td></tr>\n          </tbody>\n        </table>\n        <p class=\"help-note\">\u26a0\ufe0f Numbers ending in 2, 3, 4 (like 22, 23, 24) follow the 2\u20134 rule \u2014 except the teens 12, 13, 14 which always use the 5+ Genitive.</p>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Gender: 1 &amp; 2</h3>\n        <p>Only 1 and 2 change to match the noun's gender (masculine / feminine / neuter).</p>\n        <table class=\"help-table help-table-dense\">\n          <thead><tr><th>Number</th><th>Masculine</th><th>Feminine</th><th>Neuter</th></tr></thead>\n          <tbody>\n            <tr><td>1</td><td>jeden</td><td>jedna</td><td>jedno</td></tr>\n            <tr><td>2</td><td>dwa</td><td>dwie</td><td>dwa</td></tr>\n          </tbody>\n        </table>\n        <div class=\"ex-box\">2 tickets (bilety, m): <b>dwa bilety</b><br>2 coffees (kawy, f): <b>dwie kawy</b></div>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Prices (Prices Mode)</h3>\n        <p>Prices are spoken naturally, not formally. <em>5,50 z\u0142</em> is said as <b>pi\u0119\u0107 pi\u0119\u0107dziesi\u0105t</b>, not \"five z\u0142otych and fifty groszy\".</p>\n        <table class=\"help-table\">\n          <thead><tr><th>Price</th><th>Spoken Polish</th></tr></thead>\n          <tbody>\n            <tr><td>1,00 z\u0142</td><td>jeden z\u0142oty</td></tr>\n            <tr><td>3,00 z\u0142</td><td>trzy z\u0142ote</td></tr>\n            <tr><td>5,00 z\u0142</td><td>pi\u0119\u0107 z\u0142otych</td></tr>\n            <tr><td>2,50 z\u0142</td><td>dwa pi\u0119\u0107dziesi\u0105t</td></tr>\n            <tr><td>0,50 z\u0142</td><td>pi\u0119\u0107dziesi\u0105t groszy</td></tr>\n          </tbody>\n        </table>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Sentences (Cases)</h3>\n        <p>When a number counts something (a noun), the noun ending changes to match the number:</p>\n        <div class=\"ex-box\">\n          Mam <span class=\"c-nom\">1 rok</span> \u2014 I am 1 year old<br>\n          Mam <span class=\"c-ord\">3 lata</span> \u2014 I am 3 years old<br>\n          Mam <span class=\"c-gen\">5 lat</span> \u2014 I am 5 years old\n        </div>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Scoring &amp; XP</h3>\n        <p>+10 XP base \u00b7 +5 speed bonus (under 3s) \u00b7 \u22122 slow (7\u201313s) \u00b7 \u22124 very slow (13\u201320s)</p>\n        <p>Use the \ud83c\udf99\ufe0f mic to speak the answer for bonus points. \ud83d\ude97 handsfree plays audio loops \u2014 great for passive learning.</p>\n      </div>\n    </div>",
+  dates:"<div class=\"help-sect\">\n        <h3>\ud83d\udcc5 How to Use the Calendar</h3>\n        <table class=\"help-table\">\n          <thead><tr><th>Action</th><th>What happens</th></tr></thead>\n          <tbody>\n            <tr><td>\u2039 \u203a arrows</td><td>Navigate months</td></tr>\n            <tr><td>Year dropdown</td><td>Jump to any year</td></tr>\n            <tr><td>Tap a day</td><td>See the date in Polish (Nominative &amp; Genitive), name days, month etymology, day-name meaning, historic events, holiday info</td></tr>\n            <tr><td>\ud83d\udd0a Listen</td><td>Hear the date spoken aloud</td></tr>\n            <tr><td>\ud83d\udcc5 Day View</td><td>Open the timed appointment planner for that day</td></tr>\n            <tr><td>Name search</td><td>Type a Polish name to find its name day</td></tr>\n          </tbody>\n        </table>\n        <table class=\"help-table\" style=\"margin-top:6px;\">\n          <thead><tr><th>Border colour</th><th>Meaning</th></tr></thead>\n          <tbody>\n            <tr><td style=\"border-left:3px solid var(--holiday);padding-left:6px;\">Red top</td><td>Public holiday (dzie\u0144 wolny)</td></tr>\n            <tr><td style=\"border-left:3px solid var(--tradition);padding-left:6px;\">Gold top</td><td>Polish tradition or celebration</td></tr>\n            <tr><td style=\"border-left:3px solid var(--blue);padding-left:6px;\">Blue top</td><td>Historic Polish anniversary</td></tr>\n            <tr><td style=\"border-left:3px solid var(--sage);padding-left:6px;\">Green dot</td><td>You have an appointment</td></tr>\n          </tbody>\n        </table>\n        <p class=\"help-note\">Holiday takes priority over tradition; both can show simultaneously (red top, gold bottom).</p>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Two Modes: Naming vs Event</h3>\n        <p>Polish dates use different case endings depending on whether you are <em>naming</em> a date or saying something <em>happens on</em> a date.</p>\n        <table class=\"help-table\">\n          <thead><tr><th>Context</th><th>Case</th><th>Example (5 May)</th></tr></thead>\n          <tbody>\n            <tr><td>\ud83d\udcc5 Today is\u2026</td><td><span class=\"c-nom\">Nominative</span></td><td><span class=\"c-nom\">Pi\u0105ty maja</span></td></tr>\n            <tr><td>\ud83c\udf89 On the\u2026</td><td><span class=\"c-gen\">Genitive</span></td><td><span class=\"c-gen\">Pi\u0105tego maja</span></td></tr>\n          </tbody>\n        </table>\n        <div class=\"ex-box\">\ud83d\udcc5 Dzi\u015b jest <span class=\"c-nom\">pi\u0105ty maja</span>. (Today is the 5th of May.)<br>\ud83c\udf89 Spotkanie jest <span class=\"c-gen\">pi\u0105tego maja</span>. (The meeting is on the 5th of May.)</div>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>1. Ordinal Numbers (the Day)</h3>\n        <p>The day is always an ordinal number (1st, 2nd\u2026). In Polish these agree with the gender of <em>dzie\u0144</em> (day, masculine).</p>\n        <p>Day numbers usually end in <b>-y</b> or <b>-i</b> (Nominative) or <b>-ego</b> (Genitive).</p>\n        <table class=\"help-table help-table-dense\">\n          <thead><tr><th>#</th><th><span class=\"c-nom\">Nominative</span></th><th><span class=\"c-gen\">Genitive</span></th></tr></thead>\n          <tbody>\n            <tr><td>1</td><td class=\"c-nom\">pierwszy</td><td class=\"c-gen\">pierwszego</td></tr>\n            <tr><td>2</td><td class=\"c-nom\">drugi</td><td class=\"c-gen\">drugiego</td></tr>\n            <tr><td>3</td><td class=\"c-nom\">trzeci</td><td class=\"c-gen\">trzeciego</td></tr>\n            <tr><td>5</td><td class=\"c-nom\">pi\u0105ty</td><td class=\"c-gen\">pi\u0105tego</td></tr>\n            <tr><td>10</td><td class=\"c-nom\">dziesi\u0105ty</td><td class=\"c-gen\">dziesi\u0105tego</td></tr>\n            <tr><td>20</td><td class=\"c-nom\">dwudziesty</td><td class=\"c-gen\">dwudziestego</td></tr>\n            <tr><td>31</td><td class=\"c-nom\">trzydziesty pierwszy</td><td class=\"c-gen\">trzydziestego pierwszego</td></tr>\n          </tbody>\n        </table>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>2. Month Names (Genitive)</h3>\n        <p>The month always appears in its Genitive (\"of\") form \u2014 as if saying \"the 5th <em>of</em> May\".</p>\n        <table class=\"help-table\">\n          <thead><tr><th>Month</th><th>Nominative</th><th><span class=\"c-gen\">Genitive (always used)</span></th></tr></thead>\n          <tbody>\n            <tr><td>January</td><td>Stycze\u0144</td><td class=\"c-gen\">stycznia</td></tr>\n            <tr><td>February</td><td>Luty</td><td class=\"c-gen\">lutego</td></tr>\n            <tr><td>March</td><td>Marzec</td><td class=\"c-gen\">marca</td></tr>\n            <tr><td>April</td><td>Kwiecie\u0144</td><td class=\"c-gen\">kwietnia</td></tr>\n            <tr><td>May</td><td>Maj</td><td class=\"c-gen\">maja</td></tr>\n            <tr><td>June</td><td>Czerwiec</td><td class=\"c-gen\">czerwca</td></tr>\n            <tr><td>July</td><td>Lipiec</td><td class=\"c-gen\">lipca</td></tr>\n            <tr><td>August</td><td>Sierpie\u0144</td><td class=\"c-gen\">sierpnia</td></tr>\n            <tr><td>September</td><td>Wrzesie\u0144</td><td class=\"c-gen\">wrze\u015bnia</td></tr>\n            <tr><td>October</td><td>Pa\u017adziernik</td><td class=\"c-gen\">pa\u017adziernika</td></tr>\n            <tr><td>November</td><td>Listopad</td><td class=\"c-gen\">listopada</td></tr>\n            <tr><td>December</td><td>Grudzie\u0144</td><td class=\"c-gen\">grudnia</td></tr>\n          </tbody>\n        </table>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>3. Years</h3>\n        <p>Years are also in Genitive and end with the word <b>roku</b> (of the year).</p>\n        <p>Only the last two digits change their endings \u2014 the \"two thousand\" part stays the same.</p>\n        <div class=\"ex-box\">2026 = dwa tysi\u0105ce dwudziestego sz\u00f3stego <b>roku</b></div>\n        <p class=\"help-note\">\ud83d\udca1 Think of the year like a building's address \u2014 everything inside it happens <em>of</em> that year.</p>\n      </div>\n    </div>",
+  clock:"<div class=\"help-sect\">\n        <h3>\ud83d\udd52 How to Use the Clock</h3>\n        <table class=\"help-table\">\n          <thead><tr><th>Action</th><th>What happens</th></tr></thead>\n          <tbody>\n            <tr><td>Drag a hand</td><td>Touch near the hour or minute hand tip and drag \u2014 the app locks to whichever hand you grabbed</td></tr>\n            <tr><td>Type in box</td><td>Enter any time (e.g. 14:20) to jump directly</td></tr>\n            <tr><td>\u23f1 Now</td><td>Sync to your device's current time</td></tr>\n            <tr><td>\ud83c\udfb2 Random</td><td>Pick a random time for practice</td></tr>\n            <tr><td>\ud83d\udd0a Listen</td><td>Hear the time spoken at normal speed</td></tr>\n            <tr><td>\ud83d\udc22 Slow</td><td>Hear the time at half speed</td></tr>\n            <tr><td>Casual / Formal</td><td>Switch between everyday 12h and official 24h Polish</td></tr>\n            <tr><td>Sec: ON</td><td>Show the seconds hand</td></tr>\n            <tr><td>Phonetic: ON</td><td>Show approximate pronunciation below the Polish</td></tr>\n            <tr><td>Quiz: ON</td><td>Random clock, four choices \u2014 earn XP for correct answers</td></tr>\n          </tbody>\n        </table>\n        <p class=\"help-note\">The colour coding below the clock shows the grammar rule in action \u2014 <span class=\"c-nom\">orange = Nominative</span>, <span class=\"c-gen\">purple = Genitive</span>, <span class=\"c-card\">red = Cardinal number</span>.</p>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Formal Style (24h)</h3>\n        <p>Used for official schedules, transport, broadcasts. The hour is an <span class=\"c-nom\">ordinal feminine</span> number, the minutes are plain <span class=\"c-card\">cardinal</span> numbers.</p>\n        <div class=\"ex-box\">17:10 \u2192 <span class=\"c-nom\">Siedemnasta</span> <span class=\"c-card\">dziesi\u0119\u0107</span></div>\n        <table class=\"help-table\">\n          <thead><tr><th>Time</th><th>Structure</th><th>Polish</th></tr></thead>\n          <tbody>\n            <tr><td>13:00</td><td><span class=\"c-nom\">Hour ordinal</span> only</td><td><span class=\"c-nom\">Trzynasta</span></td></tr>\n            <tr><td>13:05</td><td><span class=\"c-nom\">Hour</span> + <span class=\"c-card\">zero minute</span></td><td><span class=\"c-nom\">Trzynasta</span> <span class=\"c-card\">zero pi\u0119\u0107</span></td></tr>\n            <tr><td>13:30</td><td><span class=\"c-nom\">Hour</span> + <span class=\"c-card\">minutes</span></td><td><span class=\"c-nom\">Trzynasta</span> <span class=\"c-card\">trzydzie\u015bci</span></td></tr>\n          </tbody>\n        </table>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Casual Style (12h)</h3>\n        <p>Used in everyday conversation. The preposition changes the case of the hour.</p>\n        <table class=\"help-table\">\n          <thead><tr><th>Pattern</th><th>Case</th><th>Example</th></tr></thead>\n          <tbody>\n            <tr><td>On the hour</td><td><span class=\"c-nom\">Nominative</span></td><td><span class=\"c-nom\">Czwarta</span> (4:00)</td></tr>\n            <tr><td>X past (<em>po</em>)</td><td><span class=\"c-gen\">Genitive</span></td><td><span class=\"c-card\">Pi\u0119\u0107</span> <span class=\"c-gen\">po czwartej</span> (4:05)</td></tr>\n            <tr><td>Half past (<em>wp\u00f3\u0142 do</em>)</td><td><span class=\"c-gen\">Genitive +1hr</span></td><td><span class=\"c-gen\">Wp\u00f3\u0142 do pi\u0105tej</span> (4:30)</td></tr>\n            <tr><td>X to (<em>za</em>)</td><td><span class=\"c-nom\">Nominative +1hr</span></td><td><span class=\"c-card\">Za dziesi\u0119\u0107</span> <span class=\"c-nom\">pi\u0105ta</span> (4:50)</td></tr>\n          </tbody>\n        </table>\n        <div class=\"ex-box\">\n          <span class=\"c-nom\">Nominative</span> (orange) = naming the hour<br>\n          <span class=\"c-gen\">Genitive</span> (purple) = after <em>po</em> &amp; <em>wp\u00f3\u0142 do</em>\n        </div>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Time of Day</h3>\n        <table class=\"help-table\">\n          <thead><tr><th>Hours</th><th>Polish</th><th>Meaning</th></tr></thead>\n          <tbody>\n            <tr><td>04\u201309</td><td><b>rano</b></td><td>in the morning</td></tr>\n            <tr><td>10\u201312</td><td><b>przed po\u0142udniem</b></td><td>before noon</td></tr>\n            <tr><td>13\u201318</td><td><b>po po\u0142udniu</b></td><td>in the afternoon</td></tr>\n            <tr><td>19\u201323</td><td><b>wieczorem</b></td><td>in the evening</td></tr>\n            <tr><td>00\u201303</td><td><b>w nocy</b></td><td>at night</td></tr>\n          </tbody>\n        </table>\n        <p class=\"help-note\">Special: 12:00 = <b>po\u0142udnie</b> (noon) \u00b7 00:00 = <b>p\u00f3\u0142noc</b> (midnight)</p>\n      </div>\n\n      <div class=\"help-sect\">\n        <h3>Hour Reference</h3>\n        <p style=\"font-size:0.72rem;color:var(--muted);margin-bottom:6px;\"><span class=\"c-card\">\u25a0 Cardinal (minutes)</span> \u00b7 <span class=\"c-nom\">\u25a0 Nominative (on hour / za)</span> \u00b7 <span class=\"c-gen\">\u25a0 Genitive (po / wp\u00f3\u0142 do)</span></p>\n        <table class=\"help-table help-table-dense\">\n          <thead><tr><th>#</th><th><span class=\"c-card\">Min.</span></th><th><span class=\"c-nom\">Nom.</span></th><th><span class=\"c-gen\">Gen.</span></th></tr></thead>\n          <tbody>\n            <tr><td>1</td><td class=\"c-card\">jeden</td><td class=\"c-nom\">pierwsza</td><td class=\"c-gen\">pierwszej</td></tr>\n            <tr><td>2</td><td class=\"c-card\">dwa</td><td class=\"c-nom\">druga</td><td class=\"c-gen\">drugiej</td></tr>\n            <tr><td>3</td><td class=\"c-card\">trzy</td><td class=\"c-nom\">trzecia</td><td class=\"c-gen\">trzeciej</td></tr>\n            <tr><td>4</td><td class=\"c-card\">cztery</td><td class=\"c-nom\">czwarta</td><td class=\"c-gen\">czwartej</td></tr>\n            <tr><td>5</td><td class=\"c-card\">pi\u0119\u0107</td><td class=\"c-nom\">pi\u0105ta</td><td class=\"c-gen\">pi\u0105tej</td></tr>\n            <tr><td>6</td><td class=\"c-card\">sze\u015b\u0107</td><td class=\"c-nom\">sz\u00f3sta</td><td class=\"c-gen\">sz\u00f3stej</td></tr>\n            <tr><td>7</td><td class=\"c-card\">siedem</td><td class=\"c-nom\">si\u00f3dma</td><td class=\"c-gen\">si\u00f3dmej</td></tr>\n            <tr><td>8</td><td class=\"c-card\">osiem</td><td class=\"c-nom\">\u00f3sma</td><td class=\"c-gen\">\u00f3smej</td></tr>\n            <tr><td>9</td><td class=\"c-card\">dziewi\u0119\u0107</td><td class=\"c-nom\">dziewi\u0105ta</td><td class=\"c-gen\">dziewi\u0105tej</td></tr>\n            <tr><td>10</td><td class=\"c-card\">dziesi\u0119\u0107</td><td class=\"c-nom\">dziesi\u0105ta</td><td class=\"c-gen\">dziesi\u0105tej</td></tr>\n            <tr><td>11</td><td class=\"c-card\">jedena\u015bcie</td><td class=\"c-nom\">jedenasta</td><td class=\"c-gen\">jedenastej</td></tr>\n            <tr><td>12</td><td class=\"c-card\">dwana\u015bcie</td><td class=\"c-nom\">dwunasta</td><td class=\"c-gen\">dwunastej</td></tr>\n          </tbody>\n        </table>\n      </div>\n    </div>"
+};
 function setHelpPanel(name){
-  document.querySelectorAll('.help-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.help-nav-btn').forEach(b=>b.classList.remove('active'));
-  const panel=document.getElementById('hp-'+name);
-  if(panel)panel.classList.add('active');
+  const area=document.getElementById('help-content-area');
+  if(!area)return;
+  area.innerHTML=HELP_PANELS[name]||'';
+  const box=document.querySelector('#help-modal .modal-box');
+  if(box)box.scrollTop=0;
   document.querySelectorAll('.help-nav-btn').forEach(b=>{
-    if(b.getAttribute('onclick').includes("'"+name+"'"))b.classList.add('active');
+    b.classList.toggle('active', b.dataset.panel===name);
   });
 }
 function buildStats(){
