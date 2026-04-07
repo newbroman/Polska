@@ -1657,10 +1657,40 @@ function timeHTML(h,m,formal){
   if(m<30)return`<span class="card">${M_ALL[m]}</span> po <span class="gen">${hG}</span>`;
   return`za <span class="card">${M_ALL[60-m]}</span> <span class="nom">${hNF}</span>`;
 }
+function yearToPl(yr){
+  const THOU={1:'tysiąc',2:'dwa tysiące',3:'trzy tysiące',4:'cztery tysiące',
+    5:'pięć tysięcy',6:'sześć tysięcy',7:'siedem tysięcy',8:'osiem tysięcy',9:'dziewięć tysięcy',
+    10:'dziesięć tysięcy',11:'jedenaście tysięcy',12:'dwanaście tysięcy',13:'trzynaście tysięcy',
+    14:'czternaście tysięcy',15:'piętnaście tysięcy',16:'szesnaście tysięcy',17:'siedemnaście tysięcy',
+    18:'osiemnaście tysięcy',19:'dziewiętnaście tysięcy',20:'dwadzieścia tysięcy'};
+  const HCARD=['','sto','dwieście','trzysta','czterysta','pięćset','sześćset','siedemset','osiemset','dziewięćset'];
+  const HGEN =['','setnego','dwusetnego','trzysetnego','czterysetnego','pięćsetnego','sześćsetnego','siedemsetnego','osiemsetnego','dziewięćsetnego'];
+  const UGEN =['','pierwszego','drugiego','trzeciego','czwartego','piątego','szóstego','siódmego','ósmego','dziewiątego'];
+  const TGEN =['','','dwudziestego','trzydziestego','czterdziestego','pięćdziesiątego','sześćdziesiątego','siedemdziesiątego','osiemdziesiątego','dziewięćdziesiątego'];
+  const TEEN =['dziesiątego','jedenastego','dwunastego','trzynastego','czternastego','piętnastego','szesnastego','siedemnastego','osiemnastego','dziewiętnastego'];
+  let s='',y=yr;
+  if(y>=1000){const t=Math.floor(y/1000);s+=(THOU[t]||numToPl(t)+' tysięcy')+' ';y%=1000;}
+  const h=Math.floor(y/100),rest=y%100;
+  if(h>0){
+    if(rest===0){s+=HGEN[h];}
+    else{
+      s+=HCARD[h]+' ';
+      if(rest>=10&&rest<=19){s+=TEEN[rest-10];}
+      else if(rest>=20){const t2=Math.floor(rest/10),u=rest%10;s+=TGEN[t2];if(u>0)s+=' '+UGEN[u];}
+      else{s+=UGEN[rest];}
+    }
+  } else {
+    if(y>=10&&y<=19){s+=TEEN[y-10];}
+    else if(y>=20){const t2=Math.floor(y/10),u=y%10;s+=TGEN[t2];if(u>0)s+=' '+UGEN[u];}
+    else if(y>0){s+=UGEN[y];}
+  }
+  return s.trim()+' roku';
+}
+
 function dateFormatPl(d,mon,yr,gen,inclYr){
   const day=gen?ORD_GEN[d]:ORD_NOM[d];
   let s=`${day} ${MONTHS_GEN[mon]}`;
-  if(inclYr)s+=` ${numToPl(yr)} roku`;
+  if(inclYr)s+=` ${yearToPl(yr)}`;
   return s;
 }
 function datePh(d,mon,gen){
