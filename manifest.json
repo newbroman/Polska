@@ -6,9 +6,38 @@
   "start_url": "/Polska/polski.html",
   "scope": "/Polska/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
+  "dir": "ltr",
+  "lang": "pl",
   "background_color": "#0f0f14",
   "theme_color": "#0f0f14",
+  "categories": ["education", "books-and-reference"],
+  "prefer_related_applications": false,
+  "iarc_rating_id": "",
+  "shortcuts": [
+    {
+      "name": "Numbers",
+      "short_name": "Numbers",
+      "description": "Practice Polish numbers",
+      "url": "/Polska/polski.html#numbers",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Calendar",
+      "short_name": "Calendar",
+      "description": "Polish calendar and dates",
+      "url": "/Polska/polski.html#calendar",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Clock",
+      "short_name": "Clock",
+      "description": "Tell the time in Polish",
+      "url": "/Polska/polski.html#clock",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    }
+  ],
   "icons": [
     { "src": "icon-72.png",  "sizes": "72x72",   "type": "image/png" },
     { "src": "icon-96.png",  "sizes": "96x96",   "type": "image/png" },
@@ -41,8 +70,5 @@
       "form_factor": "narrow",
       "label": "Clock — learn to tell the time in Polish, casual and formal styles"
     }
-  ],
-  "categories": ["education", "utilities"],
-  "lang": "pl",
-  "prefer_related_applications": false
+  ]
 }
