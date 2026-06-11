@@ -1,0 +1,24 @@
+{
+  "name": "Polski Trener",
+  "short_name": "Polski",
+  "description": "Polish numbers, dates and time trainer",
+  "start_url": "/Polska/polski.html",
+  "scope": "/Polska/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f0f14",
+  "theme_color": "#0f0f14",
+  "icons": [
+    {
+      "src": "icon512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "education",
+    "utilities"
+  ],
+  "lang": "pl"
+}

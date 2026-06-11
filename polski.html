@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Polski — Numbers, Dates & Time</title>
 <meta name="theme-color" content="#0f0f14">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -131,8 +133,15 @@ body {
 .xp-badge {
   font-size:0.7rem; font-weight:700; color:var(--nav-gold);
   padding:0 10px; letter-spacing:0.04em;
+  transition:transform 0.1s;
 }
+.xp-badge.flash { animation:xpFlash 0.5s ease forwards; }
 .streak-badge { font-size:0.75rem; color:#ff9d4d; padding:0 4px; }
+@keyframes xpFlash {
+  0%   { transform:scale(1);   color:var(--nav-gold); }
+  30%  { transform:scale(1.35);color:#fff; }
+  100% { transform:scale(1);   color:var(--nav-gold); }
+}
 
 /* ── BOTTOM NAV ───────────────────────────────────────── */
 .bottom-nav {
@@ -2003,7 +2012,7 @@ function winNum(btn){
   if(!S.cats[S.subMode])S.cats[S.subMode]=0;S.cats[S.subMode]+=sc;
   if(!S.goalMet&&S.dailyXP>=S.dailyGoal){S.goalMet=true;setTimeout(()=>{confetti();showModal('goal-modal');},400);}
   if([5,10,25,50,100].includes(S.streak))confetti(S.streak>=50?120:50);
-  save();updTopBar();updReviewBadge();
+  save();updTopBar();updReviewBadge();flashXP();
   const card=document.getElementById('display-card');
   const pop=document.createElement('div');pop.className='score-pop';pop.innerText='+'+sc;
   card.appendChild(pop);setTimeout(()=>pop.remove(),950);
@@ -2815,6 +2824,14 @@ function doHF(){
 /* ═══════════════════════════════════════════════════════
    UI UTILITIES
 ═══════════════════════════════════════════════════════ */
+function flashXP(){
+  const el=document.getElementById('xp-badge');
+  if(!el)return;
+  el.classList.remove('flash');
+  requestAnimationFrame(()=>{ el.classList.add('flash'); });
+  setTimeout(()=>el.classList.remove('flash'),500);
+}
+
 function updTopBar(){
   const rank=RANKS.reduce((r,rk)=>S.xp>=rk.l?rk:r,RANKS[0]);
   document.getElementById('xp-badge').innerText=`${S.xp.toLocaleString()} XP · ${rank.n}`;
@@ -3127,6 +3144,9 @@ function renderHoroscope(date){
     <div style="font-size:0.68rem;color:var(--muted);margin-top:4px;">${datePL} · ${dateEN}</div>`;
 }
 
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+}
 window.addEventListener('load',init);
 </script>
 
