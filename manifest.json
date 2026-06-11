@@ -6,13 +6,19 @@
   "start_url": "/Polska/polski.html",
   "scope": "/Polska/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "portrait",
   "dir": "ltr",
   "lang": "pl",
   "background_color": "#0f0f14",
   "theme_color": "#0f0f14",
-  "categories": ["education", "books-and-reference"],
+  "categories": [
+    "education",
+    "books-and-reference"
+  ],
   "prefer_related_applications": false,
   "iarc_rating_id": "",
   "shortcuts": [
@@ -21,32 +27,93 @@
       "short_name": "Numbers",
       "description": "Practice Polish numbers",
       "url": "/Polska/polski.html#numbers",
-      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Calendar",
       "short_name": "Calendar",
       "description": "Polish calendar and dates",
       "url": "/Polska/polski.html#calendar",
-      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Clock",
       "short_name": "Clock",
       "description": "Tell the time in Polish",
       "url": "/Polska/polski.html#clock",
-      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ],
   "icons": [
-    { "src": "icon-72.png",  "sizes": "72x72",   "type": "image/png" },
-    { "src": "icon-96.png",  "sizes": "96x96",   "type": "image/png" },
-    { "src": "icon-128.png", "sizes": "128x128", "type": "image/png" },
-    { "src": "icon-144.png", "sizes": "144x144", "type": "image/png" },
-    { "src": "icon-152.png", "sizes": "152x152", "type": "image/png" },
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-384.png", "sizes": "384x384", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "screenshots": [
     {
@@ -54,21 +121,21 @@
       "sizes": "1051x2175",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Numbers trainer — listen and identify Polish numbers"
+      "label": "Numbers trainer \u2014 listen and identify Polish numbers"
     },
     {
       "src": "screenshot-calendar.png",
       "sizes": "1080x2161",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Calendar — Polish dates, name days, moon phase and cultural info"
+      "label": "Calendar \u2014 Polish dates, name days, moon phase and cultural info"
     },
     {
       "src": "screenshot-clock.png",
       "sizes": "1006x2195",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Clock — learn to tell the time in Polish, casual and formal styles"
+      "label": "Clock \u2014 learn to tell the time in Polish, casual and formal styles"
     }
   ]
 }
