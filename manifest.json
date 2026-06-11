@@ -1,4 +1,5 @@
 {
+  "id": "/Polska/polski.html",
   "name": "Polski Trener",
   "short_name": "Polski",
   "description": "Polish numbers, dates and time trainer",
@@ -18,6 +19,30 @@
     { "src": "icon-384.png", "sizes": "384x384", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
+  "screenshots": [
+    {
+      "src": "screenshot-numbers.png",
+      "sizes": "1051x2175",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Numbers trainer — listen and identify Polish numbers"
+    },
+    {
+      "src": "screenshot-calendar.png",
+      "sizes": "1080x2161",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Calendar — Polish dates, name days, moon phase and cultural info"
+    },
+    {
+      "src": "screenshot-clock.png",
+      "sizes": "1006x2195",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Clock — learn to tell the time in Polish, casual and formal styles"
+    }
+  ],
   "categories": ["education", "utilities"],
-  "lang": "pl"
+  "lang": "pl",
+  "prefer_related_applications": false
 }
