@@ -1,0 +1,5 @@
+# Signing keys and their passwords never belong in this repo
+*.keystore
+*.jks
+*.p12
+signing-key-info.txt
