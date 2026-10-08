@@ -1,8 +1,8 @@
-const CACHE_NAME = 'polski-v1';
+const CACHE_NAME = 'polski-v2';
 const ASSETS = [
   'polski.html',
   'manifest.json',
-  'icon512.png'
+  'icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
