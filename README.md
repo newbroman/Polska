@@ -1,7 +1,8 @@
-# newbroman.github.io
+# Polski: Numbers, Dates & Time
 
-Root user site. Hosts the `.well-known/assetlinks.json` needed for
-the Polski Trener TWA Android app to open without falling back to Chrome.
+Polish number, date and clock trainers combined in one app. This is the version behind the Polski Trener Android app.
+
+**Live app:** https://newbroman.github.io/Polska/polski.html
 
 ## Security note: signing key (October 2026)
 
@@ -19,22 +20,53 @@ The app is not on Google Play, so the key cannot be reset. It is still in use.
   `75:21:A4:0A:7B:10:43:7C:BA:23:5F:DA:EA:70:7A:2B:4E:C0:B9:6C:61:26:66:92:86:D7:53:E4:66:10:89:B1`
 
 If the app is later re-signed with a new key, this note and `assetlinks.json`
-will be updated and existing installs will need to be uninstalled first.
+(in the `newbroman.github.io` repo) will be updated and existing installs will
+need to be uninstalled first.
 
 Keystores and their password files must never be committed here;
-`.gitignore` now blocks the usual filenames.
+`.gitignore` blocks the usual filenames.
 
+## Features
 
-## Setup
-1. Upload all files in this repo to a GitHub repo named exactly `newbroman.github.io`
-2. Enable GitHub Pages on the `main` branch
-3. Verify: https://newbroman.github.io/.well-known/assetlinks.json
+- **Numbers:** hear a Polish number and answer by tapping buttons (4, 8 or 12 choices) or typing digits or Polish. Options for negatives, decimals and fractions, plus Shopping, Prices, Sentences and Ordinals modes. Slow replay, speech input, and skip.
+- **Calendar:** month view with Polish day names, a "Today is…" panel read aloud, public holidays, traditions, historic dates, name days and moon phase. Day view, Find Day, and your own appointments (once, daily, weekly or monthly).
+- **Clock:** analogue clock in casual (12-hour) or formal (24-hour) style, with optional seconds, phonetic spelling, quiz mode, current time and random times.
+- **Hands-free mode** for practising without touching the screen.
+- Campaign levels with automatic or manual difficulty, XP, daily goal, streak, progress screen and review of mistakes.
+- Grammar guide for numbers, dates and the clock, and an audio set-up guide for Android, iPhone/iPad and desktop.
+- Light, dark or automatic theme. Progress is saved in the browser (`localStorage`).
 
-## Getting your SHA-256 fingerprint
-In Android Studio, open the Terminal tab and run:
+## Using it
+
+- **In a browser:** open the live link above. Polish speech uses your device's built-in Polish voice; the in-app Audio Setup guide shows how to install one. Chrome is recommended on Android and desktop, Safari on iPhone/iPad.
+- **As a phone app:** install it from the browser menu ("Add to Home screen"), or on Android sideload `Polski trener liczb.apk` from this repository (see the security note above).
+
+## Project structure
+
+| File | Purpose |
+|---|---|
+| `polski.html` | The whole app: markup, styles and script |
+| `manifest.json` | PWA manifest (name "Polski Trener", shortcuts to Numbers, Calendar and Clock) |
+| `sw.js` | Service worker |
+| `Polski trener liczb.apk`, `.aab` | Android build (Trusted Web Activity, package `io.github.newbroman.twa`) |
+| `.well-known/assetlinks.json`, `assetlinks.json`, `_config.yml` | Copies of the Digital Asset Links file. Android checks the copy served from the domain root, which lives in the `newbroman.github.io` repo |
+| `index.html` | Placeholder page for the folder root |
+| `icon-*.png`, `ic_launcher*.png`, `screenshot-*.png` | Icons and store-style screenshots |
+
+## Development
+
+There is no build step. Serve the folder locally and open the app:
+
+```bash
+python3 -m http.server 8000
+# then open http://localhost:8000/polski.html
 ```
-keytool -list -v -keystore signing.keystore
-```
-Enter your keystore password when prompted.
-Copy the SHA-256 line and paste it into `.well-known/assetlinks.json`
-replacing PASTE_YOUR_SHA256_FINGERPRINT_HERE
+
+The manifest uses absolute `/Polska/` paths, so install behaviour is only realistic on the live site.
+
+## Related repos
+
+- [Polish-number-trainer](https://github.com/newbroman/Polish-number-trainer), [too-obvious](https://github.com/newbroman/too-obvious) and [Polish-clock](https://github.com/newbroman/Polish-clock) are the standalone number, date and clock trainers.
+- [newbroman.github.io](https://github.com/newbroman/newbroman.github.io) hosts the root `assetlinks.json` the Android app depends on.
+
+Built by Martin Hollingham.
